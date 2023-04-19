@@ -15,3 +15,19 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 RoxygenNote: 7.2.3
+Imports: 
+    pipapi (>= 1.2.0.9001),
+    pipaux (>= 0.1.0.9006),
+    pipdata (>= 0.0.0.9013),
+    pipfun (>= 0.0.0.9017),
+    pipload (>= 0.2.0.9005),
+    pipr (>= 1.0.0),
+    wbpip (>= 0.1.0)
+Remotes:  
+    github::PIP-Technical-team/pipapi@dev,
+    github::PIP-Technical-team/pipaux@dev,
+    github::PIP-Technical-team/pipload@dev,
+    github::PIP-Technical-team/wbpip@dev,
+    github::PIP-Technical-team/pipfun@dev,
+    github::PIP-Technical-team/pipdata@dev,
+    github::PIP-Technical-team/pipr@dev

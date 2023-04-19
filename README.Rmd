@@ -28,6 +28,14 @@ In addition to the basic functionality of attaching and installing PIP-related R
 
 The core PIP R packages are
 
+-   pipapi
+-   pipaux
+-   pipload
+-   wbpip
+-   pipfun
+-   pipdata
+-   pipr
+
 ## Installation
 
 You can install the development version of metapip from [GitHub](https://github.com/) with:
