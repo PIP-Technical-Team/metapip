@@ -18,7 +18,15 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-The goal of metapip is to ...
+The goal of `{metapip}` is to provide the user with a set of functions that allow him/her to work efficiently with all the PIP R packages. The technical world of PIP consist of several packages that interact to each to load, format, modify, and estimate data for the PIP system. Given that the number of packages has increased over time, it was necessary to create a meta package whose only objective is the proper management of all the other PIP packages.
+
+`{metapip}` is highly inspired by the [{tidyverse}](https://github.com/tidyverse/tidyverse), so that some of its functions are just a simple refactoring of the `{tidyverse}` functions. All the credit, then, goes to the Tidyerse team. Thank you!
+
+In addition to the basic functionality of attaching and installing PIP-related R packages, `{metapip}` also works as the manager of those packages in your working environment such that you are always working with the right version of any of the PIP packages.
+
+## Core packages
+
+The core PIP R packages are
 
 ## Installation
 
