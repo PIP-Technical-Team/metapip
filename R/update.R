@@ -57,8 +57,8 @@ pkg_deps <- function(x = "metapip", recursive = FALSE) {
   if ("metapip" %in% x && is.null(deps$metapip)) {
     deps$metapip <-
       c(
-        "pipapi", "pipaux", "pipload", "wbpip", "pipfun", "pipdata", "pipr", "cli",
-        "rstudioapi", "tibble", "data.table"
+        "pipapi", "pipaux", "pipload", "wbpip", "pipfun", "pipdata", "pipr",
+        "cli", "rstudioapi", "tibble"
       )
   }
 
