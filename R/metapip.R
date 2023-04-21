@@ -32,4 +32,18 @@ if (getRversion() >= "2.15.1") {
   )
 }
 
+# Suppress R CMD check note
+# Namespace in Imports field not imported from: PKG
+#   All declared Imports should be used.
+ignore_unused_imports <- function() {
+  pipapi::pip
+  pipaux::load_aux
+  pipload::pip_load_aux
+  pipdata::dlw_clean
+  pipfun::load_from_gh
+  pipr::get_aux
+  wbpip::get_bins
+}
+
+
 NULL
