@@ -37,7 +37,7 @@ if (getRversion() >= "2.15.1") {
 #   All declared Imports should be used.
 ignore_unused_imports <- function() {
   pipapi::pip
-  pipaux::load_aux
+  #pipaux::load_aux
   pipload::pip_load_aux
   pipdata::dlw_clean
   pipfun::load_from_gh
