@@ -18,7 +18,8 @@ LazyData: true
 URL: https://github.com/PIP-Technical-Team/metapip
 BugReports: https://github.com/PIP-Technical-Team/metapip/issues
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0), 
+    mockery
 Config/testthat/edition: 3
 RoxygenNote: 7.2.3
 Imports: 
@@ -30,6 +31,7 @@ Imports:
     gh,
     rstudioapi, 
     tibble,
+    remotes,
     pipapi (>= 1.2.0.9001),
     pipdata (>= 0.0.0.9013),
     pipfun (>= 0.0.0.9017),

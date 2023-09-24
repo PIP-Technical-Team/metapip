@@ -10,7 +10,7 @@ get_branches(package = "pipapi")
 \item{package}{one of the core package name}
 }
 \value{
-list of branches in unordered list
+an invisible character vector of branches
 }
 \description{
 Get available branches for a particular package
