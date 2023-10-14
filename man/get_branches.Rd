@@ -7,11 +7,18 @@
 get_branches(package = "pipapi")
 }
 \arguments{
-\item{package}{one of the core package name}
+\item{package}{one of the core package name (default "pipapi")}
 }
 \value{
 an invisible character vector of branches
 }
 \description{
 Get available branches for a particular package
+}
+\examples{
+\dontrun{
+  get_branches()
+  get_branches("pipr")
+}
+
 }

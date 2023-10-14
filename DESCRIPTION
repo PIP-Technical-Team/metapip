@@ -40,7 +40,7 @@ Imports:
     rlang,
     wbpip (>= 0.1.0)
 Remotes: 
-    github::PIP-Technical-team/pipapi@dev,
+    github::PIP-Technical-team/pipapi@DEV,
     github::PIP-Technical-team/pipload@new_pipeline,
     github::PIP-Technical-team/wbpip,
     github::PIP-Technical-team/pipfun@ongoing,

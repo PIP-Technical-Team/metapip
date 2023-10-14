@@ -1,8 +1,15 @@
 #' Get available branches for a particular package
 #'
-#' @param package one of the core package name
+#' @param package one of the core package name (default "pipapi")
 #'
 #' @return an invisible character vector of branches
+#'
+#' @examples
+#' \dontrun{
+#'   get_branches()
+#'   get_branches("pipr")
+#'}
+#'
 #' @export
 #'
 get_branches <- function(package = "pipapi") {
@@ -17,12 +24,18 @@ get_branches <- function(package = "pipapi") {
 
 #' Install branch from a package
 #'
-#' @param package one of the core package name
-#' @param branch valid branch name
+#' @param package one of the core package name (default "pipapi")
+#' @param branch valid branch name (default "PROD")
+#'
+#' @examples
+#' \dontrun{
+#'   install_branch()
+#'   install_branch("pipfun", "ongoing")
+#'}
 #'
 #' @export
 #'
-install_branch <- function(package = "pipapi", branch = "master") {
+install_branch <- function(package = "pipapi", branch = "PROD") {
   check_package_condition(package)
   assertthat::assert_that(length(branch) == 1, msg = "Please enter a single branch name.")
   br <- suppressMessages(get_branches(package))

@@ -4,13 +4,20 @@
 \alias{install_branch}
 \title{Install branch from a package}
 \usage{
-install_branch(package = "pipapi", branch = "master")
+install_branch(package = "pipapi", branch = "PROD")
 }
 \arguments{
-\item{package}{one of the core package name}
+\item{package}{one of the core package name (default "pipapi")}
 
-\item{branch}{valid branch name}
+\item{branch}{valid branch name (default "PROD")}
 }
 \description{
 Install branch from a package
+}
+\examples{
+\dontrun{
+  install_branch()
+  install_branch("pipfun", "ongoing")
+}
+
 }
