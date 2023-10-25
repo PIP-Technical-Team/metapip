@@ -4,7 +4,7 @@
 \alias{get_branches}
 \title{Get available branches for a particular package}
 \usage{
-get_branches(package = "pipapi")
+get_branches(package = "pipapi", display = TRUE)
 }
 \arguments{
 \item{package}{one of the core package name (default "pipapi")}

@@ -12,12 +12,14 @@
 #'
 #' @export
 #'
-get_branches <- function(package = "pipapi") {
+get_branches <- function(package = "pipapi", display = TRUE) {
   check_package_condition(package)
   out <- gh::gh("GET /repos/PIP-Technical-Team/{repo}/branches", repo = package)
   branches <- vapply(out, `[[`, "", "name")
-  cli::cli_h3("These are available branches for {package} package: ")
-  cli::cli_ul(glue::glue("{branches}"))
+  if(isTRUE(display)) {
+    cli::cli_h3("These are available branches for {package} package: ")
+    cli::cli_ul(glue::glue("{branches}"))
+  }
   return(invisible(branches))
 }
 
@@ -49,6 +51,10 @@ install_branch <- function(package = "pipapi", branch = "PROD") {
 
 check_package_condition <- function(package) {
   assertthat::assert_that(length(package) == 1, msg = "Please enter a single package name.")
-  assertthat::assert_that(package %in% core, msg = glue::glue("The package is not one of {toString(core)}."))
+  is_core(package)
+}
+
+is_core <- function(package) {
+  assertthat::assert_that(all(package %in% core), msg = glue::glue("The package is not one of {toString(core)}."))
 }
 
