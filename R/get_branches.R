@@ -1,6 +1,7 @@
 #' Get available branches for a particular package
 #'
 #' @param package one of the core package name (default "pipapi")
+#' @param display (default TRUE) do you want to display the branches in the console?
 #'
 #' @return an invisible character vector of branches
 #'

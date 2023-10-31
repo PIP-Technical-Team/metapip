@@ -8,6 +8,8 @@ get_branches(package = "pipapi", display = TRUE)
 }
 \arguments{
 \item{package}{one of the core package name (default "pipapi")}
+
+\item{display}{(default TRUE) do you want to display the branches in the console?}
 }
 \value{
 an invisible character vector of branches
