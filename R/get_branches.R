@@ -14,6 +14,7 @@
 #' @export
 #'
 get_branches <- function(package = "pipapi", display = TRUE) {
+  check_github_token()
   check_package_condition(package)
   out <- gh::gh("GET /repos/PIP-Technical-Team/{repo}/branches", repo = package)
   branches <- vapply(out, `[[`, "", "name")
@@ -39,6 +40,7 @@ get_branches <- function(package = "pipapi", display = TRUE) {
 #' @export
 #'
 install_branch <- function(package = "pipapi", branch = "PROD") {
+  check_github_token()
   check_package_condition(package)
   assertthat::assert_that(length(branch) == 1, msg = "Please enter a single branch name.")
   br <- suppressMessages(get_branches(package))

@@ -13,6 +13,7 @@
 #' @export
 #'
 install_all_packages <- function(branch = "PROD") {
+  check_github_token()
   lapply(core, install_branch, branch)
   return(invisible(NULL))
 }
