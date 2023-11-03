@@ -15,3 +15,9 @@ a knitr::kable output with details about the core packages
 \description{
 Return meta information about core packages
 }
+\examples{
+\dontrun{
+core_metadata()
+core_metadata(c("pipapi", "wbpip"))
+}
+}

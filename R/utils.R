@@ -67,3 +67,12 @@ check_github_token <- function() {
   assertthat::assert_that(Sys.getenv("GITHUB_PAT") != "",
                           msg = "Enviroment variable `GITHUB_PAT` is empty. Please set it up using Sys.setenv(GITHUB_PAT = 'code')")
 }
+
+check_package_condition <- function(package) {
+  assertthat::assert_that(length(package) == 1, msg = "Please enter a single package name.")
+  is_core(package)
+}
+
+is_core <- function(package) {
+  assertthat::assert_that(all(package %in% core), msg = glue::glue("The package is not one of {toString(core)}."))
+}

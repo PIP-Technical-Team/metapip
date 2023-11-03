@@ -52,12 +52,38 @@ install_branch <- function(package = "pipapi", branch = "PROD") {
 }
 
 
-check_package_condition <- function(package) {
-  assertthat::assert_that(length(package) == 1, msg = "Please enter a single package name.")
+#' Get last update time of branches in a specific package
+#'
+#' @param package one of the core package (default "pipapi")
+#' @param branch valid branch name for the specified package
+#'
+#' @return a knitr::kable output with details about each branch of the package
+#'
+#' @examples
+#' \dontrun{
+#' get_branch_info()
+#' get_branch_info(branch = c("PROD", "QA"))
+#' get_branch_info(package = "wbpip", branch = c("PROD", "QA"))
+#' }
+#' @export
+get_branch_info <- function(package = "pipapi", branch = NULL) {
+  check_github_token()
   is_core(package)
-}
+  check_package_condition(package)
 
-is_core <- function(package) {
-  assertthat::assert_that(all(package %in% core), msg = glue::glue("The package is not one of {toString(core)}."))
+  branches <- get_branches(package, display = FALSE)
+  if(!is.null(branch)) {
+    assertthat::assert_that(all(branch %in% branches),
+        msg = glue::glue("{branch} is not a correct branch name. Please use one of {toString(branches)}."))
+    branches <- branch
+  }
+  out <- purrr::map_df(branches, \(x) {
+    dat <- latest_commit_for_branch(package, x)
+    dat$commit$author
+  })
+  res <- cbind(package, branch_name = branches, out) %>%
+    dplyr::rename(last_update_time = "date", last_commit_author_name = "name") %>%
+    dplyr::select(-"email")
+  knitr::kable(res)
 }
 

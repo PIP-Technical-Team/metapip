@@ -27,10 +27,10 @@ Imports:
     cli,
     glue,
     assertthat,
-    dplyr, 
-    purrr, 
+    dplyr,
+    purrr,
     gh,
-    rstudioapi, 
+    rstudioapi,
     tibble,
     remotes,
     pipapi (>= 1.2.0.9001),
@@ -39,7 +39,8 @@ Imports:
     pipload (>= 0.2.0.9005),
     pipr (>= 1.0.0),
     rlang,
-    wbpip (>= 0.1.0)
+    wbpip (>= 0.1.0),
+    magrittr
 Remotes: 
     github::PIP-Technical-team/pipapi@DEV,
     github::PIP-Technical-team/pipload@new_pipeline,

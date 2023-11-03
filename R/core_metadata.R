@@ -2,6 +2,11 @@
 #'
 #' @param package One (or more) core packages, if NULL shows information about all of them.
 #' @return a knitr::kable output with details about the core packages
+#' @examples
+#' \dontrun{
+#' core_metadata()
+#' core_metadata(c("pipapi", "wbpip"))
+#' }
 #' @export
 #'
 core_metadata <- function(package = NULL) {
@@ -23,12 +28,7 @@ core_metadata <- function(package = NULL) {
   })
 
   latest_commit <- lapply(package, \(x) {
-    dat <- tryCatch({
-      gh::gh("GET /repos/{owner}/{repo}/commits/{branch}", owner = "PIP-Technical-Team",
-                  repo = x, branch = "PROD")
-  }, error = function(err) {
-    list(commit = list(author = list(date = NA, name = NA)))
-    })
+    dat <- latest_commit_for_branch(x, "PROD")
     dat$commit$author
   })
   out <- data.frame(package, no_of_branches, latest_release_tag = sapply(latest_release, `[[`, 1),
@@ -36,4 +36,14 @@ core_metadata <- function(package = NULL) {
                     latest_commit_author = sapply(latest_commit, `[[`, "name"),
                     latest_commit_time = sapply(latest_commit, `[[`, "date"))
   knitr::kable(out)
+}
+
+
+latest_commit_for_branch <- function(package, branch) {
+  tryCatch({
+    gh::gh("GET /repos/{owner}/{repo}/commits/{branch}", owner = "PIP-Technical-Team",
+           repo = package, branch = branch)
+  }, error = function(err) {
+    list(commit = list(author = list(date = NA, name = NA)))
+  })
 }
