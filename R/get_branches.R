@@ -57,7 +57,7 @@ install_branch <- function(package = "pipapi", branch = "PROD") {
 #' @param package one of the core package (default "pipapi")
 #' @param branch valid branch name for the specified package
 #'
-#' @return a knitr::kable output with details about each branch of the package
+#' @return a dataframe
 #'
 #' @examples
 #' \dontrun{
@@ -84,6 +84,33 @@ get_branch_info <- function(package = "pipapi", branch = NULL) {
   res <- cbind(package, branch_name = branches, out) %>%
     dplyr::rename(last_update_time = "date", last_commit_author_name = "name") %>%
     dplyr::select(-"email")
-  knitr::kable(res)
+  res
+}
+
+
+#' Get details of the branch which was last updated
+#'
+#' @inheritParams get_branch_info
+#'
+#' @return single row dataframe
+#'
+#' @examples
+#' \dontrun{
+#' get_latest_branch_update()
+#' get_latest_branch_update("pipr")
+#' }
+#' @export
+#'
+get_latest_branch_update <- function(package = "pipapi") {
+  check_github_token()
+  is_core(package)
+  check_package_condition(package)
+  # Get info about all the branches
+  out <- get_branch_info(package)
+  # Return only the latest information
+  out %>%
+    dplyr::mutate(last_update_time = as.POSIXct(.data$last_update_time, format = "%Y-%m-%dT%T")) %>%
+    dplyr::arrange(.data$last_update_time) %>%
+    dplyr::slice_tail(n = 1L)
 }
 

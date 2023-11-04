@@ -27,14 +27,13 @@ core_metadata <- function(package = NULL) {
     c(dat$tag_name, dat$published_at)
   })
 
-  latest_commit <- lapply(package, \(x) {
-    dat <- latest_commit_for_branch(x, "PROD")
-    dat$commit$author
-  })
+  latest_commit <- lapply(package, get_latest_branch_update)
+
   out <- data.frame(package, no_of_branches, latest_release_tag = sapply(latest_release, `[[`, 1),
                     latest_release_time = sapply(latest_release, `[[`, 2),
-                    latest_commit_author = sapply(latest_commit, `[[`, "name"),
-                    latest_commit_time = sapply(latest_commit, `[[`, "date"))
+                    latest_commit_branch = sapply(latest_commit, `[[`, "branch_name"),
+                    latest_commit_author = sapply(latest_commit, `[[`, "last_commit_author_name"),
+                    latest_commit_time = as.POSIXct(sapply(latest_commit, `[[`, "last_update_time")))
   knitr::kable(out)
 }
 

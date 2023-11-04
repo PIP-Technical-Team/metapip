@@ -12,7 +12,7 @@ get_branch_info(package = "pipapi", branch = NULL)
 \item{branch}{valid branch name for the specified package}
 }
 \value{
-a knitr::kable output with details about each branch of the package
+a dataframe
 }
 \description{
 Get last update time of branches in a specific package

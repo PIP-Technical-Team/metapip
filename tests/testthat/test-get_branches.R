@@ -38,12 +38,30 @@ test_that("is_core works as expected", {
 test_that("get_branch_info works as expected", {
   out1 <- get_branch_info()
   out2 <- get_branch_info(package = "wbpip", branch = c("PROD", "QA"))
-  expect_s3_class(out1, "knitr_kable")
-  expect_s3_class(out2, "knitr_kable")
+  expect_s3_class(out1, "data.frame")
+  expect_s3_class(out2, "data.frame")
+  expect_length(out1, 4)
+  expect_length(out2, 4)
 })
 
 
 test_that("get_branch_info returns an error", {
   expect_error(get_branch_info("abc"), "The package is not one of pipapi, pipload, wbpip, pipfun, pipdata, pipr.")
   expect_error(get_branch_info(c("pipr", "pipapi")), "Please enter a single package name.")
+})
+
+
+test_that("get_latest_branch_update works as expected", {
+  out1 <- get_latest_branch_update()
+  out2 <- get_latest_branch_update(package = "wbpip")
+  expect_s3_class(out1, "data.frame")
+  expect_s3_class(out2, "data.frame")
+  expect_equal(dim(out1), c(1, 4))
+  expect_equal(dim(out2), c(1, 4))
+})
+
+
+test_that("get_branch_info returns an error", {
+  expect_error(get_latest_branch_update("abc"), "The package is not one of pipapi, pipload, wbpip, pipfun, pipdata, pipr.")
+  expect_error(get_latest_branch_update(c("pipr", "pipapi")), "Please enter a single package name.")
 })
