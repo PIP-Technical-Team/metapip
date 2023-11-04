@@ -47,7 +47,7 @@ install_branch <- function(package = "pipapi", branch = "PROD") {
   assertthat::assert_that(branch %in% br,
       msg = glue::glue("Not a valid branch name for the package {package}. Select one of {toString(br)}"))
 
-  cli::cli_alert_info(glue::glue("Installing {branch} from package {package}"))
+  cli::cli_alert_info(glue::glue("Installing branch {branch} from package {package}"))
   remotes::install_github(glue::glue("PIP-Technical-Team/{package}@{branch}"))
 }
 
@@ -109,6 +109,7 @@ get_latest_branch_update <- function(package = "pipapi") {
   out <- get_branch_info(package)
   # Return only the latest information
   out %>%
+    dplyr::filter(.data$branch_name != "gh-pages") %>%
     dplyr::mutate(last_update_time = as.POSIXct(.data$last_update_time, format = "%Y-%m-%dT%T")) %>%
     dplyr::arrange(.data$last_update_time) %>%
     dplyr::slice_tail(n = 1L)

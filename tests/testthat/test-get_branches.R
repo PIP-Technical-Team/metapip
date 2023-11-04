@@ -25,7 +25,7 @@ test_that("install_branch works correctly", {
   })
   expect_true(install_branch(branch = "abc"))
   expect_error(install_branch(branch = c("abc", "def")), "Please enter a single branch name.")
-  expect_message(install_branch(branch = "abc"), "Installing abc from package pipapi")
+  expect_message(install_branch(branch = "abc"), "Installing branch abc from package pipapi")
 })
 
 test_that("is_core works as expected", {
