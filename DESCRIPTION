@@ -7,6 +7,10 @@ Authors@R:
              family = "Castañeda",
              role = c("aut", "cre"),
             email = "acastanedaa@worldbank.org"),
+       person(given = "Ronak",
+            family = "Shah",
+            role =  "aut",
+            email = "shahronak47@yahoo.in"),      
       person(given = "World Bank",
             role = "cph")      
   )
@@ -24,6 +28,12 @@ Suggests:
 Config/testthat/edition: 3
 RoxygenNote: 7.2.3
 Imports: 
+    pipapi (>= 1.2.0.9001),
+    pipdata (>= 0.0.0.9013),
+    pipfun (>= 0.0.0.9017),
+    pipload (>= 0.2.0.9005),
+    pipr (>= 1.0.0),
+    wbpip (>= 0.1.0),
     cli,
     glue,
     assertthat,
@@ -33,13 +43,7 @@ Imports:
     rstudioapi,
     tibble,
     remotes,
-    pipapi (>= 1.2.0.9001),
-    pipdata (>= 0.0.0.9013),
-    pipfun (>= 0.0.0.9017),
-    pipload (>= 0.2.0.9005),
-    pipr (>= 1.0.0),
     rlang,
-    wbpip (>= 0.1.0),
     magrittr
 Remotes: 
     github::PIP-Technical-team/pipapi@DEV,
