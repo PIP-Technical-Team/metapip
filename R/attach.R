@@ -33,18 +33,21 @@ metapip_attach <- function(pkg = NULL) {
     startup = TRUE
   )
 
-  versions <- vapply(to_load, package_version, character(1))
+  versions <- vapply(to_load, package_version, character(1L))
+  branch_name <- vapply(to_load, \(x) packageDescription(x)$GithubRef, character(1L))
+
   clean_versions <- gsub(cli::ansi_regex(), "", versions, perl = TRUE)
   packages <- paste0(
     cli::col_green(cli::symbol$tick), " ", cli::col_blue(format(to_load)), " ",
-    cli::ansi_align(versions, max(nchar(clean_versions)))
+    cli::ansi_align(versions, max(nchar(clean_versions))), " ",
+    cli::col_blue("(", branch_name, ")")
   )
 
   if (length(packages) %% 2 == 1) {
     packages <- append(packages, "")
   }
   col1 <- seq_len(length(packages) / 2)
-  info <- paste0(packages[col1], "     ", packages[-col1])
+  info <- paste0(packages[col1], "          ", packages[-col1])
 
   msg(paste(info, collapse = "\n"), startup = TRUE)
 
