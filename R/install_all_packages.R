@@ -12,8 +12,9 @@
 #'
 #' @export
 #'
-install_all_packages <- function(branch = "PROD") {
+install_all_packages <- function(package = NULL, branch = "PROD") {
   check_github_token()
+  if(is.null(NULL))
   lapply(core, install_branch, branch)
   return(invisible(NULL))
 }

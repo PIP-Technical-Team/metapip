@@ -29,7 +29,7 @@ get_branches <- function(package = "pipapi", display = TRUE) {
 #' Install branch from a package
 #'
 #' @param package one of the core package name (default "pipapi")
-#' @param branch valid branch name (default "PROD")
+#' @param branch valid branch name (default "DEV")
 #'
 #' @examples
 #' \dontrun{
@@ -39,7 +39,7 @@ get_branches <- function(package = "pipapi", display = TRUE) {
 #'
 #' @export
 #'
-install_branch <- function(package = "pipapi", branch = "PROD") {
+install_branch <- function(package = "pipapi", branch = "DEV") {
   check_github_token()
   check_package_condition(package)
   assertthat::assert_that(length(branch) == 1, msg = "Please enter a single branch name.")

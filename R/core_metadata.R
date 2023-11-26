@@ -34,7 +34,8 @@ core_metadata <- function(package = NULL) {
                     latest_commit_branch = sapply(latest_commit, `[[`, "branch_name"),
                     latest_commit_author = sapply(latest_commit, `[[`, "last_commit_author_name"),
                     latest_commit_time = as.POSIXct(sapply(latest_commit, `[[`, "last_update_time")))
-  knitr::kable(out)
+  print(knitr::kable(out))
+  return(invisible(out))
 }
 
 
