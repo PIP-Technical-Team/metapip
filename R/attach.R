@@ -34,7 +34,7 @@ metapip_attach <- function(pkg = NULL) {
   )
 
   versions <- vapply(to_load, package_version, character(1L))
-  branch_name <- vapply(to_load, \(x) packageDescription(x)$GithubRef, character(1L))
+  branch_name <- vapply(to_load, \(x) utils::packageDescription(x)$GithubRef, character(1L))
 
   clean_versions <- gsub(cli::ansi_regex(), "", versions, perl = TRUE)
   packages <- paste0(

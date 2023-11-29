@@ -28,15 +28,8 @@ Suggests:
 Config/testthat/edition: 3
 RoxygenNote: 7.2.3
 Imports: 
-    pipapi (>= 1.2.0.9001),
-    pipdata (>= 0.0.0.9013),
-    pipfun (>= 0.0.0.9017),
-    pipload (>= 0.2.0.9005),
-    pipr (>= 1.0.0),
-    wbpip (>= 0.1.0),
     cli,
     glue,
-    assertthat,
     dplyr,
     purrr,
     gh,
@@ -45,9 +38,3 @@ Imports:
     remotes,
     rlang,
     magrittr
-Remotes: 
-    github::PIP-Technical-team/pipapi@DEV,
-    github::PIP-Technical-team/pipload@new_pipeline,
-    github::PIP-Technical-team/wbpip,
-    github::PIP-Technical-team/pipfun@ongoing,
-    github::PIP-Technical-team/pipdata

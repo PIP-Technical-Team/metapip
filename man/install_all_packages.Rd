@@ -5,9 +5,11 @@
 \title{Install all pip core packages from a specific branch.
 This includes packages like pipapi, pipaux, pipload, wbpip, pipfun, pipdata and pipr}
 \usage{
-install_all_packages(branch = "PROD")
+install_all_packages(package = NULL, branch = "PROD")
 }
 \arguments{
+\item{package}{one of the core package name (default "pipapi")}
+
 \item{branch}{valid branch name (default "PROD")}
 }
 \value{

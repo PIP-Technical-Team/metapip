@@ -4,12 +4,12 @@
 \alias{install_branch}
 \title{Install branch from a package}
 \usage{
-install_branch(package = "pipapi", branch = "PROD")
+install_branch(package = "pipapi", branch = "DEV")
 }
 \arguments{
 \item{package}{one of the core package name (default "pipapi")}
 
-\item{branch}{valid branch name (default "PROD")}
+\item{branch}{valid branch name (default "DEV")}
 }
 \description{
 Install branch from a package

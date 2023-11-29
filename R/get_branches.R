@@ -20,7 +20,7 @@ get_branches <- function(package = "pipapi", display = TRUE) {
   branches <- vapply(out, `[[`, "", "name")
   if(isTRUE(display)) {
     cli::cli_h3("These are available branches for {package} package: ")
-    cli::cli_ul(glue::glue("{branches}"))
+    cli::cat_bullet(glue::glue("{branches}"))
   }
   return(invisible(branches))
 }
@@ -42,11 +42,10 @@ get_branches <- function(package = "pipapi", display = TRUE) {
 install_branch <- function(package = "pipapi", branch = "DEV") {
   check_github_token()
   check_package_condition(package)
-  assertthat::assert_that(length(branch) == 1, msg = "Please enter a single branch name.")
+  if(length(branch) != 1L) cli::cli_abort("Please enter a single branch name.")
   br <- suppressMessages(get_branches(package))
-  assertthat::assert_that(branch %in% br,
-      msg = glue::glue("Not a valid branch name for the package {package}. Select one of {toString(br)}"))
 
+  if(!branch %in% br) cli::cli_abort("Not a valid branch name for the package {package}. Select one of {toString(br)}")
   cli::cli_alert_info(glue::glue("Installing branch {branch} from package {package}"))
   remotes::install_github(glue::glue("PIP-Technical-Team/{package}@{branch}"))
 }
@@ -73,8 +72,9 @@ get_branch_info <- function(package = "pipapi", branch = NULL) {
 
   branches <- get_branches(package, display = FALSE)
   if(!is.null(branch)) {
-    assertthat::assert_that(all(branch %in% branches),
-        msg = glue::glue("{branch} is not a correct branch name. Please use one of {toString(branches)}."))
+    if(!all(branch %in% branches)) {
+      cli::cli_abort("{branch} is not a correct branch name. Please use one of {toString(branches)}.")
+    }
     branches <- branch
   }
   out <- purrr::map_df(branches, \(x) {
