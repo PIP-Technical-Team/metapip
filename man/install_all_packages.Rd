@@ -2,13 +2,13 @@
 % Please edit documentation in R/install_all_packages.R
 \name{install_all_packages}
 \alias{install_all_packages}
-\title{Install all pip core packages from a specific branch.
+\title{Install one (or more) pip core packages from a specific branch.
 This includes packages like pipapi, pipaux, pipload, wbpip, pipfun, pipdata and pipr}
 \usage{
 install_all_packages(package = NULL, branch = "PROD")
 }
 \arguments{
-\item{package}{one of the core package name (default "pipapi")}
+\item{package}{one (or more) of the core package name, if NULL all the core packages are installed from the branch}
 
 \item{branch}{valid branch name (default "PROD")}
 }
@@ -16,7 +16,7 @@ install_all_packages(package = NULL, branch = "PROD")
 invisible NULL
 }
 \description{
-Install all pip core packages from a specific branch.
+Install one (or more) pip core packages from a specific branch.
 This includes packages like pipapi, pipaux, pipload, wbpip, pipfun, pipdata and pipr
 }
 \examples{

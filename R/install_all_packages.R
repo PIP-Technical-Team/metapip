@@ -1,7 +1,7 @@
-#' Install all pip core packages from a specific branch.
+#' Install one (or more) pip core packages from a specific branch.
 #' This includes packages like pipapi, pipaux, pipload, wbpip, pipfun, pipdata and pipr
 #'
-#' @param package one of the core package name (default "pipapi")
+#' @param package one (or more) of the core package name, if NULL all the core packages are installed from the branch
 #' @param branch valid branch name (default "PROD")
 #'
 #' @return invisible NULL
