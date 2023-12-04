@@ -15,7 +15,11 @@
 #'
 install_all_packages <- function(package = NULL, branch = "PROD") {
   check_github_token()
-  if(is.null(NULL))
-  lapply(core, install_branch, branch)
+  if(is.null(package)) {
+    package = core
+  } else {
+    is_core(package)
+  }
+  lapply(package, install_branch, branch)
   return(invisible(NULL))
 }

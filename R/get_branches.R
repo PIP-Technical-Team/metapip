@@ -43,7 +43,7 @@ install_branch <- function(package = "pipapi", branch = "DEV") {
   check_github_token()
   check_package_condition(package)
   if(length(branch) != 1L) cli::cli_abort("Please enter a single branch name.")
-  br <- suppressMessages(get_branches(package))
+  br <- get_branches(package, display = FALSE)
 
   if(!branch %in% br) cli::cli_abort("Not a valid branch name for the package {package}. Select one of {toString(br)}")
   cli::cli_alert_info(glue::glue("Installing branch {branch} from package {package}"))

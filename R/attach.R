@@ -42,14 +42,14 @@ metapip_attach <- function(pkg = NULL) {
     cli::ansi_align(versions, max(nchar(clean_versions))), " ",
     cli::col_blue("(", branch_name, ")")
   )
+  # Due to displaying branch name the package names in 2 columns do not look uniform so showing only 1 package per line
+  # if (length(packages) %% 2 == 1) {
+  #   packages <- append(packages, "")
+  # }
+  # col1 <- seq_len(length(packages) / 2)
+  # info <- paste0(packages[col1], "          ", packages[-col1])
 
-  if (length(packages) %% 2 == 1) {
-    packages <- append(packages, "")
-  }
-  col1 <- seq_len(length(packages) / 2)
-  info <- paste0(packages[col1], "          ", packages[-col1])
-
-  msg(paste(info, collapse = "\n"), startup = TRUE)
+  msg(paste(packages, collapse = "\n"), startup = TRUE)
 
   suppressPackageStartupMessages(
     lapply(to_load, library, character.only = TRUE, warn.conflicts = FALSE)
