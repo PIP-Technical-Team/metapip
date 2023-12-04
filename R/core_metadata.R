@@ -17,17 +17,21 @@ core_metadata <- function(package = NULL) {
   } else {
     is_core(package)
   }
-  branches <- lapply(package, get_branches, display = FALSE)
+  cli::cli_alert_info("Gathering branch information of the package")
+  branches <- purrr::map(package, get_branches, display = FALSE, .progress = TRUE)
   no_of_branches <- lengths(branches)
-  latest_release <- lapply(package, \(x) {
+
+  cli::cli_alert_info("Gathering latest tag and published date.")
+  latest_release <- purrr::map(package, \(x) {
     dat <- tryCatch({
       gh::gh("GET /repos/{owner}/{repo}/releases/latest",
           owner = "PIP-Technical-Team", repo = x)
     }, error = function(err) data.frame(tag_name = NA, published_at = NA))
     c(dat$tag_name, dat$published_at)
-  })
+  }, .progress = TRUE)
 
-  latest_commit <- lapply(package, get_latest_branch_update)
+  cli::cli_alert_info("Gathering latest branch information")
+  latest_commit <- purrr::map(package, get_latest_branch_update, .progress = TRUE)
 
   out <- data.frame(package, no_of_branches, latest_release_tag = sapply(latest_release, `[[`, 1),
                     latest_release_time = sapply(latest_release, `[[`, 2),
