@@ -8,7 +8,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' install_all_packages("test")
+#' install_all_packages(branch = "test")
 #' }
 #'
 #' @export
