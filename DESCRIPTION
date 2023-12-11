@@ -19,7 +19,7 @@ Description: More about what it does (maybe more than one line)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/PIP-Technical-Team/metapip
+URL: https://github.com/PIP-Technical-Team/metapip, https://pip-technical-team.github.io/metapip/
 BugReports: https://github.com/PIP-Technical-Team/metapip/issues
 Suggests: 
     testthat (>= 3.0.0), 
