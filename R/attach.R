@@ -35,10 +35,17 @@ metapip_attach <- function(pkg = NULL) {
   # Check if all core packages are installed, if not show appropriate message
   installed_packages <- utils::installed.packages()
   not_installed_core_packages <- setdiff(core, rownames(installed_packages))
-  if(length(not_installed_core_packages) > 0L) {
+  if (length(not_installed_core_packages) > 0L) {
     to_load <- setdiff(core, not_installed_core_packages)
-    cli::cli_warn("Package{?s} {not_installed_core_packages} {?is/are} not installed.")
+
+    to_install <- paste0("c(",
+                         shQuote(not_installed_core_packages) |>
+                           paste(collapse = ", ") ,")")
+
+    cli::cli_warn(c("Package{?s} {not_installed_core_packages} {?is/are} not installed.",
+                    "i" = "you may try {.run metapip::install_all_packages({to_install})}"))
   }
+
   versions <- vapply(to_load, package_version, character(1L))
   branch_name <- vapply(to_load, \(x) utils::packageDescription(x)$GithubRef, character(1L))
 

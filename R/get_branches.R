@@ -18,7 +18,7 @@ get_branches <- function(package = "pipapi", display = TRUE) {
   check_package_condition(package)
   out <- gh::gh("GET /repos/PIP-Technical-Team/{repo}/branches", repo = package)
   branches <- vapply(out, `[[`, "", "name")
-  if(isTRUE(display)) {
+  if (isTRUE(display)) {
     cli::cli_h3("These are available branches for {package} package: ")
     cli::cat_bullet(glue::glue("{branches}"))
   }

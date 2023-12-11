@@ -1,4 +1,6 @@
 #' Install one (or more) pip core packages from a specific branch.
+#'
+#' @description
 #' This includes packages like pipapi, pipaux, pipload, wbpip, pipfun, pipdata and pipr
 #'
 #' @param package one (or more) of the core package name, if NULL all the core packages are installed from the branch
