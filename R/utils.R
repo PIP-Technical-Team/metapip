@@ -61,3 +61,20 @@ choose_startup_tip <- function(vec) {
   ind <- as.numeric(format(Sys.time(), "%S")) %% length(vec) + 1
   vec[ind]
 }
+
+
+check_github_token <- function() {
+  if(Sys.getenv("GITHUB_PAT") == "")
+    cli::cli_abort("Enviroment variable `GITHUB_PAT` is empty. Please set it up using Sys.setenv(GITHUB_PAT = 'code')")
+}
+
+check_package_condition <- function(package) {
+  if(length(package) != 1L) cli::cli_abort("Please enter a single branch name.")
+  is_core(package)
+}
+
+is_core <- function(package) {
+  if(!all(package %in% core))
+    cli::cli_abort("The package is not one of {toString(core)}")
+  return(TRUE)
+}

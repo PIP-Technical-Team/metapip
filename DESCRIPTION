@@ -1,12 +1,16 @@
 Package: metapip
 Type: Package
 Title: Easily Install, Load, and manage PIP Packages
-Version: 0.0.0.9003
+Version: 0.0.0.9004
 Authors@R:
     c(person(given = "R.Andrés",
              family = "Castañeda",
              role = c("aut", "cre"),
             email = "acastanedaa@worldbank.org"),
+       person(given = "Ronak",
+            family = "Shah",
+            role =  "aut",
+            email = "shahronak47@yahoo.in"),      
       person(given = "World Bank",
             role = "cph")      
   )
@@ -15,28 +19,22 @@ Description: More about what it does (maybe more than one line)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/PIP-Technical-Team/metapip
+URL: https://github.com/PIP-Technical-Team/metapip, https://pip-technical-team.github.io/metapip/
 BugReports: https://github.com/PIP-Technical-Team/metapip/issues
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0), 
+    mockery, 
+    knitr
 Config/testthat/edition: 3
 RoxygenNote: 7.2.3
 Imports: 
     cli,
     glue,
-    pak,
-    pipapi (>= 1.2.0.9001),
-    pipaux (>= 0.1.0.9006),
-    pipdata (>= 0.0.0.9013),
-    pipfun (>= 0.0.0.9017),
-    pipload (>= 0.2.0.9005),
-    pipr (>= 1.0.0),
+    dplyr,
+    purrr,
+    gh,
+    rstudioapi,
+    tibble,
+    remotes,
     rlang,
-    wbpip (>= 0.1.0)
-Remotes: 
-    github::PIP-Technical-team/pipapi@dev,
-    github::PIP-Technical-team/pipaux@new_pipeline,
-    github::PIP-Technical-team/pipload@new_pipeline,
-    github::PIP-Technical-team/wbpip,
-    github::PIP-Technical-team/pipfun@ongoing,
-    github::PIP-Technical-team/pipdata
+    magrittr

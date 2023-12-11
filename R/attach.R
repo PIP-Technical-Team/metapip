@@ -1,7 +1,7 @@
 # This is basically a copy of tidyverse and tidymodels
 
-core <- c("pipapi", "pipaux", "pipload", "wbpip", "pipfun", "pipdata", "pipr")
-
+#core <- c("pipapi", "pipaux", "pipload", "wbpip", "pipfun", "pipdata", "pipr")
+core <- c("pipapi", "pipload", "wbpip", "pipfun", "pipdata", "pipr")
 
 pkg_loaded <- function(pkg = NULL) {
   if (is.null(pkg)) {
@@ -32,21 +32,37 @@ metapip_attach <- function(pkg = NULL) {
     ),
     startup = TRUE
   )
+  # Check if all core packages are installed, if not show appropriate message
+  installed_packages <- utils::installed.packages()
+  not_installed_core_packages <- setdiff(core, rownames(installed_packages))
+  if (length(not_installed_core_packages) > 0L) {
+    to_load <- setdiff(core, not_installed_core_packages)
 
-  versions <- vapply(to_load, package_version, character(1))
+    to_install <- paste0("c(",
+                         shQuote(not_installed_core_packages) |>
+                           paste(collapse = ", ") ,")")
+
+    cli::cli_warn(c("Package{?s} {not_installed_core_packages} {?is/are} not installed.",
+                    "i" = "you may try {.run metapip::install_all_packages({to_install})}"))
+  }
+
+  versions <- vapply(to_load, package_version, character(1L))
+  branch_name <- vapply(to_load, \(x) utils::packageDescription(x)$GithubRef, character(1L))
+
   clean_versions <- gsub(cli::ansi_regex(), "", versions, perl = TRUE)
   packages <- paste0(
     cli::col_green(cli::symbol$tick), " ", cli::col_blue(format(to_load)), " ",
-    cli::ansi_align(versions, max(nchar(clean_versions)))
+    cli::ansi_align(versions, max(nchar(clean_versions))), " ",
+    cli::col_blue("(", branch_name, ")")
   )
+  # Due to displaying branch name the package names in 2 columns do not look uniform so showing only 1 package per line
+  # if (length(packages) %% 2 == 1) {
+  #   packages <- append(packages, "")
+  # }
+  # col1 <- seq_len(length(packages) / 2)
+  # info <- paste0(packages[col1], "          ", packages[-col1])
 
-  if (length(packages) %% 2 == 1) {
-    packages <- append(packages, "")
-  }
-  col1 <- seq_len(length(packages) / 2)
-  info <- paste0(packages[col1], "     ", packages[-col1])
-
-  msg(paste(info, collapse = "\n"), startup = TRUE)
+  msg(paste(packages, collapse = "\n"), startup = TRUE)
 
   suppressPackageStartupMessages(
     lapply(to_load, library, character.only = TRUE, warn.conflicts = FALSE)

@@ -1,0 +1,6 @@
+url: https://pip-technical-team.github.io/metapip/
+template:
+  bootstrap: 5
+
+development:
+  mode: auto
