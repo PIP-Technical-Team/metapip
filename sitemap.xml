@@ -31,13 +31,13 @@
     <loc>https://pip-technical-team.github.io/metapip/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://pip-technical-team.github.io/metapip/reference/install_all_packages.html</loc>
-  </url>
-  <url>
     <loc>https://pip-technical-team.github.io/metapip/reference/install_branch.html</loc>
   </url>
   <url>
     <loc>https://pip-technical-team.github.io/metapip/reference/install_latest_branch.html</loc>
+  </url>
+  <url>
+    <loc>https://pip-technical-team.github.io/metapip/reference/install_pip_packages.html</loc>
   </url>
   <url>
     <loc>https://pip-technical-team.github.io/metapip/reference/metapip.html</loc>
