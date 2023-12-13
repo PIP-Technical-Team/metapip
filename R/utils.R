@@ -78,3 +78,5 @@ is_core <- function(package) {
     cli::cli_abort("The package is not one of {toString(core)}")
   return(TRUE)
 }
+
+

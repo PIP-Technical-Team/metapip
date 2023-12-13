@@ -2,8 +2,7 @@
 % Please edit documentation in R/install_all_packages.R
 \name{install_all_packages}
 \alias{install_all_packages}
-\title{Install one (or more) pip core packages from a specific branch.
-This includes packages like pipapi, pipaux, pipload, wbpip, pipfun, pipdata and pipr}
+\title{Install one (or more) pip core packages from a specific branch.}
 \usage{
 install_all_packages(package = NULL, branch = "PROD")
 }
@@ -16,7 +15,6 @@ install_all_packages(package = NULL, branch = "PROD")
 invisible NULL
 }
 \description{
-Install one (or more) pip core packages from a specific branch.
 This includes packages like pipapi, pipaux, pipload, wbpip, pipfun, pipdata and pipr
 }
 \examples{
