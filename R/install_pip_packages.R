@@ -39,15 +39,32 @@ install_latest_branch <- function(package = NULL) {
 #'
 install_pip_packages <- function(package = NULL, branch = "PROD") {
   check_github_token()
-  if(is.null(package)) {
+  if (is.null(package)) {
     package = core
   } else {
     is_core(package)
   }
-  lapply(package, install_branch, branch)
+  lapply(package,
+         \(x) {
+           tryCatch(
+             expr = {
+               # Your code...
+               install_branch(package = x, branch)
+             },
+             # end of expr section
+
+             error = function(e) {
+               cli::cli_alert_danger("package {.pkg {x}} could not be installed")
+             },
+             # end of error section
+
+             warning = function(w) {
+               cli::cli_alert_warning("package {.pkg {x}} produces warnings during installation")
+             }
+           ) # End of trycatch
+         })
   return(invisible(NULL))
 }
-
 
 
 #' Install branch from a package

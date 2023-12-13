@@ -43,7 +43,7 @@ metapip_attach <- function(pkg = NULL) {
                            paste(collapse = ", ") ,")")
 
     cli::cli_warn(c("Package{?s} {not_installed_core_packages} {?is/are} not installed.",
-                    "i" = "you may try {.run metapip::install_all_packages({to_install})}"))
+                    "i" = "you may try {.run metapip::install_pip_packages({to_install})}"))
   }
 
   versions <- vapply(to_load, package_version, character(1L))
