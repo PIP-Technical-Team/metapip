@@ -26,31 +26,6 @@ get_branches <- function(package = "pipapi", display = TRUE) {
 }
 
 
-#' Install branch from a package
-#'
-#' @param package one of the core package name (default "pipapi")
-#' @param branch valid branch name (default "DEV")
-#'
-#' @examples
-#' \dontrun{
-#'   install_branch()
-#'   install_branch("pipfun", "ongoing")
-#'}
-#'
-#' @export
-#'
-install_branch <- function(package = "pipapi", branch = "DEV") {
-  check_github_token()
-  check_package_condition(package)
-  if(length(branch) != 1L) cli::cli_abort("Please enter a single branch name.")
-  br <- get_branches(package, display = FALSE)
-
-  if(!branch %in% br) cli::cli_abort("Not a valid branch name for the package {package}. Select one of {toString(br)}")
-  cli::cli_alert_info(glue::glue("Installing branch {branch} from package {package}"))
-  remotes::install_github(glue::glue("PIP-Technical-Team/{package}@{branch}"))
-}
-
-
 #' Get last update time of branches in a specific package
 #'
 #' @param package one of the core package (default "pipapi")

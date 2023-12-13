@@ -114,7 +114,7 @@ out
 
     This installs a specific branch for a particular package.
 
-```{r}
+```{r, eval=FALSE}
 install_branch(package = "wbpip", branch = "DEV")
 ```
 
@@ -147,7 +147,7 @@ This function installs the packages from the branch which was last updated i.e t
 
 If you pass no arguments to it, it will install latest branch for all pip core R packages. However, you can also restrict it to only a few packages as well.
 
-```{r}
+```{r, eval=FALSE}
 install_latest_branch()
 install_latest_branch(c("pipfun", "pipapi"))
 ```
@@ -165,7 +165,7 @@ out <- core_metadata(c("pipapi", "wbpip"))
 
 Install one or more core packages from a specific branch. If you have fresh installation of R then running `install_all_packages()` would set you up with all pip packages.
 
-```{r}
+```{r, eval=FALSE}
 install_all_packages(branch = "test")
 install_all_packages(c("pipapi", "wbpip"), "test")
 ```
