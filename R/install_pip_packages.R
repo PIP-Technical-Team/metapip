@@ -84,7 +84,7 @@ install_branch <- function(package = "pipapi", branch = "DEV") {
   check_github_token()
   check_package_condition(package)
   if(length(branch) != 1L) cli::cli_abort("Please enter a single branch name.")
-  unattach_package(package)
+  detach_package(package)
 
   br <- get_branches(package, display = FALSE)
 

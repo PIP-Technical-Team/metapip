@@ -79,7 +79,7 @@ is_core <- function(package) {
   return(TRUE)
 }
 
-unattach_package <- function(package) {
+detach_package <- function(package) {
   unloadNamespace(package)
 }
 
