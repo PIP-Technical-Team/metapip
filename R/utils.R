@@ -69,7 +69,7 @@ check_github_token <- function() {
 }
 
 check_package_condition <- function(package) {
-  if(length(package) != 1L) cli::cli_abort("Please enter a single branch name.")
+  if(length(package) != 1L) cli::cli_abort("Please enter a single package name.")
   is_core(package)
 }
 
@@ -79,4 +79,7 @@ is_core <- function(package) {
   return(TRUE)
 }
 
+detach_package <- function(package) {
+  unloadNamespace(package)
+}
 
