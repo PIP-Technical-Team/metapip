@@ -4,6 +4,12 @@
 #' @param package One (or more) of the PIP core packages. Default NULL will include all the packages
 #'
 #' @return tibble of pipr packages and the corresponding package versions of branch
+#' @examples
+#' \dontrun{
+#' status_table()
+#' status_table(c("pipapi", "wbpip"))
+#' }
+#'
 #' @export
 #'
 status_table <- function(package = NULL) {

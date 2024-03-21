@@ -17,3 +17,10 @@ tibble of pipr packages and the corresponding package versions of branch
 Status tables of package versions in different branches
 Apart from PROD and DEV, we are only showing those branches whose version is higher than DEV.
 }
+\examples{
+\dontrun{
+status_table()
+status_table(c("pipapi", "wbpip"))
+}
+
+}
