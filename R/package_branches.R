@@ -6,13 +6,13 @@
 #' @return tibble of pipr packages and the corresponding package versions of branch
 #' @examples
 #' \dontrun{
-#' status_table()
-#' status_table(c("pipapi", "wbpip"))
+#' package_branches()
+#' package_branches(c("pipapi", "wbpip"))
 #' }
 #'
 #' @export
 #'
-status_table <- function(package = NULL) {
+package_branches  <- function(package = NULL) {
   check_github_token()
   if(!is.null(package)) is_core(package)
   else package <- core
@@ -29,7 +29,7 @@ status_table <- function(package = NULL) {
     })
   }, simplify = FALSE)
   # Keep only package version above DEV version along with master and reshape the data in wider format
-  all_package_version %>%
+  complete_data <- all_package_version %>%
     utils::stack() %>%
     tibble::rownames_to_column(var = "branch") %>%
     dplyr::rename(version = .data$values, package = .data$ind) %>%
@@ -37,9 +37,19 @@ status_table <- function(package = NULL) {
     dplyr::group_by(.data$package) %>%
     dplyr::filter(.data$branch %in% c("PROD", "DEV") |
                     purrr::map_lgl(version, ~utils::compareVersion(.x, .data$version[match("DEV", .data$branch)]) == 1)) %>%
-    tidyr::pivot_wider(names_from = .data$branch, values_from = .data$version) %>%
-    dplyr::ungroup() %>%
-    dplyr::relocate(.data$package, .data$PROD)
+    dplyr::ungroup()
+
+    common <- complete_data %>%
+      dplyr::filter(.data$branch %in% c("PROD", "DEV", "QA")) %>%
+      tidyr::pivot_wider(names_from = .data$branch, values_from = .data$version) %>%
+      dplyr::relocate("package", "PROD")
+
+    result <- complete_data %>%
+      dplyr::filter(!.data$branch %in% c("PROD", "DEV", "QA")) %>%
+      split(.$package) %>%
+      purrr::map(., ~.x %>% dplyr::select(-"package"))
+
+    c(list(common = common), result)
 }
 
 
