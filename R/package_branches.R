@@ -24,9 +24,26 @@ package_branches  <- function(package = NULL) {
   result <- split_packages_into_list(complete_data)
   # Get local installation
   local <-  purrr::map_df(package, \(.x) {
-    out <- utils::packageDescription(.x, fields = c("GithubRef", "Version"))
+    out <- tryCatch(
+      expr = {
+        utils::packageDescription(.x, fields = c("GithubRef", "Version"))
+      }, # end of expr section
+
+      error = function(e) {
+        list(GithubRef = NA_character_,
+             Version   = NA_character_)
+      }, # end of error section
+
+      warning = function(w) {
+        list(GithubRef = NA_character_,
+             Version   = NA_character_)
+      }
+    ) # End of trycatch
+
+
     tibble::tibble(package = .x, local_branch = out$GithubRef, local_version = out$Version)
   })
+
   # DEV data
   dev <- complete_data %>% dplyr::filter(.data$branch %in% "DEV")
   local <- join_and_get_status(local, dev)
