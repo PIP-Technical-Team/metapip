@@ -18,7 +18,25 @@ package_branches  <- function(package = NULL) {
   else package <- core
   # For each of the core packages, get all the branches
   # From every branch, get the version of the package
-  all_package_version <- sapply(package, \(x) {
+  all_package_version <- get_package_version(package)
+  complete_data <- get_complete_data(all_package_version)
+  common <- common_data(complete_data)
+  result <- split_packages_into_list(complete_data)
+  # Get local installation
+  local <-  purrr::map_df(package, \(.x) {
+    out <- utils::packageDescription(.x, fields = c("GithubRef", "Version"))
+    tibble::tibble(package = .x, local_branch = out$GithubRef, local_version = out$Version)
+  })
+  # DEV data
+  dev <- complete_data %>% dplyr::filter(.data$branch %in% "DEV")
+  local <- join_and_get_status(local, dev)
+
+  return(c(list(common = common, local = local), result))
+}
+
+#' @noRd
+get_package_version <- function(package) {
+  sapply(package, \(x) {
     cli::cli_alert_info("Getting package versions for all branches of {x} package")
     br = get_branches(x, display = FALSE)
     br = br[br != "gh-pages"]
@@ -28,40 +46,45 @@ package_branches  <- function(package = NULL) {
       mat[, "Version"]
     })
   }, simplify = FALSE)
+}
 
-  complete_data <- all_package_version %>%
+#' @noRd
+get_complete_data <- function(all_package_version) {
+  all_package_version %>%
     utils::stack() %>%
     tibble::rownames_to_column(var = "branch") %>%
     dplyr::rename(version = .data$values, package = .data$ind) %>%
     dplyr::mutate(branch = stringr::str_extract(.data$branch, "([0-9A-Za-z-_]+)/DESCRIPTION\\.Version", group = 1))
+}
 
-    common <- complete_data %>%
-      dplyr::filter(.data$branch %in% c("PROD", "DEV", "QA")) %>%
-      tidyr::pivot_wider(names_from = "branch", values_from = "version") %>%
-      dplyr::relocate("package", "PROD")
+#' @noRd
+common_data <- function(complete_data) {
+  complete_data %>%
+    dplyr::filter(.data$branch %in% c("PROD", "DEV", "QA")) %>%
+    tidyr::pivot_wider(names_from = "branch", values_from = "version") %>%
+    dplyr::relocate("package", "PROD")
+}
 
-    result <- complete_data %>%
-      dplyr::filter(!.data$branch %in% c("PROD", "DEV", "QA")) %>%
-      split(.$package) %>%
-      purrr::map(., ~.x %>% dplyr::select(-"package"))
+#' @noRd
+split_packages_into_list <- function(complete_data) {
+  complete_data %>%
+    dplyr::filter(!.data$branch %in% c("PROD", "DEV", "QA")) %>%
+    split(.$package) %>%
+    purrr::map(., ~.x %>% dplyr::select(-"package"))
+}
 
-    # Show local installation
-    local <-  purrr::map_df(package, \(.x) {
-      out <- utils::packageDescription(.x, fields = c("GithubRef", "Version"))
-      tibble::tibble(package = .x, local_branch = out$GithubRef, local_version = out$Version)
-    })
-    # DEV data
-    dev <- complete_data %>% dplyr::filter(.data$branch %in% "DEV")
-    # Join dev data with local data to create status column
-    local <- dplyr::full_join(local, dev, dplyr::join_by(package)) %>%
-      dplyr::rowwise() %>%
-      dplyr::mutate(status = utils::compareVersion(.data$version, .data$local_version)) %>%
-      dplyr::ungroup() %>%
-      dplyr::mutate(status = dplyr::case_when(status == 1 ~ "behind",
-                                              status == -1 ~ "ahead",
-                                              TRUE ~ "up-to-date")) %>%
-      dplyr::select(-"branch", -"version")
-    c(list(common = common, local = local), result)
+#' @noRd
+join_and_get_status <- function(local, dev) {
+  # Join dev data with local data to create status column
+  dplyr::full_join(local, dev, dplyr::join_by("package")) %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(status = utils::compareVersion(.data$version, .data$local_version)) %>%
+    dplyr::ungroup() %>%
+    dplyr::mutate(status = dplyr::case_when(status == 1 ~ "behind",
+                                            status == -1 ~ "ahead",
+                                            TRUE ~ "up-to-date")) %>%
+    dplyr::select(-"branch", -"version")
+
 }
 
 
