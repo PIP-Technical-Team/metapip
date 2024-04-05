@@ -36,17 +36,25 @@ package_branches  <- function(package = NULL) {
 
 #' @noRd
 get_package_version <- function(package) {
-  sapply(package, \(x) {
-    cli::cli_alert_info("Getting package versions for all branches of {x} package")
+  lp <- length(package)
+  cli::cli_progress_bar("Getting versions for all branches of",
+                        total = lp,
+                        format = "{cli::col_green(cli::symbol$play)} {cli::pb_name}{.pkg {x}}")
+  lr <- vector("list", length = lp)
+  names(lr) <- package
+  for (x in package) {
+    cli::cli_progress_update()
     br = get_branches(x, display = FALSE)
     br = br[br != "gh-pages"]
     urls <- glue::glue("https://raw.githubusercontent.com/PIP-Technical-Team/{x}/{br}/DESCRIPTION")
-    sapply(urls, \(y) {
+    lr[[x]] <- sapply(urls, \(y) {
       mat <- read.dcf(url(y))
       mat[, "Version"]
     })
-  }, simplify = FALSE)
+  }
+  lr
 }
+
 
 #' @noRd
 get_complete_data <- function(all_package_version) {
