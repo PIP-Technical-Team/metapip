@@ -1,13 +1,19 @@
-#' Status tables of package versions in different branches along with local installations.
-#' For local installation,a status column is returned which indicates if the local version is ahead or behind the DEV branch.
+#' Status tables of package versions in different branches along with local
+#' installations. For local installation,a status column is returned which
+#' indicates if the local version is ahead or behind the DEV branch.
 #'
-#' @param package One (or more) of the PIP core packages. Default NULL will include all the packages
+#' @param package One (or more) of the PIP core packages. Default NULL will
+#'   include all the packages
+#' @param branch_to_compare chacter: names of branch to compare to. Default is
+#'   "DEV".
 #'
-#' @return tibble of pip packages and the corresponding package versions of branch
+#' @return tibble of pip packages and the corresponding package versions of
+#'   branch
 #' @examples
 #' \dontrun{
 #' package_branches()
 #' package_branches(c("pipapi", "wbpip"))
+#' package_branches(branch_to_compare = "QA")
 #' }
 #'
 #' @export
