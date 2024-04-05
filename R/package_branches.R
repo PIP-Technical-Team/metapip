@@ -12,7 +12,8 @@
 #'
 #' @export
 #'
-package_branches  <- function(package = NULL) {
+package_branches  <- function(package = NULL,
+                              branch_to_compare = "DEV") {
   check_github_token()
   if(!is.null(package)) is_core(package)
   else package <- core
@@ -45,8 +46,8 @@ package_branches  <- function(package = NULL) {
   })
 
   # DEV data
-  dev <- complete_data %>% dplyr::filter(.data$branch %in% "DEV")
-  local <- join_and_get_status(local, dev)
+  dev <- complete_data %>% dplyr::filter(.data$branch %in% branch_to_compare)
+  local <- join_and_get_status(local, dev, branch_to_compare)
 
   return(c(list(common = common, local = local), result))
 }
@@ -99,15 +100,22 @@ split_packages_into_list <- function(complete_data) {
 }
 
 #' @noRd
-join_and_get_status <- function(local, dev) {
+join_and_get_status <- function(local, dev, branch_to_compare) {
   # Join dev data with local data to create status column
   dplyr::full_join(local, dev, dplyr::join_by("package")) %>%
     dplyr::rowwise() %>%
-    dplyr::mutate(status = utils::compareVersion(.data$version, .data$local_version)) %>%
+    dplyr::mutate(local_status = utils::compareVersion(.data$version, .data$local_version)) %>%
     dplyr::ungroup() %>%
-    dplyr::mutate(status = dplyr::case_when(status == 1 ~ "behind",
-                                            status == -1 ~ "ahead",
-                                            TRUE ~ "up-to-date")) %>%
+    dplyr::mutate(local_status =
+                    dplyr::case_when(local_status == 1 ~  paste("behind",branch_to_compare),
+                                     local_status == -1 ~ paste("ahead", branch_to_compare),
+                                     TRUE ~ "up-to-date")) %>%
+    dplyr::mutate(local_status = ifelse(is.na(.data$local_version),
+                                        "Not in local",
+                                        local_status)) %>%
+    dplyr::mutate(local_status = ifelse(is.na(.data$branch ),
+                                        paste(branch_to_compare, "not in repo"),
+                                        local_status)) %>%
     dplyr::select(-"branch", -"version")
 
 }

@@ -5,7 +5,7 @@
 \title{Status tables of package versions in different branches along with local installations.
 For local installation,a status column is returned which indicates if the local version is ahead or behind the DEV branch.}
 \usage{
-package_branches(package = NULL)
+package_branches(package = NULL, branch_to_compare = "DEV")
 }
 \arguments{
 \item{package}{One (or more) of the PIP core packages. Default NULL will include all the packages}

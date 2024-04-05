@@ -2,6 +2,7 @@
 % Please edit documentation in R/metapip.R
 \docType{package}
 \name{metapip}
+\alias{-package}
 \alias{metapip}
 \title{metapip: PIP packages manager}
 \description{
