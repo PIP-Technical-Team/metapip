@@ -2,8 +2,8 @@
 % Please edit documentation in R/package_branches.R
 \name{package_branches}
 \alias{package_branches}
-\title{Status tables of package versions in different branches
-Apart from PROD and DEV, we are only showing those branches whose version is higher than DEV.}
+\title{Status tables of package versions in different branches along with local installations.
+For local installation,a status column is returned which indicates if the local version is ahead or behind the DEV branch.}
 \usage{
 package_branches(package = NULL)
 }
@@ -11,11 +11,11 @@ package_branches(package = NULL)
 \item{package}{One (or more) of the PIP core packages. Default NULL will include all the packages}
 }
 \value{
-tibble of pipr packages and the corresponding package versions of branch
+tibble of pip packages and the corresponding package versions of branch
 }
 \description{
-Status tables of package versions in different branches
-Apart from PROD and DEV, we are only showing those branches whose version is higher than DEV.
+Status tables of package versions in different branches along with local installations.
+For local installation,a status column is returned which indicates if the local version is ahead or behind the DEV branch.
 }
 \examples{
 \dontrun{
