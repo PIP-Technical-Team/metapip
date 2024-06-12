@@ -63,9 +63,34 @@ choose_startup_tip <- function(vec) {
 }
 
 
+# This function is a modified version from  https://gitcreds.r-lib.org/
+gitcreds_msg <- function(wh) {
+  msgs <- c(
+    no_git = paste0(
+      "No git installation found. You need to install git and set up ",
+      "your GitHub Personal Access token using {.fn gitcreds::gitcreds_set}."),
+    no_creds = paste0(
+      "No git credentials found. Please set up your GitHub Personal Access ",
+      "token using {.fn gitcreds::gitcreds_set}.",
+      "Or, follow the instruction here: {.url https://happygitwithr.com/https-pat#tldr}")
+  )
+  cli::format_inline(msgs[wh])
+}
+
+
+
 check_github_token <- function() {
-  if(Sys.getenv("GITHUB_PAT") == "")
-    cli::cli_abort("Enviroment variable `GITHUB_PAT` is empty. Please set it up using Sys.setenv(GITHUB_PAT = 'code')")
+  # Check that either GITHUB_PAT is set or credentials have been stored using gitcreds
+  # If not, abort with a message
+
+  tryCatch(
+    invisible(gitcreds::gitcreds_get()),
+    gitcreds_nogit_error = function(e) cli::cli_abort("{gitcreds_msg(\"no_git\")}"),
+    gitcreds_no_credentials = function(e) cli::cli_abort("{gitcreds_msg(\"no_creds\")}")
+  )
+
+  # if (Sys.getenv("GITHUB_PAT") == "")
+  #   cli::cli_abort("Enviroment variable `GITHUB_PAT` is empty. Please set it up using Sys.setenv(GITHUB_PAT = 'code')")
 }
 
 check_package_condition <- function(package) {
