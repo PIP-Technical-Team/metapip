@@ -85,14 +85,14 @@ get_complete_data <- function(all_package_version) {
   all_package_version %>%
     utils::stack() %>%
     tibble::rownames_to_column(var = "branch") %>%
-    dplyr::rename(version = .data$values, package = .data$ind) %>%
-    dplyr::mutate(branch = stringr::str_extract(.data$branch, "([0-9A-Za-z-_]+)/DESCRIPTION\\.Version", group = 1))
+    dplyr::rename(version = values, package = ind) %>%
+    dplyr::mutate(branch = stringr::str_extract(branch, "([0-9A-Za-z-_]+)/DESCRIPTION\\.Version", group = 1))
 }
 
 #' @noRd
 common_data <- function(complete_data) {
   complete_data %>%
-    dplyr::filter(.data$branch %in% c("PROD", "DEV", "QA")) %>%
+    dplyr::filter(branch %in% c("PROD", "DEV", "QA")) %>%
     tidyr::pivot_wider(names_from = "branch", values_from = "version") %>%
     dplyr::relocate("package", "PROD")
 }
@@ -100,7 +100,7 @@ common_data <- function(complete_data) {
 #' @noRd
 split_packages_into_list <- function(complete_data) {
   complete_data %>%
-    dplyr::filter(!.data$branch %in% c("PROD", "DEV", "QA")) %>%
+    dplyr::filter(!branch %in% c("PROD", "DEV", "QA")) %>%
     split(.$package) %>%
     purrr::map(., ~.x %>% dplyr::select(-"package"))
 }

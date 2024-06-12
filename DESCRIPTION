@@ -40,4 +40,5 @@ Imports:
     remotes,
     rlang,
     magrittr,
-    gitcreds
+    gitcreds,
+    collapse
