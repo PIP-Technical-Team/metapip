@@ -79,6 +79,15 @@ gitcreds_msg <- function(wh) {
 
 
 
+#' make sure your GITHUB credentials are properly setup
+#'
+#' @return invisible TRUE if credentials are perfectly set
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' check_github_token()
+#' }
 check_github_token <- function() {
   # Check that either GITHUB_PAT is set or credentials have been stored using gitcreds
   # If not, abort with a message
@@ -88,6 +97,7 @@ check_github_token <- function() {
     gitcreds_nogit_error = function(e) cli::cli_abort("{gitcreds_msg(\"no_git\")}"),
     gitcreds_no_credentials = function(e) cli::cli_abort("{gitcreds_msg(\"no_creds\")}")
   )
+  invisible(TRUE)
 
   # if (Sys.getenv("GITHUB_PAT") == "")
   #   cli::cli_abort("Enviroment variable `GITHUB_PAT` is empty. Please set it up using Sys.setenv(GITHUB_PAT = 'code')")

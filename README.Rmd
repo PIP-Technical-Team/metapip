@@ -48,11 +48,16 @@ devtools::install_github("PIP-Technical-Team/metapip")
 
 ## Functions and it's usage in metapip
 
-Since `metapip` works with Github API a lot it is required to have a github token in your environment. You can generate a token for yourself from [here](https://github.com/settings/tokens) and set it as an environment variable as shown below.
-
-```{r example}
+```{r setup}
 library(metapip)
-Sys.setenv(GITHUB_PAT = "code")
+```
+
+Since `metapip` works with Github API, you need to make sure that your GitHub credentials are properly set in you R environment. The best way to do so is using the `{gitcreds}` package. You may find a simple explanation about how you can generate a token for yourself and set it up [here](https://happygitwithr.com/https-pat#tldr).
+
+You can check if your credentials are properly set by running the following command.
+```{r check-credentials}
+check_github_token() |> 
+  print()
 ```
 
 Let us now go through the functions in metapip.
