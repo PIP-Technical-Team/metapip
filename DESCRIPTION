@@ -36,4 +36,5 @@ Imports:
     remotes,
     gitcreds,
     collapse,
-    rlang
+    rlang,
+    colorDF
