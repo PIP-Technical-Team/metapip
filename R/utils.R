@@ -127,3 +127,37 @@ rowname_to_column <- function(data, var) {
   out
 }
 
+set_colorDF <- function() {
+  # set display options ------
+  theme <- rs_theme()
+  if (theme$dark) {
+    options(colorDF_theme = "wb")
+  } else {
+    options(colorDF_theme = "bw")
+  }
+
+  invisible(theme)
+}
+
+rs_theme <- function() {
+  # set display options ------
+  # Check if running in RStudio
+  rstudio_theme <- list(editor     = "",
+                        global     = "",
+                        dark       = "",
+                        foreground = "",
+                        background = "")
+
+  if (Sys.getenv("RSTUDIO") == "1") {
+    # Attempt to infer theme or notify the user to set the theme if using a
+    # newer RStudio version without `rstudioapi` support
+    # If possible, use `rstudioapi` to get theme information (works only in certain versions)
+
+    if ("rstudioapi" %in% rownames(installed.packages())) {
+      rstudio_theme <- try(rstudioapi::getThemeInfo(),
+                         silent = TRUE)
+    }
+  }
+  # return
+  invisible(rstudio_theme)
+}
