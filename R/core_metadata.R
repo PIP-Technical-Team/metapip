@@ -1,7 +1,7 @@
 #' Return meta information about core packages
 #'
 #' @param package One (or more) core packages, if NULL shows information about all of them.
-#' @return a knitr::kable output with details about the core packages
+#' @return a colorDF::colorDF output with details about the core packages
 #' @examples
 #' \dontrun{
 #' core_metadata()
