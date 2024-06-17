@@ -14,7 +14,8 @@ install_latest_branch <- function(package = NULL) {
   check_github_token()
   if(!is.null(package)) is_core(package)
   else package <- core
-  dat <- lapply(package, get_latest_branch_update) |> rowbind()
+  dat <- lapply(package, get_latest_branch_update) |> 
+  rowbind()
   Map(\(x, y) install_branch(x, y), dat$package, dat$branch_name)
   NULL
 }

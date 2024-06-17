@@ -48,11 +48,15 @@ package_branches  <- function(package = NULL,
     ) # End of trycatch
 
 
-    data.frame(package = .x, local_branch = out$GithubRef, local_version = out$Version)
-  }) |> rowbind()
+    data.frame(package = .x, 
+    local_branch = out$GithubRef, 
+    local_version = out$Version)
+  }) |> 
+  rowbind()
 
   # DEV data
-  dev <- complete_data |> fsubset(branch %in% branch_to_compare)
+  dev <- complete_data |> 
+  fsubset(branch %in% branch_to_compare)
   local <- join_and_get_status(local, dev, branch_to_compare)
 
   return(c(list(common = common, local = local), result))
