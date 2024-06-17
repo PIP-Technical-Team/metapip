@@ -19,7 +19,7 @@ This includes packages like pipapi, pipaux, pipload, wbpip, pipfun, pipdata and 
 }
 \examples{
 \dontrun{
-install_all_packages(branch = "test")
+install_pip_packages(branch = "test")
 }
 
 }

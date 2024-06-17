@@ -33,9 +33,7 @@ Imports:
     glue,
     gh,
     rstudioapi,
-    tibble,
     remotes,
-    rlang,
-    magrittr,
     gitcreds,
-    collapse
+    collapse,
+    rlang

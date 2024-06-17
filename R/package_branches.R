@@ -7,7 +7,7 @@
 #' @param branch_to_compare chacter: names of branch to compare to. Default is
 #'   "DEV".
 #'
-#' @return tibble of pip packages and the corresponding package versions of
+#' @return table of pip packages and the corresponding package versions of
 #'   branch
 #' @examples
 #' \dontrun{
@@ -48,7 +48,7 @@ package_branches  <- function(package = NULL,
     ) # End of trycatch
 
 
-    tibble::tibble(package = .x, local_branch = out$GithubRef, local_version = out$Version)
+    data.frame(package = .x, local_branch = out$GithubRef, local_version = out$Version)
   }) |> rowbind()
 
   # DEV data
@@ -84,7 +84,7 @@ get_package_version <- function(package) {
 get_complete_data <- function(all_package_version) {
   all_package_version |>
     utils::stack() |>
-    tibble::rownames_to_column(var = "branch") |>
+    rowname_to_column("branch") |>
     frename(version = values, package = ind) |>
     fmutate(branch = stringr::str_extract(branch, "([0-9A-Za-z-_]+)/DESCRIPTION\\.Version", group = 1))
 }

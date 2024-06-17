@@ -16,7 +16,6 @@
 #' \dontrun{
 #' metapip_update()
 #' }
-#' @import rlang
 #' @importFrom utils install.packages
 metapip_update <- function(pkg = "metapip", recursive = FALSE, ...) {
   deps <- pkg_deps(pkg, recursive)
@@ -34,10 +33,10 @@ metapip_update <- function(pkg = "metapip", recursive = FALSE, ...) {
   cli::cat_line()
   cli::cat_line("Start a clean R session then run:")
 
-  install_opt <- quos(...)
+  install_opt <- rlang::quos(...)
   install_pkg <- behind$package
-  inst_expr <- quo(install.packages(c(!!!install_pkg), !!!install_opt))
-  pkg_str <- deparse(quo_squash(inst_expr))
+  inst_expr <- rlang::quo(install.packages(c(!!!install_pkg), !!!install_opt))
+  pkg_str <- deparse(rlang::quo_squash(inst_expr))
   cli::cat_line(pkg_str)
 
   invisible()
@@ -58,7 +57,7 @@ pkg_deps <- function(x = "metapip", recursive = FALSE) {
     deps$metapip <-
       c(
         "pipapi", "pipaux", "pipload", "wbpip", "pipfun", "pipdata", "pipr",
-        "cli", "rstudioapi", "tibble"
+        "cli", "rstudioapi"
       )
   }
 
@@ -78,7 +77,7 @@ pkg_deps <- function(x = "metapip", recursive = FALSE) {
 
   behind <- mapply(`>`, cran_version, local_version)
 
-  tibble::tibble(
+  data.frame(
     package = pkg_deps,
     cran = cran_version |> sapply(as.character),
     local = local_version |> sapply(as.character),

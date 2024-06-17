@@ -83,7 +83,7 @@ get_latest_branch_update <- function(package = "pipapi") {
   # Get info about all the branches
   out <- get_branch_info(package)
   # Return only the latest information
-  out %>%
+  out |>
     fsubset(branch_name != "gh-pages") |>
     fmutate(last_update_time = as.POSIXct(last_update_time, format = "%Y-%m-%dT%T")) |>
     # arrange data in descending order

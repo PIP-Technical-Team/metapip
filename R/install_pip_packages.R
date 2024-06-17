@@ -32,7 +32,7 @@ install_latest_branch <- function(package = NULL) {
 #'
 #' @examples
 #' \dontrun{
-#' install_all_packages(branch = "test")
+#' install_pip_packages(branch = "test")
 #' }
 #'
 #' @export
