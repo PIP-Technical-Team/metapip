@@ -127,26 +127,19 @@ rowname_to_column <- function(data, var) {
   out
 }
 
-set_colorDF <- function() {
-  # set display options ------
-  theme <- rs_theme()
-  if (theme$dark) {
-    options(colorDF_theme = "wb")
-  } else {
-    options(colorDF_theme = "bw")
-  }
-
-  invisible(theme)
-}
-
+#' Set theme for colorDF
+#'
+#' @return invisible RStudio theme
+#' @keywords internal
 rs_theme <- function() {
   # set display options ------
   # Check if running in RStudio
-  rstudio_theme <- list(editor     = "",
-                        global     = "",
-                        dark       = "",
-                        foreground = "",
-                        background = "")
+  rstudio_theme <- template <-
+    list(editor     = "",
+         global     = "",
+         dark       = FALSE,
+         foreground = "",
+         background = "")
 
   if (Sys.getenv("RSTUDIO") == "1") {
     # Attempt to infer theme or notify the user to set the theme if using a
@@ -154,10 +147,29 @@ rs_theme <- function() {
     # If possible, use `rstudioapi` to get theme information (works only in certain versions)
 
     if ("rstudioapi" %in% rownames(installed.packages())) {
-      rstudio_theme <- try(rstudioapi::getThemeInfo(),
-                         silent = TRUE)
+      rstudio_theme <- tryCatch(rstudioapi::getThemeInfo(),
+                                error = \(e) template,
+                                silent = TRUE)
     }
   }
   # return
+  invisible(rstudio_theme)
+}
+
+
+#' identify RStudio theme
+#'
+#' @return invisible RStudio theme
+#' @keywords internal
+
+set_colorDF <- function() {
+  # set display options ------
+  rstudio_theme <- rs_theme()
+  if (rstudio_theme$dark) {
+    options(colorDF_theme = "wb")
+  } else {
+    options(colorDF_theme = "bw")
+  }
+
   invisible(rstudio_theme)
 }
