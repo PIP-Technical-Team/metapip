@@ -22,7 +22,14 @@ if (getRversion() >= "2.15.1") {
       "branch",
       "ind",
       "local_status",
-      "values"
+      "values",
+      "email",
+      "version",
+      "package",
+      "PROD",
+      "local_version",
+      "branch_name",
+      "last_update_time"
     ),
     package = utils::packageName()
   )

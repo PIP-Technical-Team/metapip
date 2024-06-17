@@ -20,7 +20,7 @@
 #' @importFrom utils install.packages
 metapip_update <- function(pkg = "metapip", recursive = FALSE, ...) {
   deps <- pkg_deps(pkg, recursive)
-  behind <- dplyr::filter(deps, behind)
+  behind <- fsubset(deps, behind)
 
   if (nrow(behind) == 0) {
     cli::cat_line("All packages up-to-date")
@@ -76,12 +76,12 @@ pkg_deps <- function(x = "metapip", recursive = FALSE) {
   cran_version <- lapply(pkgs[pkg_deps, "Version"], base::package_version)
   local_version <- lapply(pkg_deps, utils::packageVersion)
 
-  behind <- purrr::map2_lgl(cran_version, local_version, `>`)
+  behind <- mapply(`>`, cran_version, local_version)
 
   tibble::tibble(
     package = pkg_deps,
-    cran = cran_version |> purrr::map_chr(as.character),
-    local = local_version |> purrr::map_chr(as.character),
+    cran = cran_version |> sapply(as.character),
+    local = local_version |> sapply(as.character),
     behind = behind
   )
 }

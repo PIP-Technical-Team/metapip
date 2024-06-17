@@ -30,7 +30,6 @@ get_branches <- function(package = "pipapi", display = TRUE) {
 #'
 #' @param package one of the core package (default "pipapi")
 #' @param branch valid branch name for the specified package
-#'
 #' @return a dataframe
 #'
 #' @examples
@@ -52,13 +51,14 @@ get_branch_info <- function(package = "pipapi", branch = NULL) {
     }
     branches <- branch
   }
-  out <- purrr::map_df(branches, \(x) {
+  out <- lapply(branches, \(x) {
     dat <- latest_commit_for_branch(package, x)
-    dat$commit$author
-  })
-  res <- cbind(package, branch_name = branches, out) %>%
-    dplyr::rename(last_update_time = "date", last_commit_author_name = "name") %>%
-    dplyr::select(-"email")
+    data.frame(dat$commit$author)
+  }) |> rowbind()
+
+  res <- cbind(package, branch_name = branches, out) |>
+    frename(last_update_time = "date", last_commit_author_name = "name") |>
+    fselect(-email)
   res
 }
 
@@ -84,9 +84,11 @@ get_latest_branch_update <- function(package = "pipapi") {
   out <- get_branch_info(package)
   # Return only the latest information
   out %>%
-    dplyr::filter(.data$branch_name != "gh-pages") %>%
-    dplyr::mutate(last_update_time = as.POSIXct(.data$last_update_time, format = "%Y-%m-%dT%T")) %>%
-    dplyr::arrange(.data$last_update_time) %>%
-    dplyr::slice_tail(n = 1L)
+    fsubset(branch_name != "gh-pages") |>
+    fmutate(last_update_time = as.POSIXct(last_update_time, format = "%Y-%m-%dT%T")) |>
+    # arrange data in descending order
+    roworder(-last_update_time) |>
+    # Get the 1st row (latest)
+    ss(1L)
 }
 
