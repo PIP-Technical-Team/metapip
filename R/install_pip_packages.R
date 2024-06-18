@@ -14,8 +14,8 @@ install_latest_branch <- function(package = NULL) {
   check_github_token()
   if(!is.null(package)) is_core(package)
   else package <- core
-  dat <- lapply(package, get_latest_branch_update) |> 
-  rowbind()
+  dat <- lapply(cli::cli_progress_along(package), get_latest_branch_update) |>
+          rowbind()
   Map(\(x, y) install_branch(x, y), dat$package, dat$branch_name)
   NULL
 }
@@ -45,7 +45,7 @@ install_pip_packages <- function(package = NULL, branch = "PROD") {
   } else {
     is_core(package)
   }
-  lapply(package,
+  lapply(cli::cli_progress_along(package),
          \(x) {
            tryCatch(
              expr = {

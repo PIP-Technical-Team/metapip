@@ -24,7 +24,6 @@ BugReports: https://github.com/PIP-Technical-Team/metapip/issues
 Suggests: 
     testthat (>= 3.0.0), 
     mockery, 
-    knitr, 
     stringr
 Config/testthat/edition: 3
 RoxygenNote: 7.3.1

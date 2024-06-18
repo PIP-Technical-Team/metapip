@@ -30,7 +30,7 @@ package_branches  <- function(package = NULL,
   common <- common_data(complete_data)
   result <- split_packages_into_list(complete_data)
   # Get local installation
-  local <-  lapply(package, \(.x) {
+  local <-  lapply(cli::cli_progress_along(package), \(.x) {
     out <- tryCatch(
       expr = {
         utils::packageDescription(.x, fields = c("GithubRef", "Version"))
@@ -48,14 +48,14 @@ package_branches  <- function(package = NULL,
     ) # End of trycatch
 
 
-    data.frame(package = .x, 
-    local_branch = out$GithubRef, 
+    data.frame(package = .x,
+    local_branch = out$GithubRef,
     local_version = out$Version)
-  }) |> 
+  }) |>
   rowbind()
 
   # DEV data
-  dev <- complete_data |> 
+  dev <- complete_data |>
   fsubset(branch %in% branch_to_compare)
   local <- join_and_get_status(local, dev, branch_to_compare)
 

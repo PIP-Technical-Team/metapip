@@ -119,6 +119,18 @@ detach_package <- function(package) {
 }
 
 
+#' Non tidyverse alternative to tibble::rownames_to_column
+#'
+#' @param data Dataframe
+#' @param var column name to store rownames
+#'
+#' @return Dataframe with an additional column of rownames
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' rowname_to_column(mtcars, "rn")
+#' }
 rowname_to_column <- function(data, var) {
   rn <- rownames(data)
   out <- add_vars(data, rn = rn, pos = "front")
