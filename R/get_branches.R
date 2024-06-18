@@ -53,7 +53,7 @@ get_branch_info <- function(package = "pipapi", branch = NULL, display = TRUE) {
     branches <- branch
   }
   out <- lapply(cli::cli_progress_along(branches), \(x) {
-    dat <- latest_commit_for_branch(package, x)
+    dat <- latest_commit_for_branch(package, branches[x])
     data.frame(dat$commit$author)
   }) |> rowbind()
 

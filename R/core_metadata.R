@@ -40,7 +40,7 @@ core_metadata <- function(package = NULL) {
 
   latest_commit <- lapply(cli::cli_progress_along(package),
                           \(i) {
-                            get_latest_branch_update(package[i])
+                            get_latest_branch_update(package[i], display = FALSE)
                             }
                           )
 
