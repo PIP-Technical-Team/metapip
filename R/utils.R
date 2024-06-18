@@ -121,7 +121,7 @@ detach_package <- function(package) {
 
 rowname_to_column <- function(data, var) {
   rn <- rownames(data)
-  out <- cbind(rn, data)
+  out <- add_vars(data, rn = rn, pos = "front")
   names(out)[1] <- var
   rownames(out) <- NULL
   out

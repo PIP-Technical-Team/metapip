@@ -56,7 +56,7 @@ get_branch_info <- function(package = "pipapi", branch = NULL) {
     data.frame(dat$commit$author)
   }) |> rowbind()
 
-  res <- cbind(package, branch_name = branches, out) |>
+  res <- add_vars(out, package = rep(package, nrow(out)), branch_name = branches, pos = "front") |>
     frename(last_update_time = "date", last_commit_author_name = "name") |>
     fselect(-email)
   res
