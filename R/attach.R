@@ -1,7 +1,7 @@
 # This is basically a copy of tidyverse and tidymodels
 
-core <- c("pipapi", "pipload", "wbpip", "pipfun", "pipdata", "pipr")
-#core <- c("pipapi", "pipload", "wbpip", "pipfun", "pipdata", "pipr", "pipster", "pipaux")
+# core <- c("pipapi", "pipload", "wbpip", "pipfun", "pipdata", "pipr")
+core <- c("pipapi", "pipload", "wbpip", "pipfun", "pipdata", "pipr", "pipster", "pipaux")
 
 pkg_loaded <- function(pkg = NULL) {
   if (is.null(pkg)) {
