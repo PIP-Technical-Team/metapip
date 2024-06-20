@@ -4,15 +4,17 @@
 \alias{get_branch_info}
 \title{Get last update time of branches in a specific package}
 \usage{
-get_branch_info(package = "pipapi", branch = NULL)
+get_branch_info(package = "pipapi", branch = NULL, display = TRUE)
 }
 \arguments{
 \item{package}{one of the core package (default "pipapi")}
 
 \item{branch}{valid branch name for the specified package}
+
+\item{display}{(default TRUE) do you want to display the branches in the console?}
 }
 \value{
-a dataframe
+a invisible dataframe
 }
 \description{
 Get last update time of branches in a specific package

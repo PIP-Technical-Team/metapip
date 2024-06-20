@@ -16,7 +16,7 @@ include all the packages}
 "DEV".}
 }
 \value{
-tibble of pip packages and the corresponding package versions of
+table of pip packages and the corresponding package versions of
   branch
 }
 \description{

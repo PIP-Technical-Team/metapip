@@ -1,4 +1,9 @@
 .onAttach <- function(...) {
+
+  # set options to display tables
+  set_colorDF()
+
+  # Load the core packages --------
   needed <- core[!is_attached(core)]
   if (length(needed) == 0) {
     return()
@@ -6,10 +11,7 @@
 
   metapip_attach()
 
-  # if (!"package:conflicted" %in% search()) {
-  #   x <- metapip_conflicts()
-  #   msg(metapip_conflict_message(x), startup = TRUE)
-  # }
+
 }
 
 is_attached <- function(x) {

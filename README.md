@@ -182,13 +182,13 @@ out <- core_metadata()
 out <- core_metadata(c("pipapi", "wbpip"))
 ```
 
-6.  `install_all_packages()`
+6.  `install_pip_packages()`
 
 Install one or more core packages from a specific branch. If you have
-fresh installation of R then running `install_all_packages()` would set
+fresh installation of R then running `install_pip_packages()` would set
 you up with all pip packages.
 
 ``` r
-install_all_packages(branch = "test")
-install_all_packages(c("pipapi", "wbpip"), "test")
+install_pip_packages(branch = "test")
+install_pip_packages(c("pipapi", "wbpip"), "test")
 ```

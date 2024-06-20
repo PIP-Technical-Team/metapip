@@ -14,7 +14,11 @@ install_latest_branch <- function(package = NULL) {
   check_github_token()
   if(!is.null(package)) is_core(package)
   else package <- core
-  dat <- purrr::map_df(package, get_latest_branch_update)
+  dat <- lapply(cli::cli_progress_along(package),
+                \(i) {
+                  get_latest_branch_update(package[i], display = FALSE)
+                  }) |>
+    rowbind()
   Map(\(x, y) install_branch(x, y), dat$package, dat$branch_name)
   NULL
 }
@@ -32,7 +36,7 @@ install_latest_branch <- function(package = NULL) {
 #'
 #' @examples
 #' \dontrun{
-#' install_all_packages(branch = "test")
+#' install_pip_packages(branch = "test")
 #' }
 #'
 #' @export
@@ -44,12 +48,12 @@ install_pip_packages <- function(package = NULL, branch = "PROD") {
   } else {
     is_core(package)
   }
-  lapply(package,
+  lapply(cli::cli_progress_along(package),
          \(x) {
            tryCatch(
              expr = {
                # Your code...
-               install_branch(package = x, branch)
+               install_branch(package = package[x], branch)
              },
              # end of expr section
 

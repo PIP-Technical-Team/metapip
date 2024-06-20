@@ -118,3 +118,70 @@ detach_package <- function(package) {
   unloadNamespace(package)
 }
 
+
+#' Non tidyverse alternative to tibble::rownames_to_column
+#'
+#' @param data Dataframe
+#' @param var column name to store rownames
+#'
+#' @return Dataframe with an additional column of rownames
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' rowname_to_column(mtcars, "rn")
+#' }
+rowname_to_column <- function(data, var) {
+  rn <- rownames(data)
+  out <- add_vars(data, rn = rn, pos = "front")
+  names(out)[1] <- var
+  rownames(out) <- NULL
+  out
+}
+
+#' Set theme for colorDF
+#'
+#' @return invisible RStudio theme
+#' @keywords internal
+rs_theme <- function() {
+  # set display options ------
+  # Check if running in RStudio
+  rstudio_theme <- template <-
+    list(editor     = "",
+         global     = "",
+         dark       = FALSE,
+         foreground = "",
+         background = "")
+
+  if (Sys.getenv("RSTUDIO") == "1") {
+    # Attempt to infer theme or notify the user to set the theme if using a
+    # newer RStudio version without `rstudioapi` support
+    # If possible, use `rstudioapi` to get theme information (works only in certain versions)
+
+    if ("rstudioapi" %in% rownames(utils::installed.packages())) {
+      rstudio_theme <- tryCatch(rstudioapi::getThemeInfo(),
+                                error = \(e) template,
+                                silent = TRUE)
+    }
+  }
+  # return
+  invisible(rstudio_theme)
+}
+
+
+#' identify RStudio theme
+#'
+#' @return invisible RStudio theme
+#' @keywords internal
+
+set_colorDF <- function() {
+  # set display options ------
+  rstudio_theme <- rs_theme()
+  if (rstudio_theme$dark) {
+    options(colorDF_theme = "wb")
+  } else {
+    options(colorDF_theme = "bw")
+  }
+
+  invisible(rstudio_theme)
+}

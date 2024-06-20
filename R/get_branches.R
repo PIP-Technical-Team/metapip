@@ -30,8 +30,8 @@ get_branches <- function(package = "pipapi", display = TRUE) {
 #'
 #' @param package one of the core package (default "pipapi")
 #' @param branch valid branch name for the specified package
-#'
-#' @return a dataframe
+#' @param display (default TRUE) do you want to display the branches in the console?
+#' @return a invisible dataframe
 #'
 #' @examples
 #' \dontrun{
@@ -40,7 +40,7 @@ get_branches <- function(package = "pipapi", display = TRUE) {
 #' get_branch_info(package = "wbpip", branch = c("PROD", "QA"))
 #' }
 #' @export
-get_branch_info <- function(package = "pipapi", branch = NULL) {
+get_branch_info <- function(package = "pipapi", branch = NULL, display = TRUE) {
   check_github_token()
   is_core(package)
   check_package_condition(package)
@@ -52,14 +52,17 @@ get_branch_info <- function(package = "pipapi", branch = NULL) {
     }
     branches <- branch
   }
-  out <- purrr::map_df(branches, \(x) {
-    dat <- latest_commit_for_branch(package, x)
-    dat$commit$author
-  })
-  res <- cbind(package, branch_name = branches, out) %>%
-    dplyr::rename(last_update_time = "date", last_commit_author_name = "name") %>%
-    dplyr::select(-"email")
-  res
+  out <- lapply(cli::cli_progress_along(branches), \(x) {
+    dat <- latest_commit_for_branch(package, branches[x])
+    data.frame(dat$commit$author)
+  }) |> rowbind()
+
+  res <- add_vars(out, package = rep(package, nrow(out)), branch_name = branches, pos = "front") |>
+    frename(last_update_time = "date", last_commit_author_name = "name") |>
+    fselect(-email)
+
+  if(isTRUE(display)) print(colorDF::colorDF(res))
+  return(invisible(res))
 }
 
 
@@ -67,7 +70,7 @@ get_branch_info <- function(package = "pipapi", branch = NULL) {
 #'
 #' @inheritParams get_branch_info
 #'
-#' @return single row dataframe
+#' @return an invisible single row dataframe
 #'
 #' @examples
 #' \dontrun{
@@ -76,17 +79,22 @@ get_branch_info <- function(package = "pipapi", branch = NULL) {
 #' }
 #' @export
 #'
-get_latest_branch_update <- function(package = "pipapi") {
+get_latest_branch_update <- function(package = "pipapi", display = TRUE) {
   check_github_token()
   is_core(package)
   check_package_condition(package)
   # Get info about all the branches
-  out <- get_branch_info(package)
+  out <- get_branch_info(package, display = FALSE)
   # Return only the latest information
-  out %>%
-    dplyr::filter(.data$branch_name != "gh-pages") %>%
-    dplyr::mutate(last_update_time = as.POSIXct(.data$last_update_time, format = "%Y-%m-%dT%T")) %>%
-    dplyr::arrange(.data$last_update_time) %>%
-    dplyr::slice_tail(n = 1L)
+  res <- out |>
+    fsubset(branch_name != "gh-pages") |>
+    fmutate(last_update_time = as.POSIXct(last_update_time, format = "%Y-%m-%dT%T")) |>
+    # arrange data in descending order
+    roworder(-last_update_time) |>
+    # Get the 1st row (latest)
+    ss(1L)
+
+  if(isTRUE(display)) print(colorDF::colorDF(res))
+  return(invisible(res))
 }
 
