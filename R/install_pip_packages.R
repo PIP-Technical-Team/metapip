@@ -1,4 +1,7 @@
-#' Install latest branch from core packages
+#' Install latest branch from a package
+#' @description
+#' Based on the last commit of the branch it installs the latest branch of the package.
+#'
 #'
 #' @param package one (or more) of core packages. default NULL would install latest branch for all packages
 #'
@@ -24,10 +27,10 @@ install_latest_branch <- function(package = NULL) {
 }
 
 
-#' Install one (or more) pip core packages from a specific branch.
+#' Install one (or more) pip core packages from a branch.
 #'
 #' @description
-#' This includes packages like pipapi, pipaux, pipload, wbpip, pipfun, pipdata and pipr
+#' This installs packages like pipapi, pipaux, pipload, wbpip, pipfun, pipdata and pipr from a branch
 #'
 #' @param package one (or more) of the core package name, if NULL all the core packages are installed from the branch
 #' @param branch valid branch name (default "PROD")

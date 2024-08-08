@@ -13,7 +13,8 @@ core_metadata(package = NULL)
 a colorDF::colorDF output with details about the core packages
 }
 \description{
-Return meta information about core packages
+Returns information like name of the package, number of branches it has, last release tag,
+last release time, last commit author etc.
 }
 \examples{
 \dontrun{

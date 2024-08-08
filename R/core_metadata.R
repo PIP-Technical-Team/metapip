@@ -1,4 +1,8 @@
 #' Return meta information about core packages
+#' @description
+#' Returns information like name of the package, number of branches it has, last release tag,
+#' last release time, last commit author etc.
+#'
 #'
 #' @param package One (or more) core packages, if NULL shows information about all of them.
 #' @return a colorDF::colorDF output with details about the core packages
