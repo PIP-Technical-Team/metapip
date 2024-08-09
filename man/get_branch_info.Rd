@@ -2,22 +2,23 @@
 % Please edit documentation in R/get_branches.R
 \name{get_branch_info}
 \alias{get_branch_info}
-\title{Get last update time of branches in a specific package}
+\title{Get last update time of branches in a package}
 \usage{
 get_branch_info(package = "pipapi", branch = NULL, display = TRUE)
 }
 \arguments{
 \item{package}{one of the core package (default "pipapi")}
 
-\item{branch}{valid branch name for the specified package}
+\item{branch}{valid branch name for the package}
 
 \item{display}{(default TRUE) do you want to display the branches in the console?}
 }
 \value{
-a invisible dataframe
+a colorDF::colorDF output with an invisible dataframe
 }
 \description{
-Get last update time of branches in a specific package
+Returns a dataframe with information about package name, branch name, author of the last commit and
+when was the last commit made to the branch
 }
 \examples{
 \dontrun{

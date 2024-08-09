@@ -2,20 +2,21 @@
 % Please edit documentation in R/get_branches.R
 \name{get_branches}
 \alias{get_branches}
-\title{Get available branches for a particular package}
+\title{Get available branches for a package}
 \usage{
 get_branches(package = "pipapi", display = TRUE)
 }
 \arguments{
 \item{package}{one of the core package name (default "pipapi")}
 
-\item{display}{(default TRUE) do you want to display the branches in the console?}
+\item{display}{(default TRUE) do you want to display the name of the branches in the console?}
 }
 \value{
 an invisible character vector of branches
 }
 \description{
-Get available branches for a particular package
+Returns a vector of branch names for the package specified. If display is set to TRUE,
+the branch names are printed in the console.
 }
 \examples{
 \dontrun{

@@ -1,7 +1,10 @@
-#' Get available branches for a particular package
+#' Get available branches for a package
+#' @description
+#' Returns a vector of branch names for the package specified. If display is set to TRUE,
+#' the branch names are printed in the console.
 #'
 #' @param package one of the core package name (default "pipapi")
-#' @param display (default TRUE) do you want to display the branches in the console?
+#' @param display (default TRUE) do you want to display the name of the branches in the console?
 #'
 #' @return an invisible character vector of branches
 #'
@@ -26,12 +29,15 @@ get_branches <- function(package = "pipapi", display = TRUE) {
 }
 
 
-#' Get last update time of branches in a specific package
+#' Get last update time of branches in a package
+#' @description
+#' Returns a dataframe with information about package name, branch name, author of the last commit and
+#' when was the last commit made to the branch
 #'
 #' @param package one of the core package (default "pipapi")
-#' @param branch valid branch name for the specified package
+#' @param branch valid branch name for the package
 #' @param display (default TRUE) do you want to display the branches in the console?
-#' @return a invisible dataframe
+#' @return a colorDF::colorDF output with an invisible dataframe
 #'
 #' @examples
 #' \dontrun{
@@ -67,10 +73,12 @@ get_branch_info <- function(package = "pipapi", branch = NULL, display = TRUE) {
 
 
 #' Get details of the branch which was last updated
+#' @description
+#' This function is useful to get latest branch name, author of latest commit and time it was last updated.
 #'
 #' @inheritParams get_branch_info
 #'
-#' @return an invisible single row dataframe
+#' @return colorDF::colorDF output along with an invisible single row dataframe
 #'
 #' @examples
 #' \dontrun{
