@@ -93,11 +93,13 @@ check_github_token <- function() {
   # If not, abort with a message
 
   tryCatch(
-    invisible(gitcreds::gitcreds_get()),
+    expr = {
+      creds <- gitcreds::gitcreds_get()
+    },
     gitcreds_nogit_error = function(e) cli::cli_abort("{gitcreds_msg(\"no_git\")}"),
     gitcreds_no_credentials = function(e) cli::cli_abort("{gitcreds_msg(\"no_creds\")}")
   )
-  invisible(TRUE)
+  invisible(creds)
 
   # if (Sys.getenv("GITHUB_PAT") == "")
   #   cli::cli_abort("Enviroment variable `GITHUB_PAT` is empty. Please set it up using Sys.setenv(GITHUB_PAT = 'code')")
