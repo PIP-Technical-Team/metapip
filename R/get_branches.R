@@ -17,9 +17,11 @@
 #' @export
 #'
 get_branches <- function(package = "pipapi", display = TRUE) {
-  check_github_token()
+  creds <- check_github_token()
   check_package_condition(package)
-  out <- gh::gh("GET /repos/PIP-Technical-Team/{repo}/branches", repo = package)
+  out <- gh::gh("GET /repos/PIP-Technical-Team/{repo}/branches",
+                repo = package,
+                .token = creds$password)
   branches <- vapply(out, `[[`, "", "name")
   if (isTRUE(display)) {
     cli::cli_h3("These are available branches for {package} package: ")
