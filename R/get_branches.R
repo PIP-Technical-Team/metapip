@@ -48,7 +48,7 @@ get_branches <- function(package = "pipapi", display = TRUE) {
 #' get_branch_info(package = "wbpip", branch = c("PROD", "QA"))
 #' }
 #' @export
-get_branch_info <- function(package = "pipapi", branch = NULL, display = TRUE) {
+get_branch_info <- function(package = "pipapi", branch = getOption("metapip.default_branch", "DEV_v2"), display = TRUE) {
   check_github_token()
   is_core(package)
   check_package_condition(package)

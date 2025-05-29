@@ -1,11 +1,11 @@
 #' Status tables of package versions in different branches along with local
 #' installations. For local installation,a status column is returned which
-#' indicates if the local version is ahead or behind the DEV branch.
+#' indicates if the local version is ahead or behind the DEV_v2 branch.
 #'
 #' @param package One (or more) of the PIP core packages. Default NULL will
 #'   include all the packages
 #' @param branch_to_compare chacter: names of branch to compare to. Default is
-#'   "DEV".
+#'   "DEV_v2".
 #'
 #' @return table of pip packages and the corresponding package versions of
 #'   branch
@@ -19,7 +19,7 @@
 #' @export
 #'
 package_branches  <- function(package = NULL,
-                              branch_to_compare = "DEV") {
+                              branch_to_compare = getOption("metapip.default_branch", "DEV_v2")) {
   check_github_token()
   if(!is.null(package)) is_core(package)
   else package <- core
@@ -54,7 +54,7 @@ package_branches  <- function(package = NULL,
   }) |>
   rowbind()
 
-  # DEV data
+  # DEV_v2 data
   dev <- complete_data |>
   fsubset(branch %in% branch_to_compare)
   local <- join_and_get_status(local, dev, branch_to_compare)
@@ -96,7 +96,7 @@ get_complete_data <- function(all_package_version) {
 #' @noRd
 common_data <- function(complete_data) {
   complete_data |>
-    fsubset(branch %in% c("PROD", "DEV", "QA")) |>
+    fsubset(branch %in% c("PROD", "DEV_v2", "QA")) |>
     pivot(names = "branch", values = "version", how = "wider") |>
     colorder(package, PROD)
 }
@@ -104,7 +104,7 @@ common_data <- function(complete_data) {
 #' @noRd
 split_packages_into_list <- function(complete_data) {
   complete_data |>
-    fsubset(!branch %in% c("PROD", "DEV", "QA")) |>
+    fsubset(!branch %in% c("PROD", "DEV_v2", "QA")) |>
     split(~package) |>
     lapply(\(x) x |> fselect(-package))
 }

@@ -57,7 +57,8 @@ core_metadata <- function(package = NULL) {
   return(invisible(out))
 }
 
-
+# Not setting the branch default with getOption here because this is an internal function and called
+# only once in get_branches function where we explicitly pass the branch name
 latest_commit_for_branch <- function(package, branch) {
   tryCatch({
     gh::gh("GET /repos/{owner}/{repo}/commits/{branch}", owner = "PIP-Technical-Team",
