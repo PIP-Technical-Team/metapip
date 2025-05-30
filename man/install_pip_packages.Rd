@@ -6,7 +6,7 @@
 \usage{
 install_pip_packages(
   package = NULL,
-  branch = getOption("metapip.default_branch", "DEV_v2")
+  branch = getOption("metapip.default_branch")
 )
 }
 \arguments{

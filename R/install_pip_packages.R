@@ -44,7 +44,7 @@ install_latest_branch <- function(package = NULL) {
 #'
 #' @export
 #'
-install_pip_packages <- function(package = NULL, branch = getOption("metapip.default_branch", "DEV_v2")) {
+install_pip_packages <- function(package = NULL, branch = getOption("metapip.default_branch")) {
   check_github_token()
   if (is.null(package)) {
     package = core
@@ -87,7 +87,7 @@ install_pip_packages <- function(package = NULL, branch = getOption("metapip.def
 #'
 #' @export
 #'
-install_branch <- function(package = "pipapi", branch = getOption("metapip.default_branch", "DEV_v2")) {
+install_branch <- function(package = "pipapi", branch = getOption("metapip.default_branch")) {
   check_github_token()
   check_package_condition(package)
   if(length(branch) != 1L) cli::cli_abort("Please enter a single branch name.")

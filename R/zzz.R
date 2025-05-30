@@ -18,14 +18,14 @@ is_attached <- function(x) {
   paste0("package:", x) %in% search()
 }
 
-# Set default branch .onLoad
+metapip_default_options <- list(
+  metapip.default_branch = "DEV_v2"
+)
+
+
 .onLoad <- function(libname, pkgname) {
   op <- options()
-  op.metapip <- list(
-    metapip.default_branch = "DEV_v2"
-  )
-  toset <- !(names(op.metapip) %in% names(op))
-  if (any(toset)) options(op.metapip[toset])
+  toset <- !(names(metapip_default_options ) %in% names(op))
+  if (any(toset)) options(metapip_default_options [toset])
   invisible()
 }
-

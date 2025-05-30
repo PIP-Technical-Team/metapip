@@ -8,7 +8,7 @@ indicates if the local version is ahead or behind the DEV_v2 branch.}
 \usage{
 package_branches(
   package = NULL,
-  branch_to_compare = getOption("metapip.default_branch", "DEV_v2")
+  branch_to_compare = getOption("metapip.default_branch")
 )
 }
 \arguments{

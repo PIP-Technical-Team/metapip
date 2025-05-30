@@ -6,7 +6,7 @@
 \usage{
 get_branch_info(
   package = "pipapi",
-  branch = getOption("metapip.default_branch", "DEV_v2"),
+  branch = getOption("metapip.default_branch"),
   display = TRUE
 )
 }
