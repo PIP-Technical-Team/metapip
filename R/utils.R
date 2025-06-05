@@ -187,3 +187,15 @@ set_colorDF <- function() {
 
   invisible(rstudio_theme)
 }
+
+get_default_branch <- \(pkg) {
+  # https://app.clickup.com/t/868e3vhk2?comment=90110143651180
+  # Checking for option 2 and 3 here. For option 1, it should never come in this function
+  default_branches <- getOption("metapip.custom_default_branch")
+  branch_name <- default_branches[[paste0(pkg, "_branch")]]
+  if (is.null(branch_name)) {
+    return(getOption("metapip.default_branch"))
+  } else {
+    return(branch_name)
+  }
+}

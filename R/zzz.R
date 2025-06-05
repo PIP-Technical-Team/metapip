@@ -8,10 +8,6 @@
   if (length(needed) == 0) {
     return()
   }
-
-  metapip_attach()
-
-
 }
 
 is_attached <- function(x) {
