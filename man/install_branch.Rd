@@ -4,10 +4,7 @@
 \alias{install_branch}
 \title{Install branch from a package}
 \usage{
-install_branch(
-  package = "pipapi",
-  branch = getOption("metapip.default_branch")
-)
+install_branch(package = "pipapi", branch = NULL)
 }
 \arguments{
 \item{package}{one of the core package name (default "pipapi")}

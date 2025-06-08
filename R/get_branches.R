@@ -48,7 +48,7 @@ get_branches <- function(package = "pipapi", display = TRUE) {
 #' get_branch_info(package = "wbpip", branch = c("PROD", "QA"))
 #' }
 #' @export
-get_branch_info <- function(package = "pipapi", branch = getOption("metapip.default_branch"), display = TRUE) {
+get_branch_info <- function(package = "pipapi", branch = NULL, display = TRUE) {
   check_github_token()
   is_core(package)
   check_package_condition(package)
@@ -59,6 +59,8 @@ get_branch_info <- function(package = "pipapi", branch = getOption("metapip.defa
       cli::cli_abort("{branch} is not a correct branch name. Please use one of {toString(branches)}.")
     }
     branches <- branch
+  } else {
+    branches <- get_default_branch(package)
   }
   out <- lapply(cli::cli_progress_along(branches), \(x) {
     dat <- latest_commit_for_branch(package, branches[x])

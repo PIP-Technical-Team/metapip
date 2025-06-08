@@ -4,10 +4,7 @@
 \alias{install_pip_packages}
 \title{Install one (or more) pip core packages from a branch.}
 \usage{
-install_pip_packages(
-  package = NULL,
-  branch = getOption("metapip.default_branch")
-)
+install_pip_packages(package = NULL, branch = NULL)
 }
 \arguments{
 \item{package}{one (or more) of the core package name, if NULL all the core packages are installed from the branch}

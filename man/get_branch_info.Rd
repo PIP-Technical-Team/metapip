@@ -4,11 +4,7 @@
 \alias{get_branch_info}
 \title{Get last update time of branches in a package}
 \usage{
-get_branch_info(
-  package = "pipapi",
-  branch = getOption("metapip.default_branch"),
-  display = TRUE
-)
+get_branch_info(package = "pipapi", branch = NULL, display = TRUE)
 }
 \arguments{
 \item{package}{one of the core package (default "pipapi")}

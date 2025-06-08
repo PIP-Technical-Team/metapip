@@ -4,7 +4,7 @@
 #'
 #' @param package One (or more) of the PIP core packages. Default NULL will
 #'   include all the packages
-#' @param branch_to_compare chacter: names of branch to compare to. Default is
+#' @param branch_to_compare character: names of branch to compare to. Default is
 #'   "DEV_v2".
 #'
 #' @return table of pip packages and the corresponding package versions of
