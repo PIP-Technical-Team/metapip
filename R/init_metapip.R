@@ -11,7 +11,7 @@ init_metapip <- function() {
   default_branch <- get_current_branches() |>
     unlist()
 
-  pkgs_vec <- mapply(compare_sha, core, default_branch)
+  pkgs_vec <- mapply(compare_sha, core, default_branch[core])
 
   # get those pkgs for which branch does not exist
   null_vec    <- Filter(is.null, pkgs_vec) |>
@@ -63,22 +63,25 @@ init_metapip <- function() {
 }
 
 compare_sha <- function(package, branch) {
-  # Get locally installed sha
-  desc <- package |>
-    utils::packageDescription() |>
-    suppressWarnings()
-  # If the package is not installed return FALSE
-  if (length(desc) == 1 && is.na(desc)) return(FALSE)
-  local_sha <- desc$RemoteSha
 
   # Get GH sha
   out <- latest_commit_for_branch(package, branch)
   gh_sha <- out$sha
 
   if (is.null(gh_sha)) {
+    cli::cli_alert_danger("branch {.val {branch}} does not exist in repo of package {.pkg {package}}")
     return(NULL)
   }
 
+  # Get locally installed sha
+  local_sha <- package |>
+    utils::packageDescription(fields = "RemoteSha") |>
+    suppressWarnings()
+
+  # If the package is not installed return FALSE
+  if (is.na(local_sha)) return(FALSE)
+
+  # finally, compare
   local_sha == gh_sha
 
 }
