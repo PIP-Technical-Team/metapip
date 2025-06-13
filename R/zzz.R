@@ -15,8 +15,16 @@ is_attached <- function(x) {
 }
 
 metapip_default_options <- list(
-  metapip.default_branch = "DEV_v2"
+  metapip.default_branch = "DEV_v2",
+  metapip.custom_default_branch = list(
+    pipapi_branch = "DEV",
+    pipfaker_branch = "main"
+  )
 )
+
+
+
+
 
 
 .onLoad <- function(libname, pkgname) {

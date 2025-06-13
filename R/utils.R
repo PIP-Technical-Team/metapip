@@ -188,6 +188,15 @@ set_colorDF <- function() {
   invisible(rstudio_theme)
 }
 
+#' Get default branch for a paritulcar package
+#'
+#' @param package
+#'
+#' @returns name of branch
+#' @export
+#'
+#' @examples
+#' get_default_branch("pipapi")
 get_default_branch <- \(package) {
   # https://app.clickup.com/t/868e3vhk2?comment=90110143651180
   # Checking for option 2 and 3 here. For option 1, it should never come in this function
@@ -198,4 +207,31 @@ get_default_branch <- \(package) {
   } else {
     return(branch_name)
   }
+}
+
+#' get the current branches that are meant to be used
+#'
+#' It does not necessarily mean that these are the branches currently installed.
+#' [init_metapip] will notify you if that is the case.
+#'
+#' @returns list with names of packages and branches
+#' @rdname get_default_branch
+#' @export
+#'
+#' @examples
+#' get_current_branches()
+get_current_branches <- \() {
+
+  custom_default_branches <- getOption("metapip.custom_default_branch")
+  names(custom_default_branches) <- gsub("_branch", "", names(custom_default_branches))
+
+  default_branches <- getOption("metapip.default_branch") |>
+    list() |>
+    rep(length(core)) |>
+    setNames(core)
+
+  if (length(custom_default_branches) > 0) {
+    default_branches[names(custom_default_branches)] <- custom_default_branches
+  }
+  default_branches
 }
