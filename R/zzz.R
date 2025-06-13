@@ -18,18 +18,19 @@ metapip_default_options <- list(
   metapip.default_branch = "DEV_v2",
   metapip.custom_default_branch = list(
     pipapi_branch = "DEV",
-    pipfaker_branch = "main"
+    pipfaker_branch = "main",
+    wbpip_branch = "DEV",
+    pipr_branch = "DEV",
+    pipster_branch = "DEV",
+    pipdata_branch = "DEV"
   )
 )
 
 
 
-
-
-
 .onLoad <- function(libname, pkgname) {
   op <- options()
-  toset <- !(names(metapip_default_options ) %in% names(op))
+  toset <- !(names(metapip_default_options) %in% names(op))
   if (any(toset)) options(metapip_default_options [toset])
   invisible()
 }

@@ -69,7 +69,6 @@ compare_sha <- function(package, branch) {
   gh_sha <- out$sha
 
   if (is.null(gh_sha)) {
-    cli::cli_alert_danger("branch {.val {branch}} does not exist in repo of package {.pkg {package}}")
     return(NULL)
   }
 
