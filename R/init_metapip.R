@@ -84,3 +84,22 @@ compare_sha <- function(package, branch) {
   local_sha == gh_sha
 
 }
+
+#' Set default custom branching options
+#'
+#' @param ... Named elements to be added or updated in the custom default list.
+#'
+#' @returns invisible NULL
+#' @export
+#'
+#' @examples {
+#' set_custom_default_branch(pipr = 'main', 'pipapi' = 'DEV_v3')
+#' }
+#'
+set_custom_default_branch <- \(...) {
+  new_entries <- list(...)
+  names(new_entries) <- paste0(names(new_entries), '_branch')
+  existing_options <- getOption("metapip.custom_default_branch", list())
+  merged <- modifyList(existing_options, new_entries)
+  options("metapip.custom_default_branch" = merged)
+}
