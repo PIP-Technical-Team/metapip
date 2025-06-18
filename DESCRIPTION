@@ -25,7 +25,9 @@ Suggests:
     testthat (>= 3.0.0), 
     mockery, 
     stringr, 
-    withr
+    withr, 
+    knitr,
+    rmarkdown
 Config/testthat/edition: 3
 RoxygenNote: 7.3.2
 Imports: 
@@ -38,3 +40,4 @@ Imports:
     collapse,
     rlang,
     colorDF
+VignetteBuilder: knitr
