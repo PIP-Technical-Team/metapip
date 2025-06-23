@@ -15,7 +15,7 @@ package_branches(
 \item{package}{One (or more) of the PIP core packages. Default NULL will
 include all the packages}
 
-\item{branch_to_compare}{chacter: names of branch to compare to. Default is
+\item{branch_to_compare}{character: names of branch to compare to. Default is
 "DEV_v2".}
 }
 \value{

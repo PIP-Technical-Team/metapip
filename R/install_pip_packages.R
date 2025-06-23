@@ -44,22 +44,23 @@ install_latest_branch <- function(package = NULL) {
 #'
 #' @export
 #'
-install_pip_packages <- function(package = NULL, branch = getOption("metapip.default_branch")) {
+install_pip_packages <- function(package = NULL, branch = NULL) {
   check_github_token()
   if (is.null(package)) {
     package = core
   } else {
     is_core(package)
   }
+
+  if(is.null(branch)) {
+    branch <- sapply(package, get_default_branch)
+  }
   lapply(cli::cli_progress_along(package),
          \(x) {
            tryCatch(
              expr = {
-               # Your code...
-               install_branch(package = package[x], branch)
+               install_branch(package = package[x], branch[x])
              },
-             # end of expr section
-
              error = function(e) {
                cli::cli_alert_danger("package {.pkg {x}} could not be installed")
              },
@@ -87,9 +88,10 @@ install_pip_packages <- function(package = NULL, branch = getOption("metapip.def
 #'
 #' @export
 #'
-install_branch <- function(package = "pipapi", branch = getOption("metapip.default_branch")) {
+install_branch <- function(package = "pipapi", branch = NULL) {
   check_github_token()
   check_package_condition(package)
+  if(is.null(branch)) branch = get_default_branch(package)
   if(length(branch) != 1L) cli::cli_abort("Please enter a single branch name.")
   detach_package(package)
 
