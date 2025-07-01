@@ -2,7 +2,7 @@ test_that("check_package_condition works correctly", {
     #expect_error(check_package_condition("abc"), "The package is not one of pipapi, pipload, wbpip, pipfun, pipdata, pipr.")
     #expect_error(check_package_condition(c("abc", "def")), "Please enter a single package name.")
     expect_true(check_package_condition("pipapi"))
-    expect_true(check_package_condition("pipr"))
+    expect_true(check_package_condition("wbpip"))
 })
 
 
@@ -12,7 +12,7 @@ test_that("get_branches works correctly", {
   })
   res <- get_branches("pipapi")
   expect_equal(res, c("abc", "def"))
-  expect_message(get_branches("pipr"), "These are available branches for pipr package")
+  expect_message(get_branches("wbpip"), "These are available branches for wbpip package")
 })
 
 test_that("install_branch works correctly", {
@@ -30,7 +30,7 @@ test_that("install_branch works correctly", {
 
 test_that("is_core works as expected", {
   expect_true(is_core("pipapi"))
-  expect_true(is_core(c("pipapi", "pipr")))
+  expect_true(is_core(c("pipapi", "wbpip")))
   #expect_error(is_core("abc"), "The package is not one of pipapi, pipload, wbpip, pipfun, pipdata, pipr.")
 })
 

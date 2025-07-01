@@ -188,9 +188,9 @@ set_colorDF <- function() {
   invisible(rstudio_theme)
 }
 
-#' Get default branch for a paritulcar package
+#' Get default branch for a particular package
 #'
-#' @param package
+#' @param package One of pip core packages
 #'
 #' @returns name of branch
 #' @export
@@ -228,7 +228,7 @@ get_current_branches <- \() {
   default_branches <- getOption("metapip.default_branch") |>
     list() |>
     rep(length(core)) |>
-    setNames(core)
+    stats::setNames(core)
 
   if (length(custom_default_branches) > 0) {
     default_branches[names(custom_default_branches)] <- custom_default_branches
