@@ -12,3 +12,9 @@ invisible() output
 \description{
 Based on options() settings provides an option to download latest package versions from the branch
 }
+\examples{
+\dontrun{
+  init_metapip()
+}
+
+}

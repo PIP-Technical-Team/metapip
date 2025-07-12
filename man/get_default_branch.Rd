@@ -3,14 +3,14 @@
 \name{get_default_branch}
 \alias{get_default_branch}
 \alias{get_current_branches}
-\title{Get default branch for a paritulcar package}
+\title{Get default branch for a particular package}
 \usage{
 get_default_branch(package)
 
 get_current_branches()
 }
 \arguments{
-\item{package}{}
+\item{package}{One of pip core packages}
 }
 \value{
 name of branch

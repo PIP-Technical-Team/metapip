@@ -3,6 +3,11 @@
 #' Based on options() settings provides an option to download latest package versions from the branch
 #'
 #' @returns invisible() output
+#' @examples
+#' \dontrun{
+#'   init_metapip()
+#'}
+#'
 #' @export
 #'
 init_metapip <- function() {
@@ -100,6 +105,6 @@ set_custom_default_branch <- \(...) {
   new_entries <- list(...)
   names(new_entries) <- paste0(names(new_entries), '_branch')
   existing_options <- getOption("metapip.custom_default_branch", list())
-  merged <- modifyList(existing_options, new_entries)
+  merged <- utils::modifyList(existing_options, new_entries)
   options("metapip.custom_default_branch" = merged)
 }
