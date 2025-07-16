@@ -15,11 +15,12 @@ install_pip_packages(package = NULL, branch = NULL)
 invisible NULL
 }
 \description{
-This installs packages like pipapi, pipaux, pipload, wbpip, pipfun, pipdata and pipr from a branch
+This installs packages like pipapi, pipaux, pipload, wbpip, pipfun, pipdata from a branch
 }
 \examples{
 \dontrun{
 install_pip_packages(branch = "test")
+install_pip_packages(package = "wbpip", branch = "DEV")
 }
 
 }

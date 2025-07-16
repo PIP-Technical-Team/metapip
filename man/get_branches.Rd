@@ -21,7 +21,7 @@ the branch names are printed in the console.
 \examples{
 \dontrun{
   get_branches()
-  get_branches("pipr")
+  get_branches("wbpip", display = FALSE)
 }
 
 }
