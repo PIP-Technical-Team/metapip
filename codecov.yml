@@ -2,9 +2,13 @@ name: R-CMD-check and Codecov
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master
+      - complete-doc-update
   pull_request:
-    branches: [master]
+    branches:
+      - master
+
 
 jobs:
   R-CMD-check:
