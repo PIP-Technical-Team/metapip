@@ -39,6 +39,8 @@ jobs:
         run: |
           rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning")
         shell: Rscript {0}
+        env:
+          GITHUB_PAT: ${{ secrets.GH_TOKEN }}
 
       - name: Run test coverage
         run: |
