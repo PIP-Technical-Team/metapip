@@ -47,4 +47,5 @@ jobs:
           covr::codecov()
         shell: Rscript {0}
         env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}  # only needed for private repos
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          GITHUB_PAT: ${{ secrets.GH_TOKEN }}
