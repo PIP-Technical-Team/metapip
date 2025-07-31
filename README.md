@@ -5,6 +5,7 @@
 
 <!-- badges: start -->
 
+[![codecov](https://codecov.io/gh/PIP-Technical-Team/metapip/graph/badge.svg?token=5DMKVN16NM)](https://codecov.io/gh/PIP-Technical-Team/metapip)
 <!-- badges: end -->
 
 The goal of `{metapip}` is to provide the user with a set of functions
