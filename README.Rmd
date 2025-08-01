@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # metapip
 
 <!-- badges: start -->
-[![codecov](https://codecov.io/gh/PIP-Technical-Team/metapip/graph/badge.svg?token=5DMKVN16NM)](https://codecov.io/gh/PIP-Technical-Team/metapip)
+[![codecov](https://codecov.io/gh/PIP-Technical-Team/metapip/branch/complete-doc-update/graph/badge.svg?token=5DMKVN16NM)](https://codecov.io/gh/PIP-Technical-Team/metapip)
 <!-- badges: end -->
 
 The goal of `{metapip}` is to provide the user with a set of functions that allow him/her to work efficiently with all the PIP R packages. The technical world of PIP consist of several packages that interact to each to load, format, modify, and estimate data for the PIP system. Given that the number of packages has increased over time, it was necessary to create a meta package whose only objective is the proper management of all the other PIP packages.
