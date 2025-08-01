@@ -13,7 +13,9 @@ on:
 jobs:
   R-CMD-check:
     runs-on: ubuntu-latest
-
+    env:
+      GITHUB_PAT: ${{ secrets.GH_TOKEN }}
+      NOT_CRAN: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -39,8 +41,6 @@ jobs:
         run: |
           rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning")
         shell: Rscript {0}
-        env:
-          GITHUB_PAT: ${{ secrets.GH_TOKEN }}
 
       - name: Run test coverage
         run: |
@@ -48,4 +48,3 @@ jobs:
         shell: Rscript {0}
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-          GITHUB_PAT: ${{ secrets.GH_TOKEN }}
