@@ -23,7 +23,7 @@ when was the last commit made to the branch
 \examples{
 \dontrun{
 get_branch_info()
-get_branch_info(branch = c("PROD", "QA"))
+get_branch_info(branch = c("PROD", "QA"), display = FALSE)
 get_branch_info(package = "wbpip", branch = c("PROD", "QA"))
 }
 }

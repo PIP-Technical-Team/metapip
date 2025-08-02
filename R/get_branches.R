@@ -11,7 +11,7 @@
 #' @examples
 #' \dontrun{
 #'   get_branches()
-#'   get_branches("pipr")
+#'   get_branches("wbpip", display = FALSE)
 #'}
 #'
 #' @export
@@ -44,7 +44,7 @@ get_branches <- function(package = "pipapi", display = TRUE) {
 #' @examples
 #' \dontrun{
 #' get_branch_info()
-#' get_branch_info(branch = c("PROD", "QA"))
+#' get_branch_info(branch = c("PROD", "QA"), display = FALSE)
 #' get_branch_info(package = "wbpip", branch = c("PROD", "QA"))
 #' }
 #' @export
@@ -87,7 +87,7 @@ get_branch_info <- function(package = "pipapi", branch = NULL, display = TRUE) {
 #' @examples
 #' \dontrun{
 #' get_latest_branch_update()
-#' get_latest_branch_update("pipr")
+#' get_latest_branch_update("wbpip", display = FALSE)
 #' }
 #' @export
 #'

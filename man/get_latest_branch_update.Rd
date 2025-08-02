@@ -20,6 +20,6 @@ This function is useful to get latest branch name, author of latest commit and t
 \examples{
 \dontrun{
 get_latest_branch_update()
-get_latest_branch_update("pipr")
+get_latest_branch_update("wbpip", display = FALSE)
 }
 }

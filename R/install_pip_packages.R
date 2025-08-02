@@ -30,7 +30,7 @@ install_latest_branch <- function(package = NULL) {
 #' Install one (or more) pip core packages from a branch.
 #'
 #' @description
-#' This installs packages like pipapi, pipaux, pipload, wbpip, pipfun, pipdata and pipr from a branch
+#' This installs packages like pipapi, pipaux, pipload, wbpip, pipfun, pipdata from a branch
 #'
 #' @param package one (or more) of the core package name, if NULL all the core packages are installed from the branch
 #' @param branch valid branch name (default "PROD")
@@ -40,6 +40,7 @@ install_latest_branch <- function(package = NULL) {
 #' @examples
 #' \dontrun{
 #' install_pip_packages(branch = "test")
+#' install_pip_packages(package = "wbpip", branch = "DEV")
 #' }
 #'
 #' @export
