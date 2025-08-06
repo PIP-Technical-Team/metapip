@@ -2,7 +2,7 @@
 % Please edit documentation in R/install_pip_packages.R
 \name{install_latest_branch}
 \alias{install_latest_branch}
-\title{Install latest branch from core packages}
+\title{Install latest branch from a package}
 \usage{
 install_latest_branch(package = NULL)
 }
@@ -10,7 +10,7 @@ install_latest_branch(package = NULL)
 \item{package}{one (or more) of core packages. default NULL would install latest branch for all packages}
 }
 \description{
-Install latest branch from core packages
+Based on the last commit of the branch it installs the latest branch of the package.
 }
 \examples{
 \dontrun{

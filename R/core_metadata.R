@@ -1,7 +1,11 @@
 #' Return meta information about core packages
+#' @description
+#' Returns information like name of the package, number of branches it has, last release tag,
+#' last release time, last commit author etc.
+#'
 #'
 #' @param package One (or more) core packages, if NULL shows information about all of them.
-#' @return a knitr::kable output with details about the core packages
+#' @return a colorDF::colorDF output with details about the core packages
 #' @examples
 #' \dontrun{
 #' core_metadata()
@@ -18,31 +22,43 @@ core_metadata <- function(package = NULL) {
     is_core(package)
   }
   cli::cli_alert_info("Gathering branch information of the package")
-  branches <- purrr::map(package, get_branches, display = FALSE, .progress = TRUE)
+  branches <- lapply(cli::cli_progress_along(package),
+                     \(i) get_branches(package[i], display = FALSE)
+                     )
   no_of_branches <- lengths(branches)
 
   cli::cli_alert_info("Gathering latest tag and published date.")
-  latest_release <- purrr::map(package, \(x) {
+  latest_release <- lapply(cli::cli_progress_along(package),
+                           \(i) {
     dat <- tryCatch({
       gh::gh("GET /repos/{owner}/{repo}/releases/latest",
-          owner = "PIP-Technical-Team", repo = x)
-    }, error = function(err) data.frame(tag_name = NA, published_at = NA))
+          owner = "PIP-Technical-Team",
+          repo = package[i])
+      }, error = \(err) data.frame(tag_name = NA, published_at = NA)
+      )
+
     c(dat$tag_name, dat$published_at)
-  }, .progress = TRUE)
+  })
 
   cli::cli_alert_info("Gathering latest branch information")
-  latest_commit <- purrr::map(package, get_latest_branch_update, .progress = TRUE)
+
+  latest_commit <- lapply(cli::cli_progress_along(package),
+                          \(i) {
+                            get_latest_branch_update(package[i], display = FALSE)
+                            }
+                          )
 
   out <- data.frame(package, no_of_branches, latest_release_tag = sapply(latest_release, `[[`, 1),
                     latest_release_time = sapply(latest_release, `[[`, 2),
                     latest_commit_branch = sapply(latest_commit, `[[`, "branch_name"),
                     latest_commit_author = sapply(latest_commit, `[[`, "last_commit_author_name"),
                     latest_commit_time = as.POSIXct(sapply(latest_commit, `[[`, "last_update_time")))
-  print(knitr::kable(out))
+  print(colorDF::colorDF(out))
   return(invisible(out))
 }
 
-
+# Not setting the branch default with getOption here because this is an internal function
+# It is expected to have a branch name whenever it is called
 latest_commit_for_branch <- function(package, branch) {
   tryCatch({
     gh::gh("GET /repos/{owner}/{repo}/commits/{branch}", owner = "PIP-Technical-Team",

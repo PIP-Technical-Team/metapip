@@ -1,7 +1,7 @@
 # This is basically a copy of tidyverse and tidymodels
 
-#core <- c("pipapi", "pipaux", "pipload", "wbpip", "pipfun", "pipdata", "pipr")
-core <- c("pipapi", "pipload", "wbpip", "pipfun", "pipdata", "pipr", "pipster", "pipaux")
+# Dropping pipr from this core packages as it is not available under PIP-Technical-Team
+core <- c("pipapi", "pipload", "wbpip", "pipfun", "pipdata", "pipster", "pipaux","pipfaker")
 
 pkg_loaded <- function(pkg = NULL) {
   if (is.null(pkg)) {

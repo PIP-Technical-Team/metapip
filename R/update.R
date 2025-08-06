@@ -16,11 +16,10 @@
 #' \dontrun{
 #' metapip_update()
 #' }
-#' @import rlang
 #' @importFrom utils install.packages
 metapip_update <- function(pkg = "metapip", recursive = FALSE, ...) {
   deps <- pkg_deps(pkg, recursive)
-  behind <- dplyr::filter(deps, behind)
+  behind <- fsubset(deps, behind)
 
   if (nrow(behind) == 0) {
     cli::cat_line("All packages up-to-date")
@@ -34,10 +33,10 @@ metapip_update <- function(pkg = "metapip", recursive = FALSE, ...) {
   cli::cat_line()
   cli::cat_line("Start a clean R session then run:")
 
-  install_opt <- quos(...)
+  install_opt <- rlang::quos(...)
   install_pkg <- behind$package
-  inst_expr <- quo(install.packages(c(!!!install_pkg), !!!install_opt))
-  pkg_str <- deparse(quo_squash(inst_expr))
+  inst_expr <- rlang::quo(install.packages(c(!!!install_pkg), !!!install_opt))
+  pkg_str <- deparse(rlang::quo_squash(inst_expr))
   cli::cat_line(pkg_str)
 
   invisible()
@@ -58,7 +57,7 @@ pkg_deps <- function(x = "metapip", recursive = FALSE) {
     deps$metapip <-
       c(
         "pipapi", "pipaux", "pipload", "wbpip", "pipfun", "pipdata", "pipr",
-        "cli", "rstudioapi", "tibble"
+        "cli", "rstudioapi"
       )
   }
 
@@ -76,12 +75,13 @@ pkg_deps <- function(x = "metapip", recursive = FALSE) {
   cran_version <- lapply(pkgs[pkg_deps, "Version"], base::package_version)
   local_version <- lapply(pkg_deps, utils::packageVersion)
 
-  behind <- purrr::map2_lgl(cran_version, local_version, `>`)
+  behind <- mapply(`>`, cran_version, local_version)
 
-  tibble::tibble(
+  data.frame(
     package = pkg_deps,
-    cran = cran_version |> purrr::map_chr(as.character),
-    local = local_version |> purrr::map_chr(as.character),
+    cran = cran_version |> sapply(as.character),
+    local = local_version |> sapply(as.character),
     behind = behind
   )
 }
+

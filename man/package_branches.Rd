@@ -4,25 +4,28 @@
 \alias{package_branches}
 \title{Status tables of package versions in different branches along with local
 installations. For local installation,a status column is returned which
-indicates if the local version is ahead or behind the DEV branch.}
+indicates if the local version is ahead or behind the DEV_v2 branch.}
 \usage{
-package_branches(package = NULL, branch_to_compare = "DEV")
+package_branches(
+  package = NULL,
+  branch_to_compare = getOption("metapip.default_branch")
+)
 }
 \arguments{
 \item{package}{One (or more) of the PIP core packages. Default NULL will
 include all the packages}
 
-\item{branch_to_compare}{chacter: names of branch to compare to. Default is
-"DEV".}
+\item{branch_to_compare}{character: names of branch to compare to. Default is
+"DEV_v2".}
 }
 \value{
-tibble of pip packages and the corresponding package versions of
+table of pip packages and the corresponding package versions of
   branch
 }
 \description{
 Status tables of package versions in different branches along with local
 installations. For local installation,a status column is returned which
-indicates if the local version is ahead or behind the DEV branch.
+indicates if the local version is ahead or behind the DEV_v2 branch.
 }
 \examples{
 \dontrun{

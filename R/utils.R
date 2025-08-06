@@ -63,9 +63,46 @@ choose_startup_tip <- function(vec) {
 }
 
 
+# This function is a modified version from  https://gitcreds.r-lib.org/
+gitcreds_msg <- function(wh) {
+  msgs <- c(
+    no_git = paste0(
+      "No git installation found. You need to install git and set up ",
+      "your GitHub Personal Access token using {.fn gitcreds::gitcreds_set}."),
+    no_creds = paste0(
+      "No git credentials found. Please set up your GitHub Personal Access ",
+      "token using {.fn gitcreds::gitcreds_set}.",
+      "Or, follow the instruction here: {.url https://happygitwithr.com/https-pat#tldr}")
+  )
+  cli::format_inline(msgs[wh])
+}
+
+
+
+#' make sure your GITHUB credentials are properly setup
+#'
+#' @return invisible TRUE if credentials are perfectly set
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' check_github_token()
+#' }
 check_github_token <- function() {
-  if(Sys.getenv("GITHUB_PAT") == "")
-    cli::cli_abort("Enviroment variable `GITHUB_PAT` is empty. Please set it up using Sys.setenv(GITHUB_PAT = 'code')")
+  # Check that either GITHUB_PAT is set or credentials have been stored using gitcreds
+  # If not, abort with a message
+
+  tryCatch(
+    expr = {
+      creds <- gitcreds::gitcreds_get()
+    },
+    gitcreds_nogit_error = function(e) cli::cli_abort("{gitcreds_msg(\"no_git\")}"),
+    gitcreds_no_credentials = function(e) cli::cli_abort("{gitcreds_msg(\"no_creds\")}")
+  )
+  invisible(creds)
+
+  # if (Sys.getenv("GITHUB_PAT") == "")
+  #   cli::cli_abort("Enviroment variable `GITHUB_PAT` is empty. Please set it up using Sys.setenv(GITHUB_PAT = 'code')")
 }
 
 check_package_condition <- function(package) {
@@ -83,3 +120,70 @@ detach_package <- function(package) {
   unloadNamespace(package)
 }
 
+
+#' Non tidyverse alternative to tibble::rownames_to_column
+#'
+#' @param data Dataframe
+#' @param var column name to store rownames
+#'
+#' @return Dataframe with an additional column of rownames
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' rowname_to_column(mtcars, "rn")
+#' }
+rowname_to_column <- function(data, var) {
+  rn <- rownames(data)
+  out <- add_vars(data, rn = rn, pos = "front")
+  names(out)[1] <- var
+  rownames(out) <- NULL
+  out
+}
+
+#' Set theme for colorDF
+#'
+#' @return invisible RStudio theme
+#' @keywords internal
+rs_theme <- function() {
+  # set display options ------
+  # Check if running in RStudio
+  rstudio_theme <- template <-
+    list(editor     = "",
+         global     = "",
+         dark       = FALSE,
+         foreground = "",
+         background = "")
+
+  if (Sys.getenv("RSTUDIO") == "1") {
+    # Attempt to infer theme or notify the user to set the theme if using a
+    # newer RStudio version without `rstudioapi` support
+    # If possible, use `rstudioapi` to get theme information (works only in certain versions)
+
+    if ("rstudioapi" %in% rownames(utils::installed.packages())) {
+      rstudio_theme <- tryCatch(rstudioapi::getThemeInfo(),
+                                error = \(e) template,
+                                silent = TRUE)
+    }
+  }
+  # return
+  invisible(rstudio_theme)
+}
+
+
+#' identify RStudio theme
+#'
+#' @return invisible RStudio theme
+#' @keywords internal
+
+set_colorDF <- function() {
+  # set display options ------
+  rstudio_theme <- rs_theme()
+  if (rstudio_theme$dark) {
+    options(colorDF_theme = "wb")
+  } else {
+    options(colorDF_theme = "bw")
+  }
+
+  invisible(rstudio_theme)
+}

@@ -1,0 +1,60 @@
+---
+title: "package-specific-options"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{package-specific-options}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+## Background
+
+`metapip` is a R package that allows to work efficiently with all the pip packages. As explained in the `README` of the file there are lot of functionality that is provided with `metapip`. Many of the functions has `branch` as an argument. In this vignette we would explore different options of passing branch names to these functions.
+
+## Main content
+
+Let's take `get_branch_info()` function as an example. There are 3 ways in which a `branch` name ordered by increasing priority. 
+
+1. Pass `branch` name explicitly. 
+
+```{r}
+get_branch_info(package = "pipapi", branch = "DEV")
+```
+
+This will take `branch` value as "DEV" irrespective of any settings. 
+
+2. Use package specific options to set the default branch of a package. 
+
+We have enabled a feature to set custom default branches of a package using function `set_custom_branch`
+
+```{r}
+set_custom_branch(pipr = 'main', 'pipapi' = 'DEV_v3')
+```
+
+This function sets `option()` in the background which is used to determine the default branch. 
+So now if we call `get_branch_info(package = "pipapi")` then it will check if the `option()` value is set and get "DEV_v3" as default branch.  
+
+3. Use a generic default branch. 
+
+Finally, if both the options are not passed/set then it will use the `getOption(metapip.default_branch)` which is the default branch for all the PIP packages unless a custom default branch is set. 
+This is the default setting when you load the `metapip` package defined in file `zzz.R`
+
+```{r}
+metapip_default_options <- list(
+  metapip.default_branch = "DEV_v2",
+  metapip.custom_branch = list(
+    pipapi_branch = "DEV",
+    pipfaker_branch = "main",
+    wbpip_branch = "DEV",
+    pipster_branch = "DEV",
+    pipdata_branch = "DEV"
+  )
+)
+```
+
+Moreover, we have come up with function `init_metapip()` that checks these default branches for all PIP packages and provides an option to update them. 
+Please try the package functions and let us know what you think about it. 

@@ -1,4 +1,7 @@
-#' Install latest branch from core packages
+#' Install latest branch from a package
+#' @description
+#' Based on the last commit of the branch it installs the latest branch of the package.
+#'
 #'
 #' @param package one (or more) of core packages. default NULL would install latest branch for all packages
 #'
@@ -14,16 +17,20 @@ install_latest_branch <- function(package = NULL) {
   check_github_token()
   if(!is.null(package)) is_core(package)
   else package <- core
-  dat <- purrr::map_df(package, get_latest_branch_update)
+  dat <- lapply(cli::cli_progress_along(package),
+                \(i) {
+                  get_latest_branch_update(package[i], display = FALSE)
+                  }) |>
+    rowbind()
   Map(\(x, y) install_branch(x, y), dat$package, dat$branch_name)
   NULL
 }
 
 
-#' Install one (or more) pip core packages from a specific branch.
+#' Install one (or more) pip core packages from a branch.
 #'
 #' @description
-#' This includes packages like pipapi, pipaux, pipload, wbpip, pipfun, pipdata and pipr
+#' This installs packages like pipapi, pipaux, pipload, wbpip, pipfun, pipdata from a branch
 #'
 #' @param package one (or more) of the core package name, if NULL all the core packages are installed from the branch
 #' @param branch valid branch name (default "PROD")
@@ -32,27 +39,31 @@ install_latest_branch <- function(package = NULL) {
 #'
 #' @examples
 #' \dontrun{
-#' install_all_packages(branch = "test")
+#' install_pip_packages(branch = "test")
+#' install_pip_packages(package = "wbpip", branch = "DEV")
 #' }
 #'
 #' @export
 #'
-install_pip_packages <- function(package = NULL, branch = "PROD") {
+install_pip_packages <- function(package = NULL, branch = NULL) {
   check_github_token()
   if (is.null(package)) {
     package = core
   } else {
     is_core(package)
   }
-  lapply(package,
+
+  if(is.null(branch)) {
+    branch <- get_package_current_branch(package = package)
+  }
+  lapply(cli::cli_progress_along(package),
          \(x) {
            tryCatch(
              expr = {
-               # Your code...
-               install_branch(package = x, branch)
+               pgk <- package[x]
+               brn <- branch[pgk]
+               install_branch(package = pkg, brn)
              },
-             # end of expr section
-
              error = function(e) {
                cli::cli_alert_danger("package {.pkg {x}} could not be installed")
              },
@@ -70,7 +81,7 @@ install_pip_packages <- function(package = NULL, branch = "PROD") {
 #' Install branch from a package
 #'
 #' @param package one of the core package name (default "pipapi")
-#' @param branch valid branch name (default "DEV")
+#' @param branch valid branch name (default "DEV_v2")
 #'
 #' @examples
 #' \dontrun{
@@ -80,9 +91,10 @@ install_pip_packages <- function(package = NULL, branch = "PROD") {
 #'
 #' @export
 #'
-install_branch <- function(package = "pipapi", branch = "DEV") {
+install_branch <- function(package = "pipapi", branch = NULL) {
   check_github_token()
   check_package_condition(package)
+  if(is.null(branch)) branch = get_package_current_branch(package = package)
   if(length(branch) != 1L) cli::cli_abort("Please enter a single branch name.")
   detach_package(package)
 

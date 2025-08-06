@@ -1,7 +1,7 @@
 Package: metapip
 Type: Package
 Title: Easily Install, Load, and manage PIP Packages
-Version: 0.0.0.9010
+Version: 0.0.1
 Authors@R:
     c(person(given = "R.Andrés",
              family = "Castañeda",
@@ -24,19 +24,20 @@ BugReports: https://github.com/PIP-Technical-Team/metapip/issues
 Suggests: 
     testthat (>= 3.0.0), 
     mockery, 
-    knitr, 
     stringr, 
-    tidyr
+    withr, 
+    knitr,
+    rmarkdown
 Config/testthat/edition: 3
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Imports: 
     cli,
     glue,
-    dplyr,
-    purrr,
     gh,
     rstudioapi,
-    tibble,
     remotes,
+    gitcreds,
+    collapse,
     rlang,
-    magrittr
+    colorDF
+VignetteBuilder: knitr

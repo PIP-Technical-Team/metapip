@@ -1,13 +1,13 @@
 #' Status tables of package versions in different branches along with local
 #' installations. For local installation,a status column is returned which
-#' indicates if the local version is ahead or behind the DEV branch.
+#' indicates if the local version is ahead or behind the DEV_v2 branch.
 #'
 #' @param package One (or more) of the PIP core packages. Default NULL will
 #'   include all the packages
-#' @param branch_to_compare chacter: names of branch to compare to. Default is
-#'   "DEV".
+#' @param branch_to_compare character: names of branch to compare to. Default is
+#'   "DEV_v2".
 #'
-#' @return tibble of pip packages and the corresponding package versions of
+#' @return table of pip packages and the corresponding package versions of
 #'   branch
 #' @examples
 #' \dontrun{
@@ -19,7 +19,7 @@
 #' @export
 #'
 package_branches  <- function(package = NULL,
-                              branch_to_compare = "DEV") {
+                              branch_to_compare = getOption("metapip.default_branch")) {
   check_github_token()
   if(!is.null(package)) is_core(package)
   else package <- core
@@ -30,7 +30,7 @@ package_branches  <- function(package = NULL,
   common <- common_data(complete_data)
   result <- split_packages_into_list(complete_data)
   # Get local installation
-  local <-  purrr::map_df(package, \(.x) {
+  local <-  lapply(cli::cli_progress_along(package), \(.x) {
     out <- tryCatch(
       expr = {
         utils::packageDescription(.x, fields = c("GithubRef", "Version"))
@@ -48,11 +48,15 @@ package_branches  <- function(package = NULL,
     ) # End of trycatch
 
 
-    tibble::tibble(package = .x, local_branch = out$GithubRef, local_version = out$Version)
-  })
+    data.frame(package = .x,
+    local_branch = out$GithubRef,
+    local_version = out$Version)
+  }) |>
+  rowbind()
 
-  # DEV data
-  dev <- complete_data %>% dplyr::filter(.data$branch %in% branch_to_compare)
+  # DEV_v2 data
+  dev <- complete_data |>
+  fsubset(branch %in% branch_to_compare)
   local <- join_and_get_status(local, dev, branch_to_compare)
 
   return(c(list(common = common, local = local), result))
@@ -82,48 +86,39 @@ get_package_version <- function(package) {
 
 #' @noRd
 get_complete_data <- function(all_package_version) {
-  all_package_version %>%
-    utils::stack() %>%
-    tibble::rownames_to_column(var = "branch") %>%
-    dplyr::rename(version = .data$values, package = .data$ind) %>%
-    dplyr::mutate(branch = stringr::str_extract(.data$branch, "([0-9A-Za-z-_]+)/DESCRIPTION\\.Version", group = 1))
+  all_package_version |>
+    utils::stack() |>
+    rowname_to_column("branch") |>
+    frename(version = values, package = ind) |>
+    fmutate(branch = stringr::str_extract(branch, "([0-9A-Za-z-_]+)/DESCRIPTION\\.Version", group = 1))
 }
 
 #' @noRd
 common_data <- function(complete_data) {
-  complete_data %>%
-    dplyr::filter(.data$branch %in% c("PROD", "DEV", "QA")) %>%
-    tidyr::pivot_wider(names_from = "branch", values_from = "version") %>%
-    dplyr::relocate("package", "PROD")
+  complete_data |>
+    fsubset(branch %in% c("PROD", "DEV_v2", "QA")) |>
+    pivot(names = "branch", values = "version", how = "wider") |>
+    colorder(package, PROD)
 }
 
 #' @noRd
 split_packages_into_list <- function(complete_data) {
-  complete_data %>%
-    dplyr::filter(!.data$branch %in% c("PROD", "DEV", "QA")) %>%
-    split(.$package) %>%
-    purrr::map(., ~.x %>% dplyr::select(-"package"))
+  complete_data |>
+    fsubset(!branch %in% c("PROD", "DEV_v2", "QA")) |>
+    split(~package) |>
+    lapply(\(x) x |> fselect(-package))
 }
 
 #' @noRd
 join_and_get_status <- function(local, dev, branch_to_compare) {
   # Join dev data with local data to create status column
-  dplyr::full_join(local, dev, dplyr::join_by("package")) %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(local_status = utils::compareVersion(.data$version, .data$local_version)) %>%
-    dplyr::ungroup() %>%
-    dplyr::mutate(local_status =
-                    dplyr::case_when(local_status == 1 ~  paste("behind",branch_to_compare),
-                                     local_status == -1 ~ paste("ahead", branch_to_compare),
-                                     TRUE ~ "up-to-date")) %>%
-    dplyr::mutate(local_status = ifelse(is.na(.data$local_version),
-                                        "Not in local",
-                                        local_status)) %>%
-    dplyr::mutate(local_status = ifelse(is.na(.data$branch ),
-                                        paste(branch_to_compare, "not in repo"),
-                                        local_status)) %>%
-    dplyr::select(-"branch", -"version")
-
+  join(local, dev, "package", how = "full") |>
+    fmutate(local_status = mapply(utils::compareVersion, version, local_version),
+            local_status = ifelse(local_status == 1, paste("behind",branch_to_compare),
+                                  ifelse(local_status == -1, paste("ahead", branch_to_compare),"up-to-date")),
+            local_status = ifelse(is.na(local_version),"Not in local",local_status),
+            local_status = ifelse(is.na(branch),paste(branch_to_compare, "not in repo"),local_status)) |>
+    fselect(-branch, -version)
 }
 
 

@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # metapip
 
 <!-- badges: start -->
-
+[![codecov](https://codecov.io/gh/PIP-Technical-Team/metapip/graph/badge.svg?token=5DMKVN16NM)](https://codecov.io/gh/PIP-Technical-Team/metapip)
 <!-- badges: end -->
 
 The goal of `{metapip}` is to provide the user with a set of functions that allow him/her to work efficiently with all the PIP R packages. The technical world of PIP consist of several packages that interact to each to load, format, modify, and estimate data for the PIP system. Given that the number of packages has increased over time, it was necessary to create a meta package whose only objective is the proper management of all the other PIP packages.
@@ -46,13 +46,22 @@ You can install the development version of metapip from [GitHub](https://github.
 devtools::install_github("PIP-Technical-Team/metapip")
 ```
 
+## Setting up default branch in metapip
+
+In `metapip` there are different ways to set up default branches. By default it uses `options(metapip.default_branch)` to provide a default branch value to all packages. When you load the package it is set to "DEV_v2". You can override that default setting on per package basis by updating options with custom default branch like `options(metapip.custom_branch = list(pipapi_branch = "DEV", pipfaker_branch = "main"))`. So in this case, the default value for `pipapi` branch is "DEV" whereas the one for `pipfaker` is set to "main". For rest of the pip core packages it remains as "DEV_v2". 
+
 ## Functions and it's usage in metapip
 
-Since `metapip` works with Github API a lot it is required to have a github token in your environment. You can generate a token for yourself from [here](https://github.com/settings/tokens) and set it as an environment variable as shown below.
-
-```{r example}
+```{r setup}
 library(metapip)
-Sys.setenv(GITHUB_PAT = "code")
+```
+
+Since `metapip` works with Github API, you need to make sure that your GitHub credentials are properly set in you R environment. The best way to do so is using the `{gitcreds}` package. You may find a simple explanation about how you can generate a token for yourself and set it up [here](https://happygitwithr.com/https-pat#tldr).
+
+You can check if your credentials are properly set by running the following command.
+```{r check-credentials}
+check_github_token() |> 
+  print()
 ```
 
 Let us now go through the functions in metapip.
@@ -161,11 +170,49 @@ out <- core_metadata()
 out <- core_metadata(c("pipapi", "wbpip"))
 ```
 
-6.  `install_all_packages()`
+6.  `install_pip_packages()`
 
-Install one or more core packages from a specific branch. If you have fresh installation of R then running `install_all_packages()` would set you up with all pip packages.
+Install one or more core packages from a specific branch. If you have fresh installation of R then running `install_pip_packages()` would set you up with all pip packages.
 
 ```{r, eval=FALSE}
-install_all_packages(branch = "test")
-install_all_packages(c("pipapi", "wbpip"), "test")
+install_pip_packages(branch = "test")
+install_pip_packages(c("pipapi", "wbpip"), "test")
 ```
+
+7. `init_metapip()`
+
+This function checks the default branches for each packages and ensures that they are up-to-date. If they are not, it provides an option to update them with a single stroke. 
+
+```{r eval=FALSE}
+init_metapip()
+
+! The following packages do not have the updated version of default branch
+installed: pipapi, pipload, pipfun, and pipaux
+Do you want to install them now? 
+
+1: Yes
+2: No
+
+Selection: 1
+
+── Attaching packages ──────────────────────────────────────────────────────────── metapip 0.0.0.9014 ──
+✔ pipapi   1.3.19     (DEV)
+✔ pipload  0.2.1      (DEV_v2)
+✔ wbpip    0.1.6      (DEV)
+✔ pipfun   0.3.0      (DEV_v2)
+✔ pipdata  0.0.0.9017 (DEV)
+✔ pipr     1.1.0      (main)
+✔ pipster  0.0.1.9003 (DEV)
+✔ pipaux   0.3.0      (DEV_v2)
+✔ pipfaker 0.1.0      (main)
+```
+
+8. `set_custom_branch()`
+
+An easier way to set `options()` for pip packages custom default branch. 
+
+```{r eval=FALSE}
+set_custom_branch(pipr = 'main', 'pipapi' = 'DEV_v3')
+```
+
+This is functionally equivalent to `options(metapip.custom_branch = list(pipr_branch = "main", pipapi_branch = "DEV_v3"))`.

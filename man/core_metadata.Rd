@@ -10,10 +10,11 @@ core_metadata(package = NULL)
 \item{package}{One (or more) core packages, if NULL shows information about all of them.}
 }
 \value{
-a knitr::kable output with details about the core packages
+a colorDF::colorDF output with details about the core packages
 }
 \description{
-Return meta information about core packages
+Returns information like name of the package, number of branches it has, last release tag,
+last release time, last commit author etc.
 }
 \examples{
 \dontrun{

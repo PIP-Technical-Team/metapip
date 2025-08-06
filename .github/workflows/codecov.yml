@@ -2,14 +2,20 @@ name: R-CMD-check and Codecov
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master
+      - complete-doc-update
   pull_request:
-    branches: [master]
+    branches:
+      - master
+
 
 jobs:
   R-CMD-check:
     runs-on: ubuntu-latest
-
+    env:
+      GITHUB_PAT: ${{ secrets.GH_TOKEN }}
+      NOT_CRAN: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -19,6 +25,11 @@ jobs:
 
       - name: Set up pandoc
         uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev
 
       - name: Install dependencies
         run: |
@@ -36,5 +47,4 @@ jobs:
           covr::codecov()
         shell: Rscript {0}
         env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}  # only needed for private repos
-          
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

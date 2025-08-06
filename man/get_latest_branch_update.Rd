@@ -4,20 +4,22 @@
 \alias{get_latest_branch_update}
 \title{Get details of the branch which was last updated}
 \usage{
-get_latest_branch_update(package = "pipapi")
+get_latest_branch_update(package = "pipapi", display = TRUE)
 }
 \arguments{
 \item{package}{one of the core package (default "pipapi")}
+
+\item{display}{(default TRUE) do you want to display the branches in the console?}
 }
 \value{
-single row dataframe
+colorDF::colorDF output along with an invisible single row dataframe
 }
 \description{
-Get details of the branch which was last updated
+This function is useful to get latest branch name, author of latest commit and time it was last updated.
 }
 \examples{
 \dontrun{
 get_latest_branch_update()
-get_latest_branch_update("pipr")
+get_latest_branch_update("wbpip", display = FALSE)
 }
 }
