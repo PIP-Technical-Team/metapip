@@ -15,8 +15,8 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
- devtools::load_all(".")
-# library(metapip)
+ # devtools::load_all(".")
+library(metapip)
 ```
 
 
