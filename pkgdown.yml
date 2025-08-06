@@ -1,8 +1,10 @@
 pandoc: 3.1.11
 pkgdown: 2.1.3
 pkgdown_sha: ~
-articles: {}
-last_built: 2025-07-31T09:53Z
+articles:
+  package_development: package_development.html
+  package-specific-options: package-specific-options.html
+last_built: 2025-08-06T20:18Z
 urls:
   reference: https://pip-technical-team.github.io/metapip/reference
   article: https://pip-technical-team.github.io/metapip/articles

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">metapip</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9010</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,6 +16,11 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/package_development.html">metapip in package development</a></li>
+    <li><a class="dropdown-item" href="../articles/package-specific-options.html">package-specific-options</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -44,6 +49,12 @@
 
       <dl><dt>
 
+          <code><a href="check_github_token.html">check_github_token()</a></code>
+
+        </dt>
+        <dd>make sure your GITHUB credentials are properly setup</dd>
+      </dl><dl><dt>
+
           <code><a href="core_metadata.html">core_metadata()</a></code>
 
         </dt>
@@ -53,19 +64,43 @@
           <code><a href="get_branch_info.html">get_branch_info()</a></code>
 
         </dt>
-        <dd>Get last update time of branches in a specific package</dd>
+        <dd>Get last update time of branches in a package</dd>
       </dl><dl><dt>
 
           <code><a href="get_branches.html">get_branches()</a></code>
 
         </dt>
-        <dd>Get available branches for a particular package</dd>
+        <dd>Get available branches for a package</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_core_pagkages.html">get_core_pagkages()</a></code>
+
+        </dt>
+        <dd>Get core PIP ecosystem package</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_current_branches.html">get_current_branches()</a></code> <code><a href="get_current_branches.html">get_package_current_branch()</a></code>
+
+        </dt>
+        <dd>get the current branches that are meant to be used</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_default_branch.html">get_default_branch()</a></code> <code><a href="get_default_branch.html">set_default_branch()</a></code>
+
+        </dt>
+        <dd>Get default branch in PIP ecosystem</dd>
       </dl><dl><dt>
 
           <code><a href="get_latest_branch_update.html">get_latest_branch_update()</a></code>
 
         </dt>
         <dd>Get details of the branch which was last updated</dd>
+      </dl><dl><dt>
+
+          <code><a href="init_metapip.html">init_metapip()</a></code> <code><a href="init_metapip.html">update_pip_packages()</a></code>
+
+        </dt>
+        <dd>Initializes the pip core packages</dd>
       </dl><dl><dt>
 
           <code><a href="install_branch.html">install_branch()</a></code>
@@ -77,16 +112,16 @@
           <code><a href="install_latest_branch.html">install_latest_branch()</a></code>
 
         </dt>
-        <dd>Install latest branch from core packages</dd>
+        <dd>Install latest branch from a package</dd>
       </dl><dl><dt>
 
           <code><a href="install_pip_packages.html">install_pip_packages()</a></code>
 
         </dt>
-        <dd>Install one (or more) pip core packages from a specific branch.</dd>
+        <dd>Install one (or more) pip core packages from a branch.</dd>
       </dl><dl><dt>
 
-          <code><a href="metapip.html">-package</a></code> <code><a href="metapip.html">metapip</a></code>
+          <code><a href="metapip.html">metapip</a></code>
 
         </dt>
         <dd>metapip: PIP packages manager</dd>
@@ -107,13 +142,31 @@
           <code><a href="package_branches.html">package_branches()</a></code>
 
         </dt>
-        <dd>Status tables of package versions in different branches along with local installations. For local installation,a status column is returned which indicates if the local version is ahead or behind the DEV branch.</dd>
+        <dd>Status tables of package versions in different branches along with local installations. For local installation,a status column is returned which indicates if the local version is ahead or behind the DEV_v2 branch.</dd>
       </dl><dl><dt>
 
           <code><a href="pkg_deps.html">pkg_deps()</a></code>
 
         </dt>
         <dd>List all dependencies</dd>
+      </dl><dl><dt>
+
+          <code><a href="print.metapip_simplelist.html">print(<i>&lt;metapip_simplelist&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Pretty print for metapip_simplelist objects</dd>
+      </dl><dl><dt>
+
+          <code><a href="rowname_to_column.html">rowname_to_column()</a></code>
+
+        </dt>
+        <dd>Non tidyverse alternative to tibble::rownames_to_column</dd>
+      </dl><dl><dt>
+
+          <code><a href="set_custom_branch.html">set_custom_branch()</a></code> <code><a href="set_custom_branch.html">get_custom_branch()</a></code>
+
+        </dt>
+        <dd>Set default custom branching options</dd>
       </dl></div>
   </main></div>
 
