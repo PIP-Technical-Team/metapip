@@ -1,24 +1,28 @@
-#' Initializes the pip core packages
+#'Initializes the pip core packages
 #'
-#' @param exclude chracter:
+#'@param exclude character: packages to exclude from attaching. if [getwd()] is
+#'  one of the core PIP packages, that package will be excluded be default. To
+#'  avoid that, set exclude to `NULL`.
 #'
-#' @description
-#' Based on options() settings provides an option to download latest package versions from the branch
+#'@description Based on options() settings provides an option to download latest
+#'package versions from the branch
 #'
-#' @returns invisible() output
+#'@returns invisible() output
 #' @examples
 #' \dontrun{
 #'   init_metapip()
 #'}
 #'
-#' @export
-init_metapip <- function(exclude = NULL) {
-  # Based on options settings check if the latest version of that branch is installed for every pip core package
-  # If there is an updated commit, give an option to install the latest version of those branches
-  default_branch <- get_current_branches() |>
-    unlist()
+#'@export
+init_metapip <- function(exclude = NA) {
+  # Based on options settings check if the latest version of that branch is
+  # installed for every pip core package If there is an updated commit, give an
+  # option to install the latest version of those branches
 
-  pkgs_vec <- mapply(compare_sha, core, default_branch[core])
+  pkgs <- get_core_pagkages(exclude = exclude)
+  default_branch <- get_package_current_branch(package = pkgs)
+
+  pkgs_vec <- mapply(compare_sha, pkgs, default_branch[pkgs])
 
   # get those pkgs for which branch does not exist
   null_vec    <- Filter(is.null, pkgs_vec) |>
@@ -89,5 +93,40 @@ compare_sha <- function(package, branch) {
 
   # finally, compare
   local_sha == gh_sha
+
+}
+
+
+#' Get core PIP ecosystem package
+#'
+#' @inheritParams init_metapip
+#'
+#' @returns character vector with names of PIP packages
+#' @export
+#'
+#' @examples
+#' get_core_pagkages()
+#' get_core_pagkages(exclude = "pipdata")
+get_core_pagkages <- \(exclude = NULL) {
+
+  if (is.null(exclude)) return(core)
+
+  if (is.na(exclude)) {
+    current_project <- getwd() |>
+      fs::path_file()
+    if (current_project %in% core) {
+      return(core[!(core %in% current_project)])
+    } else {
+      return(core)
+    }
+  }
+
+  if (all(exclude %in% core)) {
+    return(core[!(core %in% exclude)])
+  } else {
+    wrong_exclude <- exclude[!exclude %in% core]
+    cli::cli_abort(c(x = "package{?s} {.pkg {wrong_exclude}} {?is/are} not part of PIP ecosystem",
+                     i = "available packages are {.pkg {core}}"))
+  }
 
 }
