@@ -2,19 +2,39 @@
 % Please edit documentation in R/init_metapip.R
 \name{init_metapip}
 \alias{init_metapip}
+\alias{update_pip_packages}
 \title{Initializes the pip core packages}
 \usage{
-init_metapip()
+init_metapip(exclude = NA, ask = TRUE, answer = 1)
+
+update_pip_packages(exclude = NA, ask = TRUE, answer = 1)
+}
+\arguments{
+\item{exclude}{character: packages to exclude from attaching. if [getwd] is
+one of the core PIP packages, that package will be excluded be default. To
+avoid that, set exclude to `NULL`.}
+
+\item{ask}{logical. Ask the user if she wants to install outdated packages. Default TRUE}
+
+\item{answer}{numeric: Developers  argument. Only works for demonstration
+purposes.}
 }
 \value{
-invisible() output
+`init_metapip()` return invisible() output
+
+`update_pip_packages()` return logical vector. TRUE if missing package
+  were update. FALSE if all packages are up to date of the user selects not
+  to update.
 }
 \description{
-Based on options() settings provides an option to download latest package versions from the branch
+Based on options() settings provides an option to download latest
+package versions from the branch
 }
 \examples{
 \dontrun{
   init_metapip()
 }
 
+update_pip_packages(ask = FALSE,
+answer = 2) # this is to make it work in examples and vignettes.
 }

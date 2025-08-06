@@ -54,13 +54,15 @@ install_pip_packages <- function(package = NULL, branch = NULL) {
   }
 
   if(is.null(branch)) {
-    branch <- sapply(package, get_default_branch)
+    branch <- get_package_current_branch(package = package)
   }
   lapply(cli::cli_progress_along(package),
          \(x) {
            tryCatch(
              expr = {
-               install_branch(package = package[x], branch[x])
+               pgk <- package[x]
+               brn <- branch[pgk]
+               install_branch(package = pkg, brn)
              },
              error = function(e) {
                cli::cli_alert_danger("package {.pkg {x}} could not be installed")
@@ -92,7 +94,7 @@ install_pip_packages <- function(package = NULL, branch = NULL) {
 install_branch <- function(package = "pipapi", branch = NULL) {
   check_github_token()
   check_package_condition(package)
-  if(is.null(branch)) branch = get_default_branch(package)
+  if(is.null(branch)) branch = get_package_current_branch(package = package)
   if(length(branch) != 1L) cli::cli_abort("Please enter a single branch name.")
   detach_package(package)
 

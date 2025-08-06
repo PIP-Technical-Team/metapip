@@ -60,7 +60,7 @@ get_branch_info <- function(package = "pipapi", branch = NULL, display = TRUE) {
     }
     branches <- branch
   } else {
-    branches <- get_default_branch(package)
+    branches <- get_package_current_branch(package)
   }
   out <- lapply(cli::cli_progress_along(branches), \(x) {
     dat <- latest_commit_for_branch(package, branches[x])
@@ -110,3 +110,151 @@ get_latest_branch_update <- function(package = "pipapi", display = TRUE) {
   return(invisible(res))
 }
 
+
+#' Get default branch in PIP ecosystem
+#'
+#' @returns name of branch
+#' @export
+#'
+#' @examples
+#' get_default_branch()
+get_default_branch <- \() {
+  getOption("metapip.default_branch")
+}
+
+#' Modify default branch
+#'
+#' @param branch chracter: name of default branch.
+#'
+#' @returns name of branch invisible
+#' @export
+#' @rdname get_default_branch
+#'
+#' @examples
+#' set_default_branch()
+set_default_branch <- \(branch) {
+  Option("metapip.default_branch" = branch)
+  getOption("metapip.default_branch")
+}
+
+
+#' get the current branches that are meant to be used
+#'
+#' It does not necessarily mean that these are the branches currently installed.
+#' [init_metapip] will notify you if that is the case.
+#'
+#' @param verbose logical: whether to display all current branches. Default is
+#' @param package character: vector with name of branches. E.g., c("pipdata",
+#'   "pipfaker").
+#'   TRUE
+#' @returns list with names of packages and branches
+#' @export
+#'
+#' @examples
+#' get_current_branches()
+get_current_branches <- \(package = NULL, verbose = TRUE) {
+
+  custom_branches <- getOption("metapip.custom_branch")
+  names(custom_branches) <- gsub("_branch", "", names(custom_branches))
+
+  default_branches <- getOption("metapip.default_branch") |>
+    list() |>
+    rep(length(core)) |>
+    stats::setNames(core)
+
+  if (length(custom_branches) > 0) {
+    default_branches <- utils::modifyList(default_branches, custom_branches)
+  }
+
+  if (!is.null(package)) {
+    default_branches <- default_branches[names(default_branches) %in% package]
+    if (length(default_branches) == 0) {
+      cli::cli_abort(c(x = "package{?s} {.pkg {package}} {?is/are} not available",
+                       i = "Available package{?s} {?is/are} {.pkg {core}}"))
+    }
+  }
+
+  attr(default_branches, "title") <- "{.pkg metapip} current branches (default in {cli::col_red('red')}):"
+  attr(default_branches, "to_red") <- getOption("metapip.default_branch")
+  class(default_branches) <- "metapip_simplelist"
+  if (verbose) return(default_branches)
+  invisible(default_branches)
+}
+
+
+
+#' Get package  current branch
+#'
+#' @returns named character vector with branches of package
+#' @export
+#' @rdname get_current_branches
+#'
+#' @examples
+#' get_package_current_branch(c("pipdata", "pipfaker"))
+get_package_current_branch <- \(package) {
+  get_current_branches(package = package,
+                       verbose = FALSE) |>
+    unlist()
+}
+
+
+#' Set default custom branching options
+#'
+#' @param ... Named elements to be added or updated in the custom default list.
+#'
+#' @returns invisible custom branches
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' set_custom_branch(pipr = 'main', 'pipapi' = 'DEV_v3')
+#' }
+set_custom_branch <- \(...) {
+  new_entries <- list(...)
+  if (length(new_entries) == 0) {
+    cli::cli_alert_danger("no changes made to custom branches")
+    return(get_custom_branch())
+  }
+  names(new_entries) <- paste0(names(new_entries), '_branch')
+  existing_options <- getOption("metapip.custom_branch", list())
+  merged <- utils::modifyList(existing_options, new_entries)
+  options("metapip.custom_branch" = merged)
+
+  get_custom_branch()
+}
+
+
+#' Get Custom branches
+#'
+#' @param package character: vector with name of branches. E.g., c("pipdata",
+#'   "pipfaker"). Default return all packages whose default  branches have been
+#'   customed.
+#'
+#' @returns Names list of packages and their corresponding branch
+#' @export
+#' @rdname set_custom_branch
+#'
+#'
+#' @examples
+#' get_custom_branch()
+get_custom_branch <- \(package = NULL) {
+
+  existing_branches        <- getOption("metapip.custom_branch", list())
+  names(existing_branches) <-  gsub("_branch", "", names(existing_branches))
+  # names of existing branches
+  neb <- names(existing_branches)
+
+  if (!is.null(package)) {
+    existing_branches <- existing_branches[names(existing_branches) %in% branch]
+  }
+
+  if (length(existing_branches) == 0) {
+    cli::cli_abort(c(x = "package{?e/s} {.field {package}} {?is/are} not available.",
+                     i = "package{?s} available {?is/are} {.emph {neb}}"))
+  }
+
+  attr(existing_branches, "title") <- "{.pkg metapip} custom branches:"
+  class(existing_branches) <- "metapip_simplelist"
+  print(existing_branches)
+
+}

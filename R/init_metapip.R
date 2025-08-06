@@ -1,22 +1,57 @@
-#' Initializes the pip core packages
-#' @description
-#' Based on options() settings provides an option to download latest package versions from the branch
+#'Initializes and updates the pip core packages
 #'
-#' @returns invisible() output
+#'@param exclude character: packages to exclude from attaching. if [getwd] is
+#'  one of the core PIP packages, that package will be excluded be default. To
+#'  avoid that, set exclude to `NULL`.
+#' @param ask logical. Ask the user if she wants to install outdated packages. Default TRUE
+#'
+#'@description Based on options() settings provides an option to download latest
+#'package versions from the branch
+#'
+#'@returns `init_metapip()` return invisible() output
 #' @examples
 #' \dontrun{
 #'   init_metapip()
 #'}
 #'
-#' @export
-#'
-init_metapip <- function() {
-  # Based on options settings check if the latest version of that branch is installed for every pip core package
-  # If there is an updated commit, give an option to install the latest version of those branches
-  default_branch <- get_current_branches() |>
-    unlist()
+#'@export
+init_metapip <- function(exclude = NA,
+                         ask     = TRUE,
+                         answer  = 1) {
+  update_pip_packages(exclude = exclude,
+                      ask = ask,
+                      answer  = 1)
+  # Finally load all the packages once it is installed.
+  metapip_attach()
+}
 
-  pkgs_vec <- mapply(compare_sha, core, default_branch[core])
+
+
+
+#' Update PIP package
+#'
+#' @param answer numeric: Developers  argument. Only works for demonstration
+#'   purposes.
+#' @returns `update_pip_packages()` return logical vector. TRUE if missing package
+#'   were update. FALSE if all packages are up to date of the user selects not
+#'   to update.
+#' @export
+#' @rdname init_metapip
+#'
+#' @examples
+#' update_pip_packages(ask = FALSE,
+#' answer = 2) # this is to make it work in examples and vignettes.
+update_pip_packages <- \(exclude = NA,
+                         ask = TRUE,
+                         answer = 1) {
+  # Based on options settings check if the latest version of that branch is
+  # installed for every pip core package If there is an updated commit, give an
+  # option to install the latest version of those branches
+
+  pkgs <- get_core_pagkages(exclude = exclude)
+  default_branch <- get_package_current_branch(package = pkgs)
+
+  pkgs_vec <- mapply(compare_sha, pkgs, default_branch[pkgs])
 
   # get those pkgs for which branch does not exist
   null_vec    <- Filter(is.null, pkgs_vec) |>
@@ -48,24 +83,30 @@ init_metapip <- function() {
       "The following packages do not have the updated version of default branch
       installed: {cli::qty(length(missing_pkgs))}{.pkg {missing_pkgs}}"
     )
-
-    answer <- utils::menu(
-      choices = c("Yes", "No"),
-      title = "Do you want to install them now?"
-    )
+    answer <- 1
+    if (ask) {
+      answer <- utils::menu(
+        choices = c("Yes", "No"),
+        title = "Do you want to install them now?"
+      )
+    }
 
     if (answer == 1) {
       cli::cli_alert_info("Installing missing packages...")
       Map(install_branch, missing_pkgs, default_branch[missing_pkgs])
+      return(invisible(TRUE))
     } else {
       cli::cli_alert_danger("Skipping installation.")
+      return(invisible(FALSE))
     }
-  } else {
-    cli::cli_inform("All packages are up-to-date")
   }
-  # Finally load all the packages once it is installed.
-  metapip_attach()
+
+  cli::cli_inform("All packages are up-to-date")
+  return(invisible(FALSE))
+
 }
+
+
 
 compare_sha <- function(package, branch) {
 
@@ -90,21 +131,37 @@ compare_sha <- function(package, branch) {
 
 }
 
-#' Set default custom branching options
+
+#' Get core PIP ecosystem package
 #'
-#' @param ... Named elements to be added or updated in the custom default list.
+#' @inheritParams init_metapip
 #'
-#' @returns invisible NULL
+#' @returns character vector with names of PIP packages
 #' @export
 #'
-#' @examples {
-#' set_custom_default_branch(pipr = 'main', 'pipapi' = 'DEV_v3')
-#' }
-#'
-set_custom_default_branch <- \(...) {
-  new_entries <- list(...)
-  names(new_entries) <- paste0(names(new_entries), '_branch')
-  existing_options <- getOption("metapip.custom_default_branch", list())
-  merged <- utils::modifyList(existing_options, new_entries)
-  options("metapip.custom_default_branch" = merged)
+#' @examples
+#' get_core_pagkages()
+#' get_core_pagkages(exclude = "pipdata")
+get_core_pagkages <- \(exclude = NULL) {
+
+  if (is.null(exclude)) return(core)
+
+  if (is.na(exclude)) {
+    current_project <- getwd() |>
+      fs::path_file()
+    if (current_project %in% core) {
+      return(core[!(core %in% current_project)])
+    } else {
+      return(core)
+    }
+  }
+
+  if (all(exclude %in% core)) {
+    return(core[!(core %in% exclude)])
+  } else {
+    wrong_exclude <- exclude[!exclude %in% core]
+    cli::cli_abort(c(x = "package{?s} {.pkg {wrong_exclude}} {?is/are} not part of PIP ecosystem",
+                     i = "available packages are {.pkg {core}}"))
+  }
+
 }

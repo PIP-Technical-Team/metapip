@@ -55,7 +55,7 @@ default it uses `options(metapip.default_branch)` to provide a default
 branch value to all packages. When you load the package it is set to
 “DEV_v2”. You can override that default setting on per package basis by
 updating options with custom default branch like
-`options(metapip.custom_default_branch = list(pipapi_branch = "DEV", pipfaker_branch = "main"))`.
+`options(metapip.custom_branch = list(pipapi_branch = "DEV", pipfaker_branch = "main"))`.
 So in this case, the default value for `pipapi` branch is “DEV” whereas
 the one for `pipfaker` is set to “main”. For rest of the pip core
 packages it remains as “DEV_v2”.
@@ -237,13 +237,13 @@ Selection: 1
 ✔ pipfaker 0.1.0      (main)
 ```
 
-8.  `set_custom_default_branch()`
+8.  `set_custom_branch()`
 
 An easier way to set `options()` for pip packages custom default branch.
 
 ``` r
-set_custom_default_branch(pipr = 'main', 'pipapi' = 'DEV_v3')
+set_custom_branch(pipr = 'main', 'pipapi' = 'DEV_v3')
 ```
 
 This is functionally equivalent to
-`options(metapip.custom_default_branch = list(pipr_branch = "main", pipapi_branch = "DEV_v3"))`.
+`options(metapip.custom_branch = list(pipr_branch = "main", pipapi_branch = "DEV_v3"))`.
