@@ -2,16 +2,27 @@
 % Please edit documentation in R/get_branches.R
 \name{get_default_branch}
 \alias{get_default_branch}
+\alias{set_default_branch}
 \title{Get default branch in PIP ecosystem}
 \usage{
 get_default_branch()
+
+set_default_branch(branch)
+}
+\arguments{
+\item{branch}{chracter: name of default branch.}
 }
 \value{
 name of branch
+
+name of branch invisible
 }
 \description{
 Get default branch in PIP ecosystem
+
+Modify default branch
 }
 \examples{
 get_default_branch()
+set_default_branch()
 }

@@ -122,6 +122,21 @@ get_default_branch <- \() {
   getOption("metapip.default_branch")
 }
 
+#' Modify default branch
+#'
+#' @param branch chracter: name of default branch.
+#'
+#' @returns name of branch invisible
+#' @export
+#' @rdname get_default_branch
+#'
+#' @examples
+#' set_default_branch()
+set_default_branch <- \(branch) {
+  Option("metapip.default_branch" = branch)
+  getOption("metapip.default_branch")
+}
+
 
 #' get the current branches that are meant to be used
 #'
