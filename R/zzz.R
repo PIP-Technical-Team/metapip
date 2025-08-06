@@ -20,8 +20,7 @@ metapip_default_options <- list(
     pipapi_branch = "DEV",
     pipfaker_branch = "main",
     wbpip_branch = "DEV",
-    pipster_branch = "DEV",
-    pipdata_branch = "DEV"
+    pipster_branch = "DEV"
   )
 )
 

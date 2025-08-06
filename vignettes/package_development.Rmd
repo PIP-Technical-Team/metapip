@@ -68,3 +68,30 @@ To get a list of all core PIP packages, use:
 get_core_pagkages()
 ```
 
+## Package Development Workflow
+When developing a PIP package, it is important to ensure you are using the most recent versions of all other PIP ecosystem packages, each on their appropriate default branch. Typically, you can achieve this by running `metapip::update_pip_packages()`, which updates all core PIP packages except the one you are currently developing.
+
+If you want to both update and attach (i.e., load with `library()`) the PIP packages, use `metapip::init_metapip()`. Both functions automatically detect your current working directory and exclude the package you are developing from updates and attachment.
+
+This behavior is managed by the `get_core_pagkages()` function. By default, it returns all core PIP packages. However, when called with `exclude = NA`, it checks if your working directory is a PIP package and excludes it from the list.
+
+For example, if you are working on the `pipapi` package, `get_core_pagkages(exclude = NA)` will return all core packages except `pipapi`. This ensures you do not accidentally update or reload the package you are actively developing. The following explains the logic behind the process. **Do NOT use this in your code**.
+
+
+```{r}
+# the same as get_core_pagkages() because the working directory 
+# is not a PIP package
+get_core_pagkages(exclude = NA)
+
+withr::with_dir(
+  # Change working directory to fake pipapi
+  fs::path_temp() |> 
+  fs::path("pipapi") |> 
+  fs::dir_create(),
+  
+  # Since the working directory is a PIP package, 
+  # it will be excluded 
+  get_core_pagkages(NA))
+
+```
+

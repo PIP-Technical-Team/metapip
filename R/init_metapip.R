@@ -1,20 +1,49 @@
-#'Initializes the pip core packages
+#'Initializes and updates the pip core packages
 #'
-#'@param exclude character: packages to exclude from attaching. if [getwd()] is
+#'@param exclude character: packages to exclude from attaching. if [getwd] is
 #'  one of the core PIP packages, that package will be excluded be default. To
 #'  avoid that, set exclude to `NULL`.
+#' @param ask logical. Ask the user if she wants to install outdated packages. Default TRUE
 #'
 #'@description Based on options() settings provides an option to download latest
 #'package versions from the branch
 #'
-#'@returns invisible() output
+#'@returns `init_metapip()` return invisible() output
 #' @examples
 #' \dontrun{
 #'   init_metapip()
 #'}
 #'
 #'@export
-init_metapip <- function(exclude = NA) {
+init_metapip <- function(exclude = NA,
+                         ask     = TRUE,
+                         answer  = 1) {
+  update_pip_packages(exclude = exclude,
+                      ask = ask,
+                      answer  = 1)
+  # Finally load all the packages once it is installed.
+  metapip_attach()
+}
+
+
+
+
+#' Update PIP package
+#'
+#' @param answer numeric: Developers  argument. Only works for demonstration
+#'   purposes.
+#' @returns `update_pip_packages()` return logical vector. TRUE if missing package
+#'   were update. FALSE if all packages are up to date of the user selects not
+#'   to update.
+#' @export
+#' @rdname init_metapip
+#'
+#' @examples
+#' update_pip_packages(ask = FALSE,
+#' answer = 2) # this is to make it work in examples and vignettes.
+update_pip_packages <- \(exclude = NA,
+                         ask = TRUE,
+                         answer = 1) {
   # Based on options settings check if the latest version of that branch is
   # installed for every pip core package If there is an updated commit, give an
   # option to install the latest version of those branches
@@ -54,24 +83,30 @@ init_metapip <- function(exclude = NA) {
       "The following packages do not have the updated version of default branch
       installed: {cli::qty(length(missing_pkgs))}{.pkg {missing_pkgs}}"
     )
-
-    answer <- utils::menu(
-      choices = c("Yes", "No"),
-      title = "Do you want to install them now?"
-    )
+    answer <- 1
+    if (ask) {
+      answer <- utils::menu(
+        choices = c("Yes", "No"),
+        title = "Do you want to install them now?"
+      )
+    }
 
     if (answer == 1) {
       cli::cli_alert_info("Installing missing packages...")
       Map(install_branch, missing_pkgs, default_branch[missing_pkgs])
+      return(invisible(TRUE))
     } else {
       cli::cli_alert_danger("Skipping installation.")
+      return(invisible(FALSE))
     }
-  } else {
-    cli::cli_inform("All packages are up-to-date")
   }
-  # Finally load all the packages once it is installed.
-  metapip_attach()
+
+  cli::cli_inform("All packages are up-to-date")
+  return(invisible(FALSE))
+
 }
+
+
 
 compare_sha <- function(package, branch) {
 

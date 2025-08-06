@@ -7,7 +7,7 @@
 get_core_pagkages(exclude = NULL)
 }
 \arguments{
-\item{exclude}{character: packages to exclude from attaching. if [getwd()] is
+\item{exclude}{character: packages to exclude from attaching. if [getwd] is
 one of the core PIP packages, that package will be excluded be default. To
 avoid that, set exclude to `NULL`.}
 }
