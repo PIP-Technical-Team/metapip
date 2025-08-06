@@ -107,3 +107,35 @@ set_custom_branch <- \(...) {
   merged <- utils::modifyList(existing_options, new_entries)
   options("metapip.custom_branch" = merged)
 }
+
+
+#' Get Custom branches
+#'
+#' @param package character: vector with name of branches. E.g., c("pipdata",
+#'   "pipfaker"). Default return all packages whose default  branches have been
+#'   customed.
+#'
+#' @returns bames list of packages and their corresponding branch
+#' @export
+#' @rdname set_custom_branch
+#'
+#'
+#' @examples
+#' get_custom_branch()
+get_custom_branch <- \(package = NULL) {
+
+  existing_branches        <- getOption("metapip.custom_branch", list())
+  names(existing_branches) <-  gsub("_branch", "", names(existing_branches))
+  # names of existing branches
+  neb <- names(existing_branches)
+
+  if (!is.null(package)) {
+    existing_branches <- existing_branches[names(existing_branches) %in% branch]
+  }
+
+  if (length(existing_branches) == 0) {
+    cli::cli_abort(c(x = "package{?e/s} {.field {package}} {?is/are} not available.",
+                     i = "package{?s} available {?is/are} {.emph {neb}}"))
+  }
+
+}
