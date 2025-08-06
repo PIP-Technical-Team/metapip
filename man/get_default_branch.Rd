@@ -2,29 +2,16 @@
 % Please edit documentation in R/get_branches.R
 \name{get_default_branch}
 \alias{get_default_branch}
-\alias{get_current_branches}
-\title{Get default branch for a particular package}
+\title{Get default branch in PIP ecosystem}
 \usage{
-get_default_branch(package)
-
-get_current_branches(verbose = TRUE)
-}
-\arguments{
-\item{package}{One of pip core packages}
-
-\item{verbose}{logical: whether to display all current branches. Default is
-TRUE}
+get_default_branch()
 }
 \value{
 name of branch
-
-list with names of packages and branches
 }
 \description{
-It does not necessarily mean that these are the branches currently installed.
-[init_metapip] will notify you if that is the case.
+Get default branch in PIP ecosystem
 }
 \examples{
-get_default_branch("pipapi")
-get_current_branches()
+get_default_branch()
 }

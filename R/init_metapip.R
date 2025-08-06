@@ -1,4 +1,7 @@
 #' Initializes the pip core packages
+#'
+#' @param exclude chracter:
+#'
 #' @description
 #' Based on options() settings provides an option to download latest package versions from the branch
 #'
@@ -9,7 +12,7 @@
 #'}
 #'
 #' @export
-init_metapip <- function() {
+init_metapip <- function(exclude = NULL) {
   # Based on options settings check if the latest version of that branch is installed for every pip core package
   # If there is an updated commit, give an option to install the latest version of those branches
   default_branch <- get_current_branches() |>

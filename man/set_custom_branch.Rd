@@ -19,7 +19,7 @@ customed.}
 \value{
 invisible custom branches
 
-bames list of packages and their corresponding branch
+Names list of packages and their corresponding branch
 }
 \description{
 Set default custom branching options

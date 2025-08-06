@@ -60,7 +60,7 @@ get_branch_info <- function(package = "pipapi", branch = NULL, display = TRUE) {
     }
     branches <- branch
   } else {
-    branches <- get_default_branch(package)
+    branches <- get_package_current_branch(package)
   }
   out <- lapply(cli::cli_progress_along(branches), \(x) {
     dat <- latest_commit_for_branch(package, branches[x])
@@ -111,28 +111,17 @@ get_latest_branch_update <- function(package = "pipapi", display = TRUE) {
 }
 
 
-
-
-#' Get default branch for a particular package
-#'
-#' @param package One of pip core packages
+#' Get default branch in PIP ecosystem
 #'
 #' @returns name of branch
 #' @export
 #'
 #' @examples
-#' get_default_branch("pipapi")
-get_default_branch <- \(package) {
-  # https://app.clickup.com/t/868e3vhk2?comment=90110143651180
-  # Checking for option 2 and 3 here. For option 1, it should never come in this function
-  default_branches <- getOption("metapip.custom_branch")
-  branch_name <- default_branches[[paste0(package, "_branch")]]
-  if (is.null(branch_name)) {
-    return(getOption("metapip.default_branch"))
-  } else {
-    return(branch_name)
-  }
+#' get_default_branch()
+get_default_branch <- \() {
+  getOption("metapip.default_branch")
 }
+
 
 #' get the current branches that are meant to be used
 #'
@@ -140,14 +129,15 @@ get_default_branch <- \(package) {
 #' [init_metapip] will notify you if that is the case.
 #'
 #' @param verbose logical: whether to display all current branches. Default is
+#' @param package character: vector with name of branches. E.g., c("pipdata",
+#'   "pipfaker").
 #'   TRUE
 #' @returns list with names of packages and branches
-#' @rdname get_default_branch
 #' @export
 #'
 #' @examples
 #' get_current_branches()
-get_current_branches <- \(verbose = TRUE) {
+get_current_branches <- \(package = NULL, verbose = TRUE) {
 
   custom_branches <- getOption("metapip.custom_branch")
   names(custom_branches) <- gsub("_branch", "", names(custom_branches))
@@ -158,7 +148,15 @@ get_current_branches <- \(verbose = TRUE) {
     stats::setNames(core)
 
   if (length(custom_branches) > 0) {
-    default_branches[names(custom_branches)] <- custom_branches
+    default_branches <- utils::modifyList(default_branches, custom_branches)
+  }
+
+  if (!is.null(package)) {
+    default_branches <- default_branches[names(default_branches) %in% package]
+    if (length(default_branches) == 0) {
+      cli::cli_abort(c(x = "package{?s} {.pkg {package}} {?is/are} not available",
+                       i = "Available package{?s} {?is/are} {.pkg {core}}"))
+    }
   }
 
   attr(default_branches, "title") <- "{.pkg metapip} current branches (default in {cli::col_red('red')}):"
@@ -168,6 +166,21 @@ get_current_branches <- \(verbose = TRUE) {
   invisible(default_branches)
 }
 
+
+
+#' Get package  current branch
+#'
+#' @returns named character vector with branches of package
+#' @export
+#' @rdname get_current_branches
+#'
+#' @examples
+#' get_package_current_branch(c("pipdata", "pipfaker"))
+get_package_current_branch <- \(package) {
+  get_current_branches(package = package,
+                       verbose = FALSE) |>
+    unlist()
+}
 
 
 #' Set default custom branching options
@@ -202,7 +215,7 @@ set_custom_branch <- \(...) {
 #'   "pipfaker"). Default return all packages whose default  branches have been
 #'   customed.
 #'
-#' @returns bames list of packages and their corresponding branch
+#' @returns Names list of packages and their corresponding branch
 #' @export
 #' @rdname set_custom_branch
 #'
