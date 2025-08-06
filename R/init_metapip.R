@@ -138,4 +138,8 @@ get_custom_branch <- \(package = NULL) {
                      i = "package{?s} available {?is/are} {.emph {neb}}"))
   }
 
+  attr(existing_branches, "title") <- "{.pkg metapip} custom branches:"
+  class(existing_branches) <- "metapip_simplelist"
+  print(existing_branches)
+
 }
