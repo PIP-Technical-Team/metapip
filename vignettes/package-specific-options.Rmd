@@ -29,10 +29,10 @@ This will take `branch` value as "DEV" irrespective of any settings.
 
 2. Use package specific options to set the default branch of a package. 
 
-We have enabled a feature to set custom default branches of a package using function `set_custom_default_branch`
+We have enabled a feature to set custom default branches of a package using function `set_custom_branch`
 
 ```{r}
-set_custom_default_branch(pipr = 'main', 'pipapi' = 'DEV_v3')
+set_custom_branch(pipr = 'main', 'pipapi' = 'DEV_v3')
 ```
 
 This function sets `option()` in the background which is used to determine the default branch. 
@@ -46,7 +46,7 @@ This is the default setting when you load the `metapip` package defined in file 
 ```{r}
 metapip_default_options <- list(
   metapip.default_branch = "DEV_v2",
-  metapip.custom_default_branch = list(
+  metapip.custom_branch = list(
     pipapi_branch = "DEV",
     pipfaker_branch = "main",
     wbpip_branch = "DEV",

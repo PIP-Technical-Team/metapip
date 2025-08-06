@@ -200,7 +200,7 @@ set_colorDF <- function() {
 get_default_branch <- \(package) {
   # https://app.clickup.com/t/868e3vhk2?comment=90110143651180
   # Checking for option 2 and 3 here. For option 1, it should never come in this function
-  default_branches <- getOption("metapip.custom_default_branch")
+  default_branches <- getOption("metapip.custom_branch")
   branch_name <- default_branches[[paste0(package, "_branch")]]
   if (is.null(branch_name)) {
     return(getOption("metapip.default_branch"))
@@ -222,16 +222,16 @@ get_default_branch <- \(package) {
 #' get_current_branches()
 get_current_branches <- \() {
 
-  custom_default_branches <- getOption("metapip.custom_default_branch")
-  names(custom_default_branches) <- gsub("_branch", "", names(custom_default_branches))
+  custom_branches <- getOption("metapip.custom_branch")
+  names(custom_branches) <- gsub("_branch", "", names(custom_branches))
 
   default_branches <- getOption("metapip.default_branch") |>
     list() |>
     rep(length(core)) |>
     stats::setNames(core)
 
-  if (length(custom_default_branches) > 0) {
-    default_branches[names(custom_default_branches)] <- custom_default_branches
+  if (length(custom_branches) > 0) {
+    default_branches[names(custom_branches)] <- custom_branches
   }
   default_branches
 }

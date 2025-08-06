@@ -9,7 +9,6 @@
 #'}
 #'
 #' @export
-#'
 init_metapip <- function() {
   # Based on options settings check if the latest version of that branch is installed for every pip core package
   # If there is an updated commit, give an option to install the latest version of those branches
@@ -98,13 +97,13 @@ compare_sha <- function(package, branch) {
 #' @export
 #'
 #' @examples {
-#' set_custom_default_branch(pipr = 'main', 'pipapi' = 'DEV_v3')
+#' set_custom_branch(pipr = 'main', 'pipapi' = 'DEV_v3')
 #' }
 #'
-set_custom_default_branch <- \(...) {
+set_custom_branch <- \(...) {
   new_entries <- list(...)
   names(new_entries) <- paste0(names(new_entries), '_branch')
-  existing_options <- getOption("metapip.custom_default_branch", list())
+  existing_options <- getOption("metapip.custom_branch", list())
   merged <- utils::modifyList(existing_options, new_entries)
-  options("metapip.custom_default_branch" = merged)
+  options("metapip.custom_branch" = merged)
 }

@@ -9,18 +9,18 @@ test_that("compare_sha works as expected", {
   expect_false(compare_sha("pipfun", "test"))
 })
 
-test_that("set_custom_default_branch works correctly", {
+test_that("set_custom_branch works correctly", {
   # Save original option to restore later
-  original <- getOption("metapip.custom_default_branch")
-  on.exit(options("metapip.custom_default_branch" = original), add = TRUE)
+  original <- getOption("metapip.custom_branch")
+  on.exit(options("metapip.custom_branch" = original), add = TRUE)
 
   # Reset to known state
-  options("metapip.custom_default_branch" = list(pkgA_branch = "dev"))
+  options("metapip.custom_branch" = list(pkgA_branch = "dev"))
 
   # Update with new values
-  set_custom_default_branch(pkgB = "main", pkgA = "release")
+  set_custom_branch(pkgB = "main", pkgA = "release")
 
-  result <- getOption("metapip.custom_default_branch")
+  result <- getOption("metapip.custom_branch")
 
   expect_named(result, c("pkgA_branch", "pkgB_branch"))
   expect_equal(result$pkgA_branch, "release")
