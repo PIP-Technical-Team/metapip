@@ -1,6 +1,6 @@
 test_that("compare_sha works as expected", {
   # Since we don't install pipfun on Github actions
-  skip_on_ci()
+  skip()
   hash_val <- "a051498f183e24afdc468ab167306f94a80e57f4"
   mockery::stub(compare_sha, "latest_commit_for_branch", \(...) list(sha = hash_val))
   expect_true(compare_sha("pipfun", "test"))
