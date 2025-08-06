@@ -1,6 +1,7 @@
 # metapip (development version)
  
 * Remove dependencies from `tidyverse` packages `dplyr`, `tidyr`, `purrr`, `magrittr` and `tibble`.
+* add suit to update packages. 
 
 # metapip 0.0.0.9010
 
