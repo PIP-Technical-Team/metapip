@@ -36,7 +36,10 @@ The core PIP R packages are
 - wbpip
 - pipfun
 - pipdata
-- pipr
+- pipster
+- pipfaker
+- dlw
+- stamp
 
 ## Installation
 
@@ -53,12 +56,12 @@ devtools::install_github("PIP-Technical-Team/metapip")
 In `metapip` there are different ways to set up default branches. By
 default it uses `options(metapip.default_branch)` to provide a default
 branch value to all packages. When you load the package it is set to
-“DEV_v2”. You can override that default setting on per package basis by
+“PROD”. You can override that default setting on per package basis by
 updating options with custom default branch like
 `options(metapip.custom_branch = list(pipapi_branch = "DEV", pipfaker_branch = "main"))`.
-So in this case, the default value for `pipapi` branch is “DEV” whereas
-the one for `pipfaker` is set to “main”. For rest of the pip core
-packages it remains as “DEV_v2”.
+So in this case, the default value for `pipapi`, `wbpip` and `pipster`
+branch is “DEV” whereas the one for `pipfaker`,`stamp` and `dlw` is set
+to “main”. For rest of the pip core packages it remains as “PROD”.
 
 ## Functions and it’s usage in metapip
 
