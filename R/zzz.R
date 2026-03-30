@@ -15,7 +15,7 @@ is_attached <- function(x) {
 }
 
 metapip_default_options <- list(
-  metapip.default_branch = "DEV_v2",
+  metapip.default_branch = "PROD",
   metapip.custom_branch = list(
     pipapi_branch = "DEV",
     pipfaker_branch = "main",

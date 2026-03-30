@@ -81,7 +81,7 @@ install_pip_packages <- function(package = NULL, branch = NULL) {
 #' Install branch from a package
 #'
 #' @param package one of the core package name (default "pipapi")
-#' @param branch valid branch name (default "DEV_v2")
+#' @param branch valid branch name (default "PROD")
 #'
 #' @examples
 #' \dontrun{
