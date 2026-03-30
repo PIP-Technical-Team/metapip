@@ -39,8 +39,10 @@ init_metapip <- function(exclude = NA,
 #' @rdname init_metapip
 #'
 #' @examples
+#' \dontrun{
 #' update_pip_packages(ask = FALSE,
 #' answer = 2) # this is to make it work in examples and vignettes.
+#' }
 update_pip_packages <- \(exclude = NA,
                          ask = TRUE,
                          answer = 1) {

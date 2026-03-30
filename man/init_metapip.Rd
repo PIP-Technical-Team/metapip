@@ -35,6 +35,8 @@ package versions from the branch
   init_metapip()
 }
 
+\dontrun{
 update_pip_packages(ask = FALSE,
 answer = 2) # this is to make it work in examples and vignettes.
+}
 }
