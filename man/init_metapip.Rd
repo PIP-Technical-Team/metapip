@@ -3,7 +3,7 @@
 \name{init_metapip}
 \alias{init_metapip}
 \alias{update_pip_packages}
-\title{Initializes the pip core packages}
+\title{Initializes and updates the pip core packages}
 \usage{
 init_metapip(exclude = NA, ask = TRUE, answer = 1)
 

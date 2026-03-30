@@ -4,7 +4,7 @@
 \alias{package_branches}
 \title{Status tables of package versions in different branches along with local
 installations. For local installation,a status column is returned which
-indicates if the local version is ahead or behind the DEV_v2 branch.}
+indicates if the local version is ahead or behind the PROD branch.}
 \usage{
 package_branches(
   package = NULL,
@@ -16,7 +16,7 @@ package_branches(
 include all the packages}
 
 \item{branch_to_compare}{character: names of branch to compare to. Default is
-"DEV_v2".}
+"PROD".}
 }
 \value{
 table of pip packages and the corresponding package versions of
@@ -25,7 +25,7 @@ table of pip packages and the corresponding package versions of
 \description{
 Status tables of package versions in different branches along with local
 installations. For local installation,a status column is returned which
-indicates if the local version is ahead or behind the DEV_v2 branch.
+indicates if the local version is ahead or behind the PROD branch.
 }
 \examples{
 \dontrun{

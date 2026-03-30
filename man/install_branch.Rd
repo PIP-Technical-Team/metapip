@@ -9,7 +9,7 @@ install_branch(package = "pipapi", branch = NULL)
 \arguments{
 \item{package}{one of the core package name (default "pipapi")}
 
-\item{branch}{valid branch name (default "DEV_v2")}
+\item{branch}{valid branch name (default "PROD")}
 }
 \description{
 Install branch from a package
