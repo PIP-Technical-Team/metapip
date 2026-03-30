@@ -35,7 +35,10 @@ The core PIP R packages are
 -   wbpip
 -   pipfun
 -   pipdata
--   pipr
+-   pipster
+-   pipfaker
+-   dlw
+-   stamp
 
 ## Installation
 
