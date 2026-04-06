@@ -86,7 +86,7 @@
 <div class="section level2">
 <h2 id="setting-up-default-branch-in-metapip">Setting up default branch in metapip<a class="anchor" aria-label="anchor" href="#setting-up-default-branch-in-metapip"></a>
 </h2>
-<p>In <code>metapip</code> there are different ways to set up default branches. By default it uses <code>options(metapip.default_branch)</code> to provide a default branch value to all packages. When you load the package it is set to “DEV_v2”. You can override that default setting on per package basis by updating options with custom default branch like <code>options(metapip.custom_branch = list(pipapi_branch = "DEV", pipfaker_branch = "main"))</code>. So in this case, the default value for <code>pipapi</code> branch is “DEV” whereas the one for <code>pipfaker</code> is set to “main”. For rest of the pip core packages it remains as “DEV_v2”.</p>
+<p>In <code>metapip</code> there are different ways to set up default branches. By default it uses <code>options(metapip.default_branch)</code> to provide a default branch value to all packages. When you load the package it is set to “PROD”. You can override that default setting on per package basis by updating options with custom default branch like <code>options(metapip.custom_branch = list(pipapi_branch = "DEV", pipfaker_branch = "main"))</code>. So in this case, the default value for <code>pipapi</code> branch is “DEV” whereas the one for <code>pipfaker</code> is set to “main”. For rest of the pip core packages it remains as “PROD”.</p>
 </div>
 <div class="section level2">
 <h2 id="functions-and-its-usage-in-metapip">Functions and it’s usage in metapip<a class="anchor" aria-label="anchor" href="#functions-and-its-usage-in-metapip"></a>
@@ -208,16 +208,15 @@
 <span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a></span>
 <span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>Selection<span class="sc">:</span> <span class="dv">1</span></span>
 <span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a></span>
-<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>── Attaching packages ──────────────────────────────────────────────────────────── metapip <span class="dv">0</span>.<span class="dv">0</span>.<span class="fl">0.9014</span> ──</span>
-<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>✔ pipapi   <span class="dv">1</span>.<span class="fl">3.19</span>     (DEV)</span>
-<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>✔ pipload  <span class="dv">0</span>.<span class="fl">2.1</span>      (DEV_v2)</span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>── Attaching packages ────────────────────────────────────────────────────────────────────── metapip <span class="dv">0</span>.<span class="fl">0.1</span> ──</span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>✔ pipapi   <span class="dv">1</span>.<span class="fl">5.3</span>      (DEV)</span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>✔ pipload  <span class="dv">1</span>.<span class="fl">0.0</span>      (PROD)</span>
 <span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>✔ wbpip    <span class="dv">0</span>.<span class="fl">1.6</span>      (DEV)</span>
-<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a>✔ pipfun   <span class="dv">0</span>.<span class="fl">3.0</span>      (DEV_v2)</span>
-<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a>✔ pipdata  <span class="dv">0</span>.<span class="dv">0</span>.<span class="fl">0.9017</span> (DEV)</span>
-<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a>✔ pipr     <span class="dv">1</span>.<span class="fl">1.0</span>      (main)</span>
-<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a>✔ pipster  <span class="dv">0</span>.<span class="dv">0</span>.<span class="fl">1.9003</span> (DEV)</span>
-<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a>✔ pipaux   <span class="dv">0</span>.<span class="fl">3.0</span>      (DEV_v2)</span>
-<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a>✔ pipfaker <span class="dv">0</span>.<span class="fl">1.0</span>      (main)</span></code></pre></div>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a>✔ pipfun   <span class="dv">1</span>.<span class="fl">0.0</span>      (PROD)</span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a>✔ pipdata  <span class="dv">0</span>.<span class="dv">0</span>.<span class="fl">0.9017</span> (PROD)</span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a>✔ pipster  <span class="dv">0</span>.<span class="dv">0</span>.<span class="fl">1.9003</span> (DEV)</span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a>✔ pipaux   <span class="dv">0</span>.<span class="fl">3.0</span>      (PROD)</span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a>✔ pipfaker <span class="dv">0</span>.<span class="fl">2.1</span>      (main)</span></code></pre></div>
 <ol start="8" style="list-style-type: decimal">
 <li><code><a href="reference/set_custom_branch.html">set_custom_branch()</a></code></li>
 </ol>
@@ -271,7 +270,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
