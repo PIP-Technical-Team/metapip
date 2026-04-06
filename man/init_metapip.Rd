@@ -3,7 +3,7 @@
 \name{init_metapip}
 \alias{init_metapip}
 \alias{update_pip_packages}
-\title{Initializes the pip core packages}
+\title{Initializes and updates the pip core packages}
 \usage{
 init_metapip(exclude = NA, ask = TRUE, answer = 1)
 
@@ -35,6 +35,8 @@ package versions from the branch
   init_metapip()
 }
 
+\dontrun{
 update_pip_packages(ask = FALSE,
 answer = 2) # this is to make it work in examples and vignettes.
+}
 }

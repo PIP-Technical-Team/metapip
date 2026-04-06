@@ -24,5 +24,7 @@ Modify default branch
 }
 \examples{
 get_default_branch()
-set_default_branch()
+\dontrun{
+set_default_branch("PROD")
+}
 }

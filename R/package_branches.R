@@ -1,11 +1,11 @@
 #' Status tables of package versions in different branches along with local
 #' installations. For local installation,a status column is returned which
-#' indicates if the local version is ahead or behind the DEV_v2 branch.
+#' indicates if the local version is ahead or behind the PROD branch.
 #'
 #' @param package One (or more) of the PIP core packages. Default NULL will
 #'   include all the packages
 #' @param branch_to_compare character: names of branch to compare to. Default is
-#'   "DEV_v2".
+#'   "PROD".
 #'
 #' @return table of pip packages and the corresponding package versions of
 #'   branch
@@ -18,11 +18,16 @@
 #'
 #' @export
 #'
-package_branches  <- function(package = NULL,
-                              branch_to_compare = getOption("metapip.default_branch")) {
+package_branches <- function(
+  package = NULL,
+  branch_to_compare = getOption("metapip.default_branch")
+) {
   check_github_token()
-  if(!is.null(package)) is_core(package)
-  else package <- core
+  if (!is.null(package)) {
+    is_core(package)
+  } else {
+    package <- core
+  }
   # For each of the core packages, get all the branches
   # From every branch, get the version of the package
   all_package_version <- get_package_version(package)
@@ -30,33 +35,32 @@ package_branches  <- function(package = NULL,
   common <- common_data(complete_data)
   result <- split_packages_into_list(complete_data)
   # Get local installation
-  local <-  lapply(cli::cli_progress_along(package), \(.x) {
+  local <- lapply(cli::cli_progress_along(package), \(.x) {
     out <- tryCatch(
       expr = {
         utils::packageDescription(.x, fields = c("GithubRef", "Version"))
       }, # end of expr section
 
       error = function(e) {
-        list(GithubRef = NA_character_,
-             Version   = NA_character_)
+        list(GithubRef = NA_character_, Version = NA_character_)
       }, # end of error section
 
       warning = function(w) {
-        list(GithubRef = NA_character_,
-             Version   = NA_character_)
+        list(GithubRef = NA_character_, Version = NA_character_)
       }
     ) # End of trycatch
 
-
-    data.frame(package = .x,
-    local_branch = out$GithubRef,
-    local_version = out$Version)
+    data.frame(
+      package = .x,
+      local_branch = out$GithubRef,
+      local_version = out$Version
+    )
   }) |>
-  rowbind()
+    rowbind()
 
-  # DEV_v2 data
+  # PROD data
   dev <- complete_data |>
-  fsubset(branch %in% branch_to_compare)
+    fsubset(branch %in% branch_to_compare)
   local <- join_and_get_status(local, dev, branch_to_compare)
 
   return(c(list(common = common, local = local), result))

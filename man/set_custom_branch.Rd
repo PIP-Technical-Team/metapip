@@ -28,7 +28,7 @@ Get Custom branches
 }
 \examples{
 \dontrun{
-set_custom_branch(pipr = 'main', 'pipapi' = 'DEV_v3')
+set_custom_branch(pipr = 'main', 'pipapi' = 'DEV_v2')
 }
 get_custom_branch()
 }

@@ -131,9 +131,11 @@ get_default_branch <- \() {
 #' @rdname get_default_branch
 #'
 #' @examples
-#' set_default_branch()
+#' \dontrun{
+#' set_default_branch("PROD")
+#' }
 set_default_branch <- \(branch) {
-  Option("metapip.default_branch" = branch)
+  options("metapip.default_branch" = branch)
   getOption("metapip.default_branch")
 }
 
@@ -207,7 +209,7 @@ get_package_current_branch <- \(package) {
 #'
 #' @examples
 #' \dontrun{
-#' set_custom_branch(pipr = 'main', 'pipapi' = 'DEV_v3')
+#' set_custom_branch(pipr = 'main', 'pipapi' = 'DEV_v2')
 #' }
 set_custom_branch <- \(...) {
   new_entries <- list(...)
