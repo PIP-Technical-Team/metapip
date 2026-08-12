@@ -1,3 +1,4 @@
+^inst/TMP$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
@@ -8,3 +9,4 @@
 ^\.github$
 ^doc$
 ^Meta$
+^\.cg-docs$
