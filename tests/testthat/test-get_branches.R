@@ -36,6 +36,7 @@ test_that("is_core works as expected", {
 
 
 test_that("get_branch_info works as expected", {
+  skip("avoid live network")
   out1 <- get_branch_info()
   out2 <- get_branch_info(package = "wbpip", branch = c("PROD", "QA"))
   expect_s3_class(out1, "data.frame")
@@ -52,6 +53,7 @@ test_that("get_branch_info returns an error", {
 
 
 test_that("get_latest_branch_update works as expected", {
+  skip("avoid live network")
   out1 <- get_latest_branch_update()
   out2 <- get_latest_branch_update(package = "wbpip")
   expect_s3_class(out1, "data.frame")

@@ -38,7 +38,7 @@ package_branches <- function(
   local <- lapply(cli::cli_progress_along(package), \(.x) {
     out <- tryCatch(
       expr = {
-        utils::packageDescription(.x, fields = c("GithubRef", "Version"))
+        utils::packageDescription(package[.x], fields = c("GithubRef", "Version"))
       }, # end of expr section
 
       error = function(e) {
@@ -51,7 +51,7 @@ package_branches <- function(
     ) # End of trycatch
 
     data.frame(
-      package = .x,
+      package = package[.x],
       local_branch = out$GithubRef,
       local_version = out$Version
     )
@@ -76,13 +76,15 @@ get_package_version <- function(package) {
   names(lr) <- package
   for (x in package) {
     cli::cli_progress_update()
-    br = get_branches(x, display = FALSE)
-    br = br[br != "gh-pages"]
+    br <- get_branches(x, display = FALSE)
+    br <- br[br != "gh-pages"]
     urls <- glue::glue("https://raw.githubusercontent.com/PIP-Technical-Team/{x}/{br}/DESCRIPTION")
-    lr[[x]] <- sapply(urls, \(y) {
+    versions <- sapply(urls, \(y) {
       mat <- read.dcf(url(y))
       mat[, "Version"]
     })
+    names(versions) <- br
+    lr[[x]] <- versions
   }
   lr
 }
@@ -90,11 +92,10 @@ get_package_version <- function(package) {
 
 #' @noRd
 get_complete_data <- function(all_package_version) {
-  all_package_version |>
-    utils::stack() |>
-    rowname_to_column("branch") |>
-    frename(version = values, package = ind) |>
-    fmutate(branch = stringr::str_extract(branch, "([0-9A-Za-z-_]+)/DESCRIPTION\\.Version", group = 1))
+  branch  <- unlist(lapply(all_package_version, names))
+  package <- rep(names(all_package_version), lengths(all_package_version))
+  version <- unlist(all_package_version, use.names = FALSE)
+  data.frame(package = package, branch = branch, version = version)
 }
 
 #' @noRd
@@ -117,11 +118,13 @@ split_packages_into_list <- function(complete_data) {
 join_and_get_status <- function(local, dev, branch_to_compare) {
   # Join dev data with local data to create status column
   join(local, dev, "package", how = "full") |>
-    fmutate(local_status = mapply(utils::compareVersion, version, local_version),
-            local_status = ifelse(local_status == 1, paste("behind",branch_to_compare),
-                                  ifelse(local_status == -1, paste("ahead", branch_to_compare),"up-to-date")),
-            local_status = ifelse(is.na(local_version),"Not in local",local_status),
-            local_status = ifelse(is.na(branch),paste(branch_to_compare, "not in repo"),local_status)) |>
+    fmutate(local_status = fcase(
+      local_status == 1, paste("behind", branch_to_compare),
+      local_status == -1, paste("ahead", branch_to_compare),
+      is.na(local_version), "Not in local",
+      is.na(branch), paste(branch_to_compare, "not in repo"),
+      default = "up-to-date"
+    )) |>
     fselect(-branch, -version)
 }
 

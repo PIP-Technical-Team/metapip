@@ -145,10 +145,9 @@ set_default_branch <- \(branch) {
 #' It does not necessarily mean that these are the branches currently installed.
 #' [init_metapip] will notify you if that is the case.
 #'
-#' @param verbose logical: whether to display all current branches. Default is
+#' @param verbose logical: whether to display all current branches. Default is TRUE
 #' @param package character: vector with name of branches. E.g., c("pipdata",
 #'   "pipfaker").
-#'   TRUE
 #' @returns list with names of packages and branches
 #' @export
 #'
@@ -247,12 +246,12 @@ get_custom_branch <- \(package = NULL) {
   neb <- names(existing_branches)
 
   if (!is.null(package)) {
-    existing_branches <- existing_branches[names(existing_branches) %in% branch]
+    existing_branches <- existing_branches[names(existing_branches) %in% package]
   }
 
   if (length(existing_branches) == 0) {
     cli::cli_abort(c(x = "package{?e/s} {.field {package}} {?is/are} not available.",
-                     i = "package{?s} available {?is/are} {.emph {neb}}"))
+                     i = "package{?s} {?is/are} available: {.emph {neb}}"))
   }
 
   attr(existing_branches, "title") <- "{.pkg metapip} custom branches:"

@@ -20,7 +20,7 @@ init_metapip <- function(exclude = NA,
                          answer  = 1) {
   update_pip_packages(exclude = exclude,
                       ask = ask,
-                      answer  = 1)
+                      answer  = answer)
   # Finally load all the packages once it is installed.
   metapip_attach()
 }
@@ -85,7 +85,6 @@ update_pip_packages <- \(exclude = NA,
       "The following packages do not have the updated version of default branch
       installed: {cli::qty(length(missing_pkgs))}{.pkg {missing_pkgs}}"
     )
-    answer <- 1
     if (ask) {
       answer <- utils::menu(
         choices = c("Yes", "No"),
@@ -150,7 +149,7 @@ get_core_pagkages <- \(exclude = NULL) {
 
   if (is.na(exclude)) {
     current_project <- getwd() |>
-      fs::path_file()
+      basename()
     if (current_project %in% core) {
       return(core[!(core %in% current_project)])
     } else {
