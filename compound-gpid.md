@@ -38,4 +38,11 @@ pipaux, pipload, wbpip, pipfun, pipdata, pipr).
 
 ## Current Focus
 
-I am working on optimizing the package.
+Remediate the engineering review findings across 5 milestones: (1)
+Unblock the Core — fix critical bugs V1–V4; (2) Harden the Install
+Pipeline — robust namespace handling and failure isolation; (3) Lock
+Down the Supply Chain — SHA-pinned installs, team lock manifest,
+least-privilege tokens; (4) Resilient Networking & Time — httr2 fetch,
+UTC timestamps; (5) Performance, Tests & Release — memoization, CI
+hardening, ship 0.1.0. First milestone is “Unblock the Core” — start
+with `/cg-plan` for that milestone.

@@ -4,6 +4,8 @@
 
  # devtools::load_all(".")
 library(metapip)
+#> ── Attaching packages ───────────────────────────────────────── metapip 0.0.1 ──
+#> ✔   ()
 ```
 
 ## metapip: Managing PIP Ecosystem Packages for Development
@@ -145,11 +147,10 @@ get_core_pagkages(exclude = NA)
 #> [1] "pipapi"   "pipload"  "wbpip"    "pipfun"   "pipdata"  "pipster"  "pipaux"  
 #> [8] "pipfaker"
 
+pipapi_dir <- file.path(tempdir(), "pipapi")
+dir.create(pipapi_dir, recursive = TRUE, showWarnings = FALSE)
 withr::with_dir(
-  # Change working directory to fake pipapi
-  fs::path_temp() |> 
-  fs::path("pipapi") |> 
-  fs::dir_create(),
+  pipapi_dir,
   
   # Since the working directory is a PIP package, 
   # it will be excluded 
