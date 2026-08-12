@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "compound-gpid-roadmap-v1",
+  "milestones": [
+    {
+      "id": "i-am-working-on-optimizing",
+      "title": "I am working on optimizing the package.",
+      "objective": "I am working on optimizing the package.",
+      "status": "in-progress",
+      "features": [
+        {
+          "id": "initial-focus",
+          "title": "I am working on optimizing the package.",
+          "status": "in-progress",
+          "plan": null
+        }
+      ]
+    }
+  ]
+}
