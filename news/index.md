@@ -1,5 +1,7 @@
 # Changelog
 
+## metapip 0.0.2
+
 ## metapip 0.0.1
 
 - Remove dependencies from `tidyverse` packages `dplyr`, `tidyr`,
