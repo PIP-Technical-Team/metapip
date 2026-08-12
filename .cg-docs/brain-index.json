@@ -1,0 +1,812 @@
+{
+  "edge_count": 1,
+  "edges": [
+    {
+      "edge_type": "reviews",
+      "source": ".cg-docs/reviews/2026-08-12-unblock-the-core-review.md",
+      "target": ".cg-docs/plans/2026-08-12-unblock-the-core.md",
+      "target_missing": false
+    }
+  ],
+  "entities": [
+    {
+      "date": "2026-08-12",
+      "entity_type": "plan",
+      "path": ".cg-docs/plans/2026-08-12-unblock-the-core.md",
+      "slug": "2026-08-12-unblock-the-core",
+      "status": "completed",
+      "summary": "Make the three headline metapip workflows functional again by fixing the four critical bugs (V1–V4) and the medium robustness bug (R7) identified in the engineering review (`inst/TMP/metapip-review.html`), using a red-green-refactor approach: write failing regression tests first, then implement the fixes in dependency order, then verify with the full test suite and `rcmdcheck`.",
+      "tags": [
+        "unblock-the-core",
+        "bugfix",
+        "regression-tests",
+        "red-green-refactor",
+        "critical"
+      ],
+      "title": "Unblock the Core — fix V1–V4 and R7 with a red-phase regression harness",
+      "top_keywords": [
+        "stringr",
+        "rcmdcheck",
+        "fs",
+        "branch",
+        ".onattach()",
+        "get_complete_data()",
+        "devtools::test()",
+        "package",
+        "test scenarios",
+        "answer"
+      ]
+    },
+    {
+      "date": "2026-08-12",
+      "entity_type": "review",
+      "path": ".cg-docs/reviews/2026-08-12-unblock-the-core-review.md",
+      "slug": "2026-08-12-unblock-the-core-review",
+      "status": "",
+      "summary": "**Review mode**: standard **Files reviewed**: 15 **Findings**: 17 (P0: 1, P1: 5, P2: 7, P3: 4)",
+      "tags": [],
+      "title": "2026-08-12-unblock-the-core-review",
+      "top_keywords": [
+        "test-undeclared-deps.r",
+        "get_core_pagkages",
+        "fcase()",
+        "fs::path_file",
+        "package_branches.r",
+        "get_branches.r",
+        "fix",
+        "metapip_attach",
+        ".x",
+        "package[.x]"
+      ]
+    },
+    {
+      "date": "2026-08-12",
+      "entity_type": "solution",
+      "path": ".cg-docs/solutions/data-quality/2026-08-12-rebuild-named-list-branches.md",
+      "slug": "2026-08-12-rebuild-named-list-branches",
+      "status": "",
+      "summary": "`get_complete_data()` used `utils::stack()` to rebuild a data frame from a named list where inner vectors carried branch names. The old implementation: `utils::stack()` on a `list(pkg = c(branch1 = \"v1\", branch2 = \"v2\"))` produces rownames `c(\"branch1\", \"branch2\")` only when the inner vector is *unnamed*. When inner names are present, `stack()` uses them as rownames. However, if the inner names are URLs (e.g., from `sapply(urls, ...)`), the row names become full URLs. The regex then tried to extract branch names from URLs, but failed because the URL suffixes (`DESCRIPTION` vs `DESCRIPTION.Version`) did not match.",
+      "tags": [
+        "named-lists",
+        "stack",
+        "data-frame",
+        "collapse",
+        "get_complete_data",
+        "bugfix"
+      ],
+      "title": "Rebuilding data frames from named lists in R without losing branch names",
+      "top_keywords": [
+        "branch",
+        "utils::stack()",
+        "get_complete_data()",
+        "named",
+        "frames",
+        "lists",
+        "rebuilding",
+        "losing",
+        "description",
+        "problem"
+      ]
+    },
+    {
+      "date": "2026-08-12",
+      "entity_type": "strategy",
+      "path": ".cg-docs/strategy/2026-08-12-remediation-roadmap.md",
+      "slug": "2026-08-12-remediation-roadmap",
+      "status": "",
+      "summary": "- **Project**: metapip (PIP R package manager) - **Team**: DECDG / GPID — World Bank - **Language**: R | **Type**: Package | **Review**: Standard - **Charter Objective**: Meta R package for managing all PIP R packages via GitHub API - **Current Focus (before session)**: \"I am working on optimizing the package.\" (placeholder) - **Roadmap (before session)**: 1 placeholder milestone (\"I am working on optimizing the package.\") with 1 generic feature — no actionable scope. - **Starting material**: Engineering review completed same day (`inst/TMP/metapip-review.html`) — 25 verified findings (4 critical, 6 high, 11 medium, 4 low), 5 root causes, 6-phase remediation...",
+      "tags": [],
+      "title": "Remediation Roadmap — Engineering Review Findings",
+      "top_keywords": [
+        "roadmap",
+        "httr2",
+        "session",
+        "pip_lock",
+        "changes",
+        "force = true",
+        "init_metapip()",
+        "update_pip_packages()",
+        "install_latest_branch()",
+        "pip_snapshot()"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#fix-install-pip-packages",
+      "slug": "fix-install-pip-packages",
+      "status": "idea",
+      "summary": "Fix install_pip_packages() (V1: undefined pkg, unnamed branch → NA, error messages)",
+      "tags": [],
+      "title": "Fix install_pip_packages() (V1: undefined pkg, unnamed branch → NA, error messages)",
+      "top_keywords": [
+        "core\nobjective",
+        "fix",
+        "install_pip_packages",
+        "undefined",
+        "pkg",
+        "unnamed",
+        "branch",
+        "error",
+        "messages",
+        "feature"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#fix-package-branches-regex",
+      "slug": "fix-package-branches-regex",
+      "status": "idea",
+      "summary": "Fix package_branches() regex (V2: invalid char range, wrong suffix)",
+      "tags": [],
+      "title": "Fix package_branches() regex (V2: invalid char range, wrong suffix)",
+      "top_keywords": [
+        "core\nobjective",
+        "fix",
+        "package_branches",
+        "regex",
+        "invalid",
+        "char",
+        "range",
+        "wrong",
+        "suffix",
+        "feature"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#fix-get-custom-branch",
+      "slug": "fix-get-custom-branch",
+      "status": "idea",
+      "summary": "Fix get_custom_branch() undefined variable (V3)",
+      "tags": [],
+      "title": "Fix get_custom_branch() undefined variable (V3)",
+      "top_keywords": [
+        "core\nobjective",
+        "fix",
+        "get_custom_branch",
+        "undefined",
+        "variable",
+        "feature",
+        "milestone",
+        "unblock",
+        "core",
+        "objective"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#declare-undeclared-deps",
+      "slug": "declare-undeclared-deps",
+      "status": "idea",
+      "summary": "Declare undeclared dependencies — fs → basename(), stringr → Imports or base R (V4)",
+      "tags": [],
+      "title": "Declare undeclared dependencies — fs → basename(), stringr → Imports or base R (V4)",
+      "top_keywords": [
+        "core\nobjective",
+        "declare",
+        "undeclared",
+        "dependencies",
+        "basename",
+        "stringr",
+        "imports",
+        "base",
+        "feature",
+        "milestone"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#fix-onattach-and-answer",
+      "slug": "fix-onattach-and-answer",
+      "status": "idea",
+      "summary": "Fix .onAttach() stub and init_metapip() hardcoded answer (R7)",
+      "tags": [],
+      "title": "Fix .onAttach() stub and init_metapip() hardcoded answer (R7)",
+      "top_keywords": [
+        "core\nobjective",
+        "fix",
+        "onattach",
+        "stub",
+        "init_metapip",
+        "hardcoded",
+        "answer",
+        "feature",
+        "milestone",
+        "unblock"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#write-red-phase-tests",
+      "slug": "write-red-phase-tests",
+      "status": "idea",
+      "summary": "Write red-phase regression tests for V1–V4",
+      "tags": [],
+      "title": "Write red-phase regression tests for V1–V4",
+      "top_keywords": [
+        "core\nobjective",
+        "regression",
+        "red-phase",
+        "tests",
+        "feature",
+        "milestone",
+        "unblock",
+        "core",
+        "objective",
+        "headline"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#safe-unload-namespace",
+      "slug": "safe-unload-namespace",
+      "status": "idea",
+      "summary": "Safe unloadNamespace() with tryCatch + restart advisory (R1)",
+      "tags": [],
+      "title": "Safe unloadNamespace() with tryCatch + restart advisory (R1)",
+      "top_keywords": [
+        "install pipeline\nobjective",
+        "safe",
+        "unloadnamespace",
+        "trycatch",
+        "restart",
+        "advisory",
+        "install",
+        "feature",
+        "milestone",
+        "harden"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#per-package-failure-isolation",
+      "slug": "per-package-failure-isolation",
+      "status": "idea",
+      "summary": "Per-package failure isolation in update_pip_packages() loop (R2)",
+      "tags": [],
+      "title": "Per-package failure isolation in update_pip_packages() loop (R2)",
+      "top_keywords": [
+        "install pipeline\nobjective",
+        "failure",
+        "isolation",
+        "per-package",
+        "update_pip_packages",
+        "loop",
+        "install",
+        "feature",
+        "milestone",
+        "harden"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#interactive-gate",
+      "slug": "interactive-gate",
+      "status": "idea",
+      "summary": "interactive() gate on utils::menu() (R3)",
+      "tags": [],
+      "title": "interactive() gate on utils::menu() (R3)",
+      "top_keywords": [
+        "install pipeline\nobjective",
+        "interactive",
+        "gate",
+        "utils",
+        "menu",
+        "install",
+        "feature",
+        "milestone",
+        "harden",
+        "pipeline"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#tri-state-compare-sha",
+      "slug": "tri-state-compare-sha",
+      "status": "idea",
+      "summary": "Tri-state compare_sha() — treat CRAN-installed as unknown not missing (R6)",
+      "tags": [],
+      "title": "Tri-state compare_sha() — treat CRAN-installed as unknown not missing (R6)",
+      "top_keywords": [
+        "install pipeline\nobjective",
+        "tri-state",
+        "compare_sha",
+        "treat",
+        "cran-installed",
+        "unknown",
+        "missing",
+        "install",
+        "feature",
+        "milestone"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#sha-short-circuit",
+      "slug": "sha-short-circuit",
+      "status": "idea",
+      "summary": "SHA short-circuit in install_latest_branch() (P3)",
+      "tags": [],
+      "title": "SHA short-circuit in install_latest_branch() (P3)",
+      "top_keywords": [
+        "install pipeline\nobjective",
+        "sha",
+        "short-circuit",
+        "install_latest_branch",
+        "install",
+        "feature",
+        "milestone",
+        "harden",
+        "pipeline",
+        "objective"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#document-cran-gap",
+      "slug": "document-cran-gap",
+      "status": "idea",
+      "summary": "Document CRAN dependency gap, recommend renv companion (S5 deferred)",
+      "tags": [],
+      "title": "Document CRAN dependency gap, recommend renv companion (S5 deferred)",
+      "top_keywords": [
+        "install pipeline\nobjective",
+        "document",
+        "cran",
+        "dependency",
+        "gap",
+        "recommend",
+        "renv",
+        "companion",
+        "deferred",
+        "install"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#sha-pinned-install",
+      "slug": "sha-pinned-install",
+      "status": "idea",
+      "summary": "SHA-pinned install_branch() with force=TRUE override (S1)",
+      "tags": [],
+      "title": "SHA-pinned install_branch() with force=TRUE override (S1)",
+      "top_keywords": [
+        "lock down",
+        "supply chain\nobjective",
+        "sha-pinned",
+        "install_branch",
+        "force",
+        "override",
+        "lock",
+        "feature",
+        "milestone",
+        "down"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#pip-lock-manifest",
+      "slug": "pip-lock-manifest",
+      "status": "idea",
+      "summary": "PIP_LOCK manifest format + pip_snapshot() writer (S1)",
+      "tags": [],
+      "title": "PIP_LOCK manifest format + pip_snapshot() writer (S1)",
+      "top_keywords": [
+        "lock down",
+        "supply chain\nobjective",
+        "manifest",
+        "pip_lock",
+        "format",
+        "pip_snapshot",
+        "writer",
+        "lock",
+        "feature",
+        "milestone"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#lock-driven-init",
+      "slug": "lock-driven-init",
+      "status": "idea",
+      "summary": "Lock-driven init_metapip() and lock-updating update_pip_packages() (S1)",
+      "tags": [],
+      "title": "Lock-driven init_metapip() and lock-updating update_pip_packages() (S1)",
+      "top_keywords": [
+        "lock down",
+        "supply chain\nobjective",
+        "lock-driven",
+        "init_metapip",
+        "lock-updating",
+        "update_pip_packages",
+        "lock",
+        "feature",
+        "milestone",
+        "down"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#install-latest-dev-only",
+      "slug": "install-latest-dev-only",
+      "status": "idea",
+      "summary": "install_latest_branch() becomes developer-only with warning (S1)",
+      "tags": [],
+      "title": "install_latest_branch() becomes developer-only with warning (S1)",
+      "top_keywords": [
+        "lock down",
+        "supply chain\nobjective",
+        "install_latest_branch",
+        "becomes",
+        "developer-only",
+        "warning",
+        "lock",
+        "feature",
+        "milestone",
+        "down"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#least-privilege-tokens",
+      "slug": "least-privilege-tokens",
+      "status": "idea",
+      "summary": "Least-privilege token handling — read-only functions work without PAT, redacted print() (S2)",
+      "tags": [],
+      "title": "Least-privilege token handling — read-only functions work without PAT, redacted print() (S2)",
+      "top_keywords": [
+        "lock down",
+        "supply chain\nobjective",
+        "least-privilege",
+        "token",
+        "handling",
+        "read-only",
+        "functions",
+        "work",
+        "pat",
+        "redacted"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#remove-codecov-token",
+      "slug": "remove-codecov-token",
+      "status": "idea",
+      "summary": "Remove committed Codecov badge token from README (S3)",
+      "tags": [],
+      "title": "Remove committed Codecov badge token from README (S3)",
+      "top_keywords": [
+        "lock down",
+        "supply chain\nobjective",
+        "committed",
+        "codecov",
+        "badge",
+        "token",
+        "readme",
+        "lock",
+        "feature",
+        "milestone"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#full-gh-pagination",
+      "slug": "full-gh-pagination",
+      "status": "idea",
+      "summary": "Full gh() pagination — per_page=100, .limit=100 (S4)",
+      "tags": [],
+      "title": "Full gh() pagination — per_page=100, .limit=100 (S4)",
+      "top_keywords": [
+        "lock down",
+        "supply chain\nobjective",
+        "pagination",
+        "per_page",
+        "limit",
+        "lock",
+        "feature",
+        "milestone",
+        "down",
+        "supply"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#httr2-fetch",
+      "slug": "httr2-fetch",
+      "status": "idea",
+      "summary": "Replace read.dcf(url()) with httr2 — timeouts, error handling, connection safety (R4)",
+      "tags": [],
+      "title": "Replace read.dcf(url()) with httr2 — timeouts, error handling, connection safety (R4)",
+      "top_keywords": [
+        "resilient networking",
+        "time\nobjective",
+        "httr2",
+        "replace",
+        "dcf",
+        "url",
+        "timeouts",
+        "error",
+        "handling",
+        "connection"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#utc-timestamps",
+      "slug": "utc-timestamps",
+      "status": "idea",
+      "summary": "UTC-correct timestamp parsing in get_latest_branch_update() and core_metadata() (R5)",
+      "tags": [],
+      "title": "UTC-correct timestamp parsing in get_latest_branch_update() and core_metadata() (R5)",
+      "top_keywords": [
+        "resilient networking",
+        "time\nobjective",
+        "timestamp",
+        "parsing",
+        "utc-correct",
+        "get_latest_branch_update",
+        "core_metadata",
+        "feature",
+        "milestone",
+        "resilient"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#guard-empty-ss",
+      "slug": "guard-empty-ss",
+      "status": "idea",
+      "summary": "Guard ss(1L) on empty data in get_latest_branch_update() (R6 edge)",
+      "tags": [],
+      "title": "Guard ss(1L) on empty data in get_latest_branch_update() (R6 edge)",
+      "top_keywords": [
+        "resilient networking",
+        "time\nobjective",
+        "guard",
+        "empty",
+        "get_latest_branch_update",
+        "edge",
+        "feature",
+        "milestone",
+        "resilient",
+        "networking"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#api-memoization",
+      "slug": "api-memoization",
+      "status": "idea",
+      "summary": "Per-session API memoization for get_branches() / latest_commit_for_branch() (P1)",
+      "tags": [],
+      "title": "Per-session API memoization for get_branches() / latest_commit_for_branch() (P1)",
+      "top_keywords": [
+        "release\nobjective",
+        "api",
+        "per-session",
+        "memoization",
+        "get_branches",
+        "latest_commit_for_branch",
+        "tests",
+        "feature",
+        "milestone",
+        "performance"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#require-namespace-checks",
+      "slug": "require-namespace-checks",
+      "status": "idea",
+      "summary": "Replace installed.packages() with requireNamespace() per-package checks (P2)",
+      "tags": [],
+      "title": "Replace installed.packages() with requireNamespace() per-package checks (P2)",
+      "top_keywords": [
+        "release\nobjective",
+        "replace",
+        "installed",
+        "packages",
+        "requirenamespace",
+        "per-package",
+        "tests",
+        "feature",
+        "milestone",
+        "performance"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#unskip-install-tests",
+      "slug": "unskip-install-tests",
+      "status": "idea",
+      "summary": "Un-skip and rewrite install tests with mockery stubs",
+      "tags": [],
+      "title": "Un-skip and rewrite install tests with mockery stubs",
+      "top_keywords": [
+        "release\nobjective",
+        "tests",
+        "un-skip",
+        "rewrite",
+        "install",
+        "mockery",
+        "stubs",
+        "feature",
+        "milestone",
+        "performance"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#network-test-gating",
+      "slug": "network-test-gating",
+      "status": "idea",
+      "summary": "Mark network tests with skip_if_offline() + skip_on_cran()",
+      "tags": [],
+      "title": "Mark network tests with skip_if_offline() + skip_on_cran()",
+      "top_keywords": [
+        "release\nobjective",
+        "tests",
+        "mark",
+        "network",
+        "skip_if_offline",
+        "skip_on_cran",
+        "feature",
+        "milestone",
+        "performance",
+        "release"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#windows-ci",
+      "slug": "windows-ci",
+      "status": "idea",
+      "summary": "Windows CI matrix + pin actions/checkout@v4 + document GH_TOKEN policy",
+      "tags": [],
+      "title": "Windows CI matrix + pin actions/checkout@v4 + document GH_TOKEN policy",
+      "top_keywords": [
+        "release\nobjective",
+        "windows",
+        "matrix",
+        "pin",
+        "actions",
+        "checkout",
+        "document",
+        "gh_token",
+        "policy",
+        "tests"
+      ]
+    },
+    {
+      "date": "",
+      "entity_type": "feature",
+      "path": "roadmap.json#version-bump-010",
+      "slug": "version-bump-010",
+      "status": "idea",
+      "summary": "Version bump to 0.1.0, NEWS.md rewrite, API hygiene (typos, globalVariables, roxygen)",
+      "tags": [],
+      "title": "Version bump to 0.1.0, NEWS.md rewrite, API hygiene (typos, globalVariables, roxygen)",
+      "top_keywords": [
+        "release\nobjective",
+        "api",
+        "version",
+        "bump",
+        "news",
+        "rewrite",
+        "hygiene",
+        "typos",
+        "globalvariables",
+        "roxygen"
+      ]
+    }
+  ],
+  "entity_count": 32,
+  "generated": "2026-08-12",
+  "schema_version": "0.2.0",
+  "topic_count": 4,
+  "topics": [
+    {
+      "entity_count": 12,
+      "entity_paths": [
+        "roadmap.json#fix-install-pip-packages",
+        "roadmap.json#fix-package-branches-regex",
+        "roadmap.json#fix-get-custom-branch",
+        "roadmap.json#declare-undeclared-deps",
+        "roadmap.json#fix-onattach-and-answer",
+        "roadmap.json#write-red-phase-tests",
+        "roadmap.json#api-memoization",
+        "roadmap.json#require-namespace-checks",
+        "roadmap.json#unskip-install-tests",
+        "roadmap.json#network-test-gating",
+        "roadmap.json#windows-ci",
+        "roadmap.json#version-bump-010"
+      ],
+      "keywords": [
+        "core\nobjective",
+        "release\nobjective",
+        "fix"
+      ],
+      "label": "Core\nObjective / Release\nObjective / Fix",
+      "slug": "core-objective-release-objective-fix"
+    },
+    {
+      "entity_count": 7,
+      "entity_paths": [
+        "roadmap.json#sha-pinned-install",
+        "roadmap.json#pip-lock-manifest",
+        "roadmap.json#lock-driven-init",
+        "roadmap.json#install-latest-dev-only",
+        "roadmap.json#least-privilege-tokens",
+        "roadmap.json#remove-codecov-token",
+        "roadmap.json#full-gh-pagination"
+      ],
+      "keywords": [
+        "lock down",
+        "supply chain\nobjective",
+        "token"
+      ],
+      "label": "Lock Down / Supply Chain\nObjective / Token",
+      "slug": "lock-down-supply-chain-objective-token"
+    },
+    {
+      "entity_count": 6,
+      "entity_paths": [
+        "roadmap.json#safe-unload-namespace",
+        "roadmap.json#per-package-failure-isolation",
+        "roadmap.json#interactive-gate",
+        "roadmap.json#tri-state-compare-sha",
+        "roadmap.json#sha-short-circuit",
+        "roadmap.json#document-cran-gap"
+      ],
+      "keywords": [
+        "install pipeline\nobjective",
+        "interactive",
+        "failure"
+      ],
+      "label": "Install Pipeline\nObjective / Interactive / Failure",
+      "slug": "install-pipeline-objective-interactive-failure"
+    },
+    {
+      "entity_count": 3,
+      "entity_paths": [
+        "roadmap.json#httr2-fetch",
+        "roadmap.json#utc-timestamps",
+        "roadmap.json#guard-empty-ss"
+      ],
+      "keywords": [
+        "resilient networking",
+        "time\nobjective",
+        "get_latest_branch_update"
+      ],
+      "label": "Resilient Networking / Time\nObjective / Get_Latest_Branch_Update",
+      "slug": "resilient-networking-time-objective-get-latest-branch-update"
+    }
+  ]
+}

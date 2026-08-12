@@ -2,15 +2,209 @@
   "schemaVersion": "compound-gpid-roadmap-v1",
   "milestones": [
     {
-      "id": "i-am-working-on-optimizing",
-      "title": "I am working on optimizing the package.",
-      "objective": "I am working on optimizing the package.",
-      "status": "in-progress",
+      "id": "unblock-the-core",
+      "title": "Unblock the Core",
+      "objective": "Three headline functions are broken; fix them and establish a regression harness.",
+      "status": "planned",
       "features": [
         {
-          "id": "initial-focus",
-          "title": "I am working on optimizing the package.",
-          "status": "in-progress",
+          "id": "fix-install-pip-packages",
+          "title": "Fix install_pip_packages() (V1: undefined pkg, unnamed branch \u2192 NA, error messages)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "fix-package-branches-regex",
+          "title": "Fix package_branches() regex (V2: invalid char range, wrong suffix)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "fix-get-custom-branch",
+          "title": "Fix get_custom_branch() undefined variable (V3)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "declare-undeclared-deps",
+          "title": "Declare undeclared dependencies \u2014 fs \u2192 basename(), stringr \u2192 Imports or base R (V4)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "fix-onattach-and-answer",
+          "title": "Fix .onAttach() stub and init_metapip() hardcoded answer (R7)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "write-red-phase-tests",
+          "title": "Write red-phase regression tests for V1\u2013V4",
+          "status": "idea",
+          "plan": null
+        }
+      ]
+    },
+    {
+      "id": "harden-install-pipeline",
+      "title": "Harden the Install Pipeline",
+      "objective": "Make the install/update flow robust: safe namespace handling, failure isolation, interactive gating.",
+      "status": "planned",
+      "features": [
+        {
+          "id": "safe-unload-namespace",
+          "title": "Safe unloadNamespace() with tryCatch + restart advisory (R1)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "per-package-failure-isolation",
+          "title": "Per-package failure isolation in update_pip_packages() loop (R2)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "interactive-gate",
+          "title": "interactive() gate on utils::menu() (R3)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "tri-state-compare-sha",
+          "title": "Tri-state compare_sha() \u2014 treat CRAN-installed as unknown not missing (R6)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "sha-short-circuit",
+          "title": "SHA short-circuit in install_latest_branch() (P3)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "document-cran-gap",
+          "title": "Document CRAN dependency gap, recommend renv companion (S5 deferred)",
+          "status": "idea",
+          "plan": null
+        }
+      ]
+    },
+    {
+      "id": "lock-down-supply-chain",
+      "title": "Lock Down the Supply Chain",
+      "objective": "SHA-pinned installs, team lock manifest, least-privilege tokens, full pagination.",
+      "status": "planned",
+      "features": [
+        {
+          "id": "sha-pinned-install",
+          "title": "SHA-pinned install_branch() with force=TRUE override (S1)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "pip-lock-manifest",
+          "title": "PIP_LOCK manifest format + pip_snapshot() writer (S1)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "lock-driven-init",
+          "title": "Lock-driven init_metapip() and lock-updating update_pip_packages() (S1)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "install-latest-dev-only",
+          "title": "install_latest_branch() becomes developer-only with warning (S1)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "least-privilege-tokens",
+          "title": "Least-privilege token handling \u2014 read-only functions work without PAT, redacted print() (S2)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "remove-codecov-token",
+          "title": "Remove committed Codecov badge token from README (S3)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "full-gh-pagination",
+          "title": "Full gh() pagination \u2014 per_page=100, .limit=100 (S4)",
+          "status": "idea",
+          "plan": null
+        }
+      ]
+    },
+    {
+      "id": "resilient-networking-time",
+      "title": "Resilient Networking & Time",
+      "objective": "Robust HTTP fetch with httr2, correct UTC timestamp parsing.",
+      "status": "planned",
+      "features": [
+        {
+          "id": "httr2-fetch",
+          "title": "Replace read.dcf(url()) with httr2 \u2014 timeouts, error handling, connection safety (R4)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "utc-timestamps",
+          "title": "UTC-correct timestamp parsing in get_latest_branch_update() and core_metadata() (R5)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "guard-empty-ss",
+          "title": "Guard ss(1L) on empty data in get_latest_branch_update() (R6 edge)",
+          "status": "idea",
+          "plan": null
+        }
+      ]
+    },
+    {
+      "id": "performance-tests-release",
+      "title": "Performance, Tests & Release",
+      "objective": "Cache API calls, un-skip tests, harden CI, ship 0.1.0.",
+      "status": "planned",
+      "features": [
+        {
+          "id": "api-memoization",
+          "title": "Per-session API memoization for get_branches() / latest_commit_for_branch() (P1)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "require-namespace-checks",
+          "title": "Replace installed.packages() with requireNamespace() per-package checks (P2)",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "unskip-install-tests",
+          "title": "Un-skip and rewrite install tests with mockery stubs",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "network-test-gating",
+          "title": "Mark network tests with skip_if_offline() + skip_on_cran()",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "windows-ci",
+          "title": "Windows CI matrix + pin actions/checkout@v4 + document GH_TOKEN policy",
+          "status": "idea",
+          "plan": null
+        },
+        {
+          "id": "version-bump-010",
+          "title": "Version bump to 0.1.0, NEWS.md rewrite, API hygiene (typos, globalVariables, roxygen)",
+          "status": "idea",
           "plan": null
         }
       ]

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "compound-gpid-active-state-v1",
+  "updatedAt": "2026-08-12T17:34:00-04:00",
+  "workflow": "/cg-work",
+  "status": "completed",
+  "branch": null,
+  "plan": ".cg-docs/plans/2026-08-12-unblock-the-core.md",
+  "executionReport": ".cg-docs/work-reports/2026-08-12-unblock-the-core.md",
+  "currentPhase": null,
+  "evidenceStatus": [
+    {"id": "V1", "status": "passed", "artifact": "tests/testthat/test-install_pip_packages.R"},
+    {"id": "V2", "status": "passed", "artifact": "tests/testthat/test-get_complete_data.R"},
+    {"id": "V3", "status": "passed", "artifact": "tests/testthat/test-get_custom_branch.R"},
+    {"id": "V4", "status": "passed", "artifact": "tests/testthat/test-undeclared-deps.R"},
+    {"id": "V6", "status": "passed", "artifact": "tests/testthat/test-attach.R, tests/testthat/test-init_metapip.R"},
+    {"id": "V7", "status": "passed", "artifact": "rcmdcheck -- no undeclared fs/stringr"}
+  ],
+  "unresolvedDecisions": [],
+  "artifactRefs": [],
+  "nextCommand": "/cg-review standard"
+}
