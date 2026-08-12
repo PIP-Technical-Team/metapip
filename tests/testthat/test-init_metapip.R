@@ -1,11 +1,11 @@
 test_that("compare_sha works as expected", {
-  # Since we don't install pipfun on Github actions
-  skip()
   hash_val <- "a051498f183e24afdc468ab167306f94a80e57f4"
   mockery::stub(compare_sha, "latest_commit_for_branch", \(...) list(sha = hash_val))
+  mockery::stub(compare_sha, "utils::packageDescription", function(...) hash_val)
   expect_true(compare_sha("pipfun", "test"))
 
   mockery::stub(compare_sha, "latest_commit_for_branch", \(...) list(sha = "abc"))
+  mockery::stub(compare_sha, "utils::packageDescription", function(...) hash_val)
   expect_false(compare_sha("pipfun", "test"))
 })
 
@@ -25,4 +25,21 @@ test_that("set_custom_branch works correctly", {
   expect_named(result, c("pkgA_branch", "pkgB_branch"))
   expect_equal(result$pkgA_branch, "release")
   expect_equal(result$pkgB_branch, "main")
+})
+
+test_that("init_metapip forwards its answer argument", {
+  called_args <- list()
+  attach_called <- FALSE
+  mockery::stub(init_metapip, "update_pip_packages", function(exclude, ask, answer) {
+    called_args <<- list(exclude = exclude, ask = ask, answer = answer)
+  })
+  mockery::stub(init_metapip, "metapip_attach", function(...) {
+    attach_called <<- TRUE
+  })
+
+  init_metapip(exclude = "pipdata", ask = FALSE, answer = 2)
+  expect_equal(called_args$exclude, "pipdata")
+  expect_equal(called_args$ask, FALSE)
+  expect_equal(called_args$answer, 2)
+  expect_true(attach_called)
 })
