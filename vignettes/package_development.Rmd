@@ -85,7 +85,7 @@ get_core_pagkages(exclude = NA)
 
 withr::with_dir(
   # Change working directory to fake pipapi
-  dir.create(file.path(tempdir(), "pipapi"), recursive = TRUE),
+  file.path(tempdir(), "pipapi"),
   
   # Since the working directory is a PIP package, 
   # it will be excluded 
