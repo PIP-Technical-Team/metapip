@@ -6,7 +6,7 @@
   # Load the core packages --------
   needed <- core[!is_attached(core)]
   if (length(needed) > 0) {
-    metapip_attach(needed)
+    suppressWarnings(metapip_attach(needed))
   }
 }
 
