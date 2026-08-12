@@ -18,6 +18,7 @@ ordered by increasing priority.
 1.  Pass `branch` name explicitly.
 
 ``` r
+
 get_branch_info(package = "pipapi", branch = "DEV")
 ```
 
@@ -29,6 +30,7 @@ We have enabled a feature to set custom default branches of a package
 using function `set_custom_branch`
 
 ``` r
+
 set_custom_branch(pipr = 'main', 'pipapi' = 'DEV_v3')
 ```
 
@@ -46,6 +48,7 @@ default setting when you load the `metapip` package defined in file
 `zzz.R`
 
 ``` r
+
 metapip_default_options <- list(
   metapip.default_branch = "PROD",
   metapip.custom_branch = list(

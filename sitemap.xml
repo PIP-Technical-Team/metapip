@@ -1,10 +1,14 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://pip-technical-team.github.io/metapip/404.html</loc></url>
+<url><loc>https://pip-technical-team.github.io/metapip/AGENTS.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/LICENSE.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/articles/index.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/articles/package-specific-options.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/articles/package_development.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/authors.html</loc></url>
+<url><loc>https://pip-technical-team.github.io/metapip/compound-gpid.context.html</loc></url>
+<url><loc>https://pip-technical-team.github.io/metapip/compound-gpid.html</loc></url>
+<url><loc>https://pip-technical-team.github.io/metapip/compound-gpid.local.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/index.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/news/index.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/check_github_token.html</loc></url>

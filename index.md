@@ -39,6 +39,7 @@ You can install the development version of metapip from
 [GitHub](https://github.com/) with:
 
 ``` r
+
 # install.packages("devtools")
 devtools::install_github("PIP-Technical-Team/metapip")
 ```
@@ -58,6 +59,7 @@ packages it remains as “PROD”.
 ## Functions and it’s usage in metapip
 
 ``` r
+
 library(metapip)
 ```
 
@@ -71,6 +73,7 @@ You can check if your credentials are properly set by running the
 following command.
 
 ``` r
+
 check_github_token() |> 
   print()
 ```
@@ -84,6 +87,7 @@ Let us now go through the functions in metapip.
     console the available branches.
 
 ``` r
+
 get_branches("pipr")   
 
 #── These are available branches for pipr package:  
@@ -103,6 +107,7 @@ At the same time it also returns the branch name as character vector
 invisibly.
 
 ``` r
+
 out <- get_branches("pipr")
 
 #── These are available branches for pipr package:  
@@ -128,6 +133,7 @@ This argument controls if you want to show the branch names in the
 console or not.
 
 ``` r
+
 out <- get_branches("pipr", display = FALSE)  
 out
 #[1] "29-website-formatting" "61_global_end"         "DEV"                   "add_retry"            
@@ -140,6 +146,7 @@ out
     This installs a specific branch for a particular package.
 
 ``` r
+
 install_branch(package = "wbpip", branch = "DEV")
 ```
 
@@ -152,6 +159,7 @@ package. For example, when was last commit done on this branch and by
 whom.
 
 ``` r
+
 get_branch_info(package = "pipr", branch = "DEV")
 
 #  package branch_name last_commit_author_name     last_update_time
@@ -161,6 +169,7 @@ get_branch_info(package = "pipr", branch = "DEV")
 You may pass more than one branch names.
 
 ``` r
+
 get_branch_info(package = "wbpip", branch = c("PROD", "QA"))
 
 #  package branch_name last_commit_author_name     last_update_time
@@ -178,6 +187,7 @@ pip core R packages. However, you can also restrict it to only a few
 packages as well.
 
 ``` r
+
 install_latest_branch()
 install_latest_branch(c("pipfun", "pipapi"))
 ```
@@ -187,6 +197,7 @@ install_latest_branch(c("pipfun", "pipapi"))
 Get metadata information about pip packages.
 
 ``` r
+
 out <- core_metadata()
 out <- core_metadata(c("pipapi", "wbpip"))
 ```
@@ -199,6 +210,7 @@ fresh installation of R then running
 would set you up with all pip packages.
 
 ``` r
+
 install_pip_packages(branch = "test")
 install_pip_packages(c("pipapi", "wbpip"), "test")
 ```
@@ -238,6 +250,7 @@ An easier way to set [`options()`](https://rdrr.io/r/base/options.html)
 for pip packages custom default branch.
 
 ``` r
+
 set_custom_branch(pipr = 'main', 'pipapi' = 'DEV_v3')
 ```
 

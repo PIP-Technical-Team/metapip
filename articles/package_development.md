@@ -1,6 +1,7 @@
 # metapip in package development
 
 ``` r
+
  # devtools::load_all(".")
 library(metapip)
 ```
@@ -22,6 +23,7 @@ branch is available with
 [`get_default_branch()`](https://pip-technical-team.github.io/metapip/reference/get_default_branch.md),
 
 ``` r
+
 get_default_branch()
 #> [1] "PROD"
 ```
@@ -31,6 +33,7 @@ and you can modify it with
 For example:
 
 ``` r
+
 set_default_branch("DEV")
 ```
 
@@ -40,6 +43,7 @@ same branch. Packages that do not use the default branch are tracked as
 [`get_custom_branch()`](https://pip-technical-team.github.io/metapip/reference/set_custom_branch.md):
 
 ``` r
+
 get_custom_branch()
 #> 
 #> ── metapip custom branches: ──
@@ -59,6 +63,7 @@ To get the branch for a specific package, use
 `get_package_current_branch(package)`. For example:
 
 ``` r
+
 get_current_branches()
 #> ── metapip current branches (default in red): ──
 #> 
@@ -81,6 +86,7 @@ For example, to set the `pipdata` package to use the `main` branch and
 `pipapi` to use `DEV_v3`:
 
 ``` r
+
 set_custom_branch(pipdata = 'main', pipapi = 'DEV_v3')
 #> ── metapip custom branches: ──
 #> 
@@ -96,6 +102,7 @@ set_custom_branch(pipdata = 'main', pipapi = 'DEV_v3')
 To get a list of all core PIP packages, use:
 
 ``` r
+
 get_core_pagkages()
 #> [1] "pipapi"   "pipload"  "wbpip"    "pipfun"   "pipdata"  "pipster"  "pipaux"  
 #> [8] "pipfaker"
@@ -131,6 +138,7 @@ package you are actively developing. The following explains the logic
 behind the process. **Do NOT use this in your code**.
 
 ``` r
+
 # the same as get_core_pagkages() because the working directory 
 # is not a PIP package
 get_core_pagkages(exclude = NA)
