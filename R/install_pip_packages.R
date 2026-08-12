@@ -48,7 +48,7 @@ install_latest_branch <- function(package = NULL) {
 install_pip_packages <- function(package = NULL, branch = NULL) {
   check_github_token()
   if (is.null(package)) {
-    package = core
+    package <- core
   } else {
     is_core(package)
   }
@@ -61,16 +61,16 @@ install_pip_packages <- function(package = NULL, branch = NULL) {
            tryCatch(
              expr = {
                pgk <- package[x]
-               brn <- branch[pgk]
-               install_branch(package = pkg, brn)
+               brn <- if (is.null(names(branch))) branch[1] else unname(branch[pgk])
+               install_branch(package = pgk, branch = brn)
              },
              error = function(e) {
-               cli::cli_alert_danger("package {.pkg {x}} could not be installed")
+               cli::cli_alert_danger("package {.pkg {pgk}} could not be installed")
              },
              # end of error section
 
              warning = function(w) {
-               cli::cli_alert_warning("package {.pkg {x}} produces warnings during installation")
+               cli::cli_alert_warning("package {.pkg {pgk}} produces warnings during installation")
              }
            ) # End of trycatch
          })
