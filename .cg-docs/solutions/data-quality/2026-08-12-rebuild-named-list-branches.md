@@ -59,3 +59,7 @@ Without this companion fix, the inner names remain URLs and the new `get_complet
 - When building data frames from nested named lists, prefer explicit reconstruction with `unlist(lapply(...))` over `utils::stack()`.
 - Set meaningful names at the point of vector creation (the producer), not after aggregation.
 - Add unit tests that verify `branch` column values, not just row counts.
+
+## Related
+
+- `.cg-docs/solutions/data-quality/2026-08-13-resilient-httr2-utc-fetching.md` — companion fix: `get_package_version()` now uses httr2 with `vapply(character(1L))` (stable typing) and named branch vectors, keeping this named-list contract intact.

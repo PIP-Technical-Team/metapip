@@ -1,14 +1,53 @@
 {
-  "edge_count": 1,
+  "edge_count": 3,
   "edges": [
+    {
+      "edge_type": "reviews",
+      "source": ".cg-docs/reviews/2026-08-12-resilient-networking-time-review.md",
+      "target": ".cg-docs/plans/2026-08-12-resilient-networking-time.md",
+      "target_missing": false
+    },
     {
       "edge_type": "reviews",
       "source": ".cg-docs/reviews/2026-08-12-unblock-the-core-review.md",
       "target": ".cg-docs/plans/2026-08-12-unblock-the-core.md",
       "target_missing": false
+    },
+    {
+      "edge_type": "verifies",
+      "source": ".cg-docs/reviews/2026-08-12-unblock-the-core-verify-review.md",
+      "target": ".cg-docs/reviews/2026-08-12-unblock-the-core-review.md",
+      "target_missing": false
     }
   ],
   "entities": [
+    {
+      "date": "2026-08-12",
+      "entity_type": "plan",
+      "path": ".cg-docs/plans/2026-08-12-resilient-networking-time.md",
+      "slug": "2026-08-12-resilient-networking-time",
+      "status": "completed",
+      "summary": "Replace fragile `read.dcf(url())` HTTP fetching with httr2 (timeouts, error handling, connection safety), fix UTC timestamp parsing in `get_latest_branch_update()` and `core_metadata()`, and guard against empty-branch subsetting in `get_latest_branch_update()`.",
+      "tags": [
+        "httr2",
+        "timestamps",
+        "robustness",
+        "milestone-4"
+      ],
+      "title": "Resilient Networking & Time — httr2 fetch, UTC timestamps, empty-branch guard",
+      "top_keywords": [
+        "get_latest_branch_update()",
+        "mockery::stub()",
+        "news.md",
+        "rscript -e \"devtools::test()\"",
+        "httr2",
+        "core_metadata()",
+        "httr2::with_mocked_responses()",
+        "test scenarios",
+        "get_package_version()",
+        "ss(1l)"
+      ]
+    },
     {
       "date": "2026-08-12",
       "entity_type": "plan",
@@ -38,6 +77,28 @@
       ]
     },
     {
+      "date": "2026-08-13",
+      "entity_type": "review",
+      "path": ".cg-docs/reviews/2026-08-12-resilient-networking-time-review.md",
+      "slug": "2026-08-12-resilient-networking-time-review",
+      "status": "",
+      "summary": "**Review mode**: standard (auto-routed by `/cg-work review:auto`) **Files reviewed**: R/package_branches.R, R/get_branches.R, R/core_metadata.R, DESCRIPTION, NEWS.md, man/get_current_branches.Rd, tests/testthat/*.R, .cg-docs state files **Findings**: 17 total (P0: 1, P1: 4, P2: 7, P3: 5)",
+      "tags": [],
+      "title": "2026-08-12-resilient-networking-time-review",
+      "top_keywords": [
+        "package_branches",
+        "tests",
+        "package_branches.r",
+        "fcase",
+        "cg-data-quality",
+        "cg-reproducibility",
+        "testthat",
+        "prod",
+        "test",
+        "cg-testing"
+      ]
+    },
+    {
       "date": "2026-08-12",
       "entity_type": "review",
       "path": ".cg-docs/reviews/2026-08-12-unblock-the-core-review.md",
@@ -60,6 +121,28 @@
       ]
     },
     {
+      "date": "2026-08-13",
+      "entity_type": "review",
+      "path": ".cg-docs/reviews/2026-08-12-unblock-the-core-verify-review.md",
+      "slug": "2026-08-12-unblock-the-core-verify-review",
+      "status": "",
+      "summary": "**Review mode**: verification (light depth, forced by mode:verify) **Parent review**: `.cg-docs/reviews/2026-08-12-unblock-the-core-review.md` **Files reviewed**: R/package_branches.R, R/get_branches.R, R/core_metadata.R, tests/testthat/test-{package_branches,get_branches,core_metadata,attach}.R, DESCRIPTION **Findings**: 11 (P0: 1, P1: 1, P2: 5, P3: 3)",
+      "tags": [],
+      "title": "2026-08-12-unblock-the-core-verify-review",
+      "top_keywords": [
+        "tests",
+        "package_branches",
+        "fcase",
+        "cg-code-quality",
+        "cg-testing",
+        "testthat",
+        "package_branches.r",
+        "fix",
+        "prior",
+        "version"
+      ]
+    },
+    {
       "date": "2026-08-12",
       "entity_type": "solution",
       "path": ".cg-docs/solutions/data-quality/2026-08-12-rebuild-named-list-branches.md",
@@ -79,13 +162,45 @@
         "branch",
         "utils::stack()",
         "get_complete_data()",
+        "get_package_version()",
         "named",
         "frames",
         "lists",
         "rebuilding",
         "losing",
-        "description",
-        "problem"
+        "description"
+      ]
+    },
+    {
+      "date": "2026-08-13",
+      "entity_type": "solution",
+      "path": ".cg-docs/solutions/data-quality/2026-08-13-resilient-httr2-utc-fetching.md",
+      "slug": "2026-08-13-resilient-httr2-utc-fetching",
+      "status": "",
+      "summary": "Three fragility classes in an R package's remote-data layer: 1. `read.dcf(url(y))` had no timeout, no HTTP error handling, and leaked connections. 2. GitHub timestamps like `2026-01-15T12:30:00Z` were parsed with `as.POSIXct(x, format = \"%Y-%m-%dT%T\")` — no `tz`, so \"12:30 UTC\" silently became \"12:30 local\" (5h off on `America/New_York`, and different on every user machine). 3. `fsubset(...) |> ss(1L)` errored when filtering removed every row (e.g., a package with only a `gh-pages` branch), and `core_metadata()` consumed the result unsafely.",
+      "tags": [
+        "httr2",
+        "timezone",
+        "POSIXct",
+        "collapse",
+        "data.table",
+        "fcase",
+        "timestamp",
+        "http",
+        "bugfix"
+      ],
+      "title": "Resilient httr2 fetching, explicit-UTC timestamps, and safe subsetting in R",
+      "top_keywords": [
+        "fcase",
+        "httr2",
+        "data.table",
+        "fifelse",
+        "collapse",
+        "explicit-utc",
+        "seconds",
+        "local_status",
+        "optional",
+        "fractional"
       ]
     },
     {
@@ -533,7 +648,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#httr2-fetch",
       "slug": "httr2-fetch",
-      "status": "idea",
+      "status": "done",
       "summary": "Replace read.dcf(url()) with httr2 — timeouts, error handling, connection safety (R4)",
       "tags": [],
       "title": "Replace read.dcf(url()) with httr2 — timeouts, error handling, connection safety (R4)",
@@ -555,7 +670,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#utc-timestamps",
       "slug": "utc-timestamps",
-      "status": "idea",
+      "status": "done",
       "summary": "UTC-correct timestamp parsing in get_latest_branch_update() and core_metadata() (R5)",
       "tags": [],
       "title": "UTC-correct timestamp parsing in get_latest_branch_update() and core_metadata() (R5)",
@@ -577,7 +692,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#guard-empty-ss",
       "slug": "guard-empty-ss",
-      "status": "idea",
+      "status": "done",
       "summary": "Guard ss(1L) on empty data in get_latest_branch_update() (R6 edge)",
       "tags": [],
       "title": "Guard ss(1L) on empty data in get_latest_branch_update() (R6 edge)",
@@ -727,8 +842,8 @@
       ]
     }
   ],
-  "entity_count": 32,
-  "generated": "2026-08-12",
+  "entity_count": 36,
+  "generated": "2026-08-13",
   "schema_version": "0.2.0",
   "topic_count": 4,
   "topics": [

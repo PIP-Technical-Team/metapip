@@ -1,7 +1,7 @@
 Package: metapip
 Type: Package
 Title: Easily Install, Load, and manage PIP Packages
-Version: 0.0.2
+Version: 0.0.3
 Authors@R:
     c(person(given = "R.Andrés",
              family = "Castañeda",
@@ -33,6 +33,8 @@ Imports:
     cli,
     glue,
     gh,
+    httr2 (>= 1.0.0),
+    data.table,
     rstudioapi,
     remotes,
     gitcreds,
