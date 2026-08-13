@@ -4,7 +4,7 @@
 ## usethis namespace: start
 #' @name metapip
 #' @rawNamespace import(collapse, except = fdroplevels)
-# @rawNamespace import(data.table, except = fdroplevels)
+#' @rawNamespace import(data.table, except = fdroplevels)
 ## usethis namespace: end
 ##
 
@@ -20,6 +20,7 @@ if (getRversion() >= "2.15.1") {
       "!!",
       ":=",
       "branch",
+      "cmp",
       "ind",
       "local_status",
       "values",

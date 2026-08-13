@@ -1,3 +1,10 @@
+# metapip 0.0.3
+
+* `get_package_version()` now uses httr2 with timeouts and graceful error handling.
+* Timestamp parsing uses explicit UTC timezone in `get_latest_branch_update()` and `core_metadata()`.
+* `get_latest_branch_update()` handles packages with only gh-pages branches gracefully.
+* Added httr2 to Imports.
+
 # metapip 0.0.2
 
 * `detach_package()` now warns and continues on `unloadNamespace()` failure instead of aborting.
