@@ -11,10 +11,9 @@ get_package_current_branch(package)
 }
 \arguments{
 \item{package}{character: vector with name of branches. E.g., c("pipdata",
-"pipfaker").
-TRUE}
+"pipfaker").}
 
-\item{verbose}{logical: whether to display all current branches. Default is}
+\item{verbose}{logical: whether to display all current branches. Default is TRUE}
 }
 \value{
 list with names of packages and branches
