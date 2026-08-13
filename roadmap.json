@@ -49,43 +49,43 @@
       "id": "harden-install-pipeline",
       "title": "Harden the Install Pipeline",
       "objective": "Make the install/update flow robust: safe namespace handling, failure isolation, interactive gating.",
-      "status": "planned",
+      "status": "done",
       "features": [
         {
           "id": "safe-unload-namespace",
           "title": "Safe unloadNamespace() with tryCatch + restart advisory (R1)",
-          "status": "idea",
-          "plan": null
+          "status": "done",
+          "plan": ".cg-docs/plans/2026-08-13-harden-install-pipeline.md"
         },
         {
           "id": "per-package-failure-isolation",
           "title": "Per-package failure isolation in update_pip_packages() loop (R2)",
-          "status": "idea",
-          "plan": null
+          "status": "done",
+          "plan": ".cg-docs/plans/2026-08-13-harden-install-pipeline.md"
         },
         {
           "id": "interactive-gate",
           "title": "interactive() gate on utils::menu() (R3)",
-          "status": "idea",
-          "plan": null
+          "status": "done",
+          "plan": ".cg-docs/plans/2026-08-13-harden-install-pipeline.md"
         },
         {
           "id": "tri-state-compare-sha",
           "title": "Tri-state compare_sha() \u2014 treat CRAN-installed as unknown not missing (R6)",
-          "status": "idea",
-          "plan": null
+          "status": "done",
+          "plan": ".cg-docs/plans/2026-08-13-harden-install-pipeline.md"
         },
         {
           "id": "sha-short-circuit",
           "title": "SHA short-circuit in install_latest_branch() (P3)",
-          "status": "idea",
-          "plan": null
+          "status": "done",
+          "plan": ".cg-docs/plans/2026-08-13-harden-install-pipeline.md"
         },
         {
           "id": "document-cran-gap",
           "title": "Document CRAN dependency gap, recommend renv companion (S5 deferred)",
-          "status": "idea",
-          "plan": null
+          "status": "done",
+          "plan": ".cg-docs/plans/2026-08-13-harden-install-pipeline.md"
         }
       ]
     },
