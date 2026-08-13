@@ -46,6 +46,9 @@ init_metapip <- function(exclude = NA,
 update_pip_packages <- \(exclude = NA,
                          ask = TRUE,
                          answer = 1) {
+  pkgs <- get_core_pagkages(exclude = exclude)
+  default_branch <- get_package_current_branch(package = pkgs)
+
   pkgs_vec <- mapply(compare_sha, pkgs, default_branch[pkgs],
                      SIMPLIFY = FALSE, USE.NAMES = TRUE)
   null_vec    <- Filter(is.null, pkgs_vec) |>
