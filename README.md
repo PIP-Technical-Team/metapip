@@ -252,5 +252,5 @@ This is functionally equivalent to
 `{metapip}` installs PIP packages from GitHub branches and resolves
 non-PIP dependencies from CRAN independently, which can cause version
 skew. For coordinated dependency resolution across all packages,
-consider using `[{renv}](https://rstudio.github.io/renv/)` as a
+consider using [{renv}](https://rstudio.github.io/renv/) as a
 companion tool.
