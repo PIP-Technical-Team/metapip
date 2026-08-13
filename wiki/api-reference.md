@@ -10,6 +10,7 @@ Key exported functions:
 | `install_branch()` | Install a specific branch of a package |
 | `update_pip_packages()` / `metapip_update()` | Update installed PIP packages |
 | `get_branches()` / `get_branch_info()` / `get_current_branches()` | Inspect available branches |
+| `get_latest_branch_update()` | Latest commit's branch, author, and timestamp per package |
 | `get_default_branch()` / `set_default_branch()` | Get/set the default branch |
 | `get_custom_branch()` / `set_custom_branch()` | Get/set per-package branch overrides |
 | `core_metadata()` / `get_core_pagkages()` / `metapip_packages()` | Package metadata and listing |
@@ -28,6 +29,13 @@ Options controlling behavior:
 Most inspection functions return named character vectors or data frames
 describing branches, metadata, or package names. Installation and update
 functions return confirmation of what was installed or updated.
+
+Timestamps are returned as `POSIXct` in UTC: `get_latest_branch_update()`
+(`last_update_time`) and `core_metadata()` (`latest_commit_time`). When a
+package has only `gh-pages` branches, `get_latest_branch_update()` issues a
+warning and returns a single-row data.frame filled with `NA`. Package versions
+are fetched via `httr2` with a 10-second timeout, gracefully returning `NA`
+on 404, malformed, or timed-out responses.
 <!-- cg:auto:end -->
 
 ← [Home](README.md)

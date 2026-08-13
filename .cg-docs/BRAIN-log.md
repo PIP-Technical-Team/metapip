@@ -1,6 +1,15 @@
 # 🧠 Project Brain — Chronological Log
 
-_Generated 2026-08-12 · 4 artifacts (newest first) + 28 roadmap features_
+_Generated 2026-08-13 · 8 artifacts (newest first) + 28 roadmap features_
+
+## 2026-08-13
+
+- **[2026-08-12-resilient-networking-time-review](.cg-docs/reviews/2026-08-12-resilient-networking-time-review.md)** · `review` · _—_ · `2026-08-13`
+  > **Review mode**: standard (auto-routed by `/cg-work review:auto`) **Files reviewed**: R/package_branches.R, R/get_bra…
+- **[2026-08-12-unblock-the-core-verify-review](.cg-docs/reviews/2026-08-12-unblock-the-core-verify-review.md)** · `review` · _—_ · `2026-08-13`
+  > **Review mode**: verification (light depth, forced by mode:verify) **Parent review**: `.cg-docs/reviews/2026-08-12-un…
+- **[Resilient httr2 fetching, explicit-UTC timestamps, and safe subsetting in R](.cg-docs/solutions/data-quality/2026-08-13-resilient-httr2-utc-fetching.md)** · `solution` · _—_ · `2026-08-13`
+  > Three fragility classes in an R package's remote-data layer: 1. `read.dcf(url(y))` had no timeout, no HTTP error hand…
 
 ## 2026-08-12
 
@@ -10,6 +19,8 @@ _Generated 2026-08-12 · 4 artifacts (newest first) + 28 roadmap features_
   > `get_complete_data()` used `utils::stack()` to rebuild a data frame from a named list where inner vectors carried bra…
 - **[Remediation Roadmap — Engineering Review Findings](.cg-docs/strategy/2026-08-12-remediation-roadmap.md)** · `strategy` · _—_ · `2026-08-12`
   > - **Project**: metapip (PIP R package manager) - **Team**: DECDG / GPID — World Bank - **Language**: R | **Type**: Pa…
+- **[Resilient Networking & Time — httr2 fetch, UTC timestamps, empty-branch guard](.cg-docs/plans/2026-08-12-resilient-networking-time.md)** · `plan` · _completed_ · `2026-08-12`
+  > Replace fragile `read.dcf(url())` HTTP fetching with httr2 (timeouts, error handling, connection safety), fix UTC tim…
 - **[Unblock the Core — fix V1–V4 and R7 with a red-phase regression harness](.cg-docs/plans/2026-08-12-unblock-the-core.md)** · `plan` · _completed_ · `2026-08-12`
   > Make the three headline metapip workflows functional again by fixing the four critical bugs (V1–V4) and the medium ro…
 
@@ -31,9 +42,9 @@ _Generated 2026-08-12 · 4 artifacts (newest first) + 28 roadmap features_
   > Fix package_branches() regex (V2: invalid char range, wrong suffix)
 - **[Full gh\(\) pagination — per_page=100, .limit=100 \(S4\)](roadmap.json#full-gh-pagination)** · `feature` · _idea_ · `—`
   > Full gh() pagination — per_page=100, .limit=100 (S4)
-- **[Guard ss\(1L\) on empty data in get_latest_branch_update\(\) \(R6 edge\)](roadmap.json#guard-empty-ss)** · `feature` · _idea_ · `—`
+- **[Guard ss\(1L\) on empty data in get_latest_branch_update\(\) \(R6 edge\)](roadmap.json#guard-empty-ss)** · `feature` · _done_ · `—`
   > Guard ss(1L) on empty data in get_latest_branch_update() (R6 edge)
-- **[Replace read.dcf\(url\(\)\) with httr2 — timeouts, error handling, connection safety \(R4\)](roadmap.json#httr2-fetch)** · `feature` · _idea_ · `—`
+- **[Replace read.dcf\(url\(\)\) with httr2 — timeouts, error handling, connection safety \(R4\)](roadmap.json#httr2-fetch)** · `feature` · _done_ · `—`
   > Replace read.dcf(url()) with httr2 — timeouts, error handling, connection safety (R4)
 - **[install_latest_branch\(\) becomes developer-only with warning \(S1\)](roadmap.json#install-latest-dev-only)** · `feature` · _idea_ · `—`
   > install_latest_branch() becomes developer-only with warning (S1)
@@ -63,7 +74,7 @@ _Generated 2026-08-12 · 4 artifacts (newest first) + 28 roadmap features_
   > Tri-state compare_sha() — treat CRAN-installed as unknown not missing (R6)
 - **[Un-skip and rewrite install tests with mockery stubs](roadmap.json#unskip-install-tests)** · `feature` · _idea_ · `—`
   > Un-skip and rewrite install tests with mockery stubs
-- **[UTC-correct timestamp parsing in get_latest_branch_update\(\) and core_metadata\(\) \(R5\)](roadmap.json#utc-timestamps)** · `feature` · _idea_ · `—`
+- **[UTC-correct timestamp parsing in get_latest_branch_update\(\) and core_metadata\(\) \(R5\)](roadmap.json#utc-timestamps)** · `feature` · _done_ · `—`
   > UTC-correct timestamp parsing in get_latest_branch_update() and core_metadata() (R5)
 - **[Version bump to 0.1.0, NEWS.md rewrite, API hygiene \(typos, globalVariables, roxygen\)](roadmap.json#version-bump-010)** · `feature` · _idea_ · `—`
   > Version bump to 0.1.0, NEWS.md rewrite, API hygiene (typos, globalVariables, roxygen)

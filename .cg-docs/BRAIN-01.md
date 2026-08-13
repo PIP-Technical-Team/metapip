@@ -1,6 +1,6 @@
 # 🧠 Project Brain — Part 1
 
-_Generated 2026-08-12_
+_Generated 2026-08-13_
 
 ## Core Objective / Release Objective / Fix
 
@@ -76,9 +76,9 @@ objective` · `interactive` · `failure`_ · 6 entities
 _Keywords: `resilient networking` · `time
 objective` · `get_latest_branch_update`_ · 3 entities
 
-- **[Replace read.dcf\(url\(\)\) with httr2 — timeouts, error handling, connection safety \(R4\)](roadmap.json#httr2-fetch)** · `feature` · _idea_ · `—`
+- **[Replace read.dcf\(url\(\)\) with httr2 — timeouts, error handling, connection safety \(R4\)](roadmap.json#httr2-fetch)** · `feature` · _done_ · `—`
   > Replace read.dcf(url()) with httr2 — timeouts, error handling, connection safety (R4)
-- **[UTC-correct timestamp parsing in get_latest_branch_update\(\) and core_metadata\(\) \(R5\)](roadmap.json#utc-timestamps)** · `feature` · _idea_ · `—`
+- **[UTC-correct timestamp parsing in get_latest_branch_update\(\) and core_metadata\(\) \(R5\)](roadmap.json#utc-timestamps)** · `feature` · _done_ · `—`
   > UTC-correct timestamp parsing in get_latest_branch_update() and core_metadata() (R5)
-- **[Guard ss\(1L\) on empty data in get_latest_branch_update\(\) \(R6 edge\)](roadmap.json#guard-empty-ss)** · `feature` · _idea_ · `—`
+- **[Guard ss\(1L\) on empty data in get_latest_branch_update\(\) \(R6 edge\)](roadmap.json#guard-empty-ss)** · `feature` · _done_ · `—`
   > Guard ss(1L) on empty data in get_latest_branch_update() (R6 edge)

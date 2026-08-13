@@ -1,6 +1,6 @@
 # 🧠 Project Brain
 
-_Generated 2026-08-12 · 32 entities · 4 topics · 1 edges_
+_Generated 2026-08-13 · 36 entities · 4 topics · 3 edges_
 
 ## How to Use
 
@@ -23,15 +23,16 @@ _Generated 2026-08-12 · 32 entities · 4 topics · 1 edges_
 | Type | Count |
 |------|-------|
 | feature | 28 |
-| plan | 1 |
-| review | 1 |
-| solution | 1 |
+| plan | 2 |
+| review | 3 |
+| solution | 2 |
 | strategy | 1 |
 
-_4 entities not assigned to any topic_
+_8 entities not assigned to any topic_
 
 ## Relationship Summary
 
 | Edge Type | Count |
 |-----------|-------|
-| reviews | 1 |
+| reviews | 2 |
+| verifies | 1 |
