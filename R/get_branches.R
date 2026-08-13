@@ -95,16 +95,21 @@ get_latest_branch_update <- function(package = "pipapi", display = TRUE) {
   check_github_token()
   is_core(package)
   check_package_condition(package)
-  # Get info about all the branches
   out <- get_branch_info(package, display = FALSE)
-  # Return only the latest information
   res <- out |>
     fsubset(branch_name != "gh-pages") |>
-    fmutate(last_update_time = as.POSIXct(last_update_time, format = "%Y-%m-%dT%T")) |>
-    # arrange data in descending order
-    roworder(-last_update_time) |>
-    # Get the 1st row (latest)
-    ss(1L)
+    fmutate(last_update_time = as.POSIXct(last_update_time, format = "%Y-%m-%dT%T"))
+
+  if (nrow(res) == 0) {
+    res <- data.frame(
+      package = character(0),
+      branch_name = character(0),
+      name = character(0),
+      last_update_time = as.POSIXct(character(0))
+    )
+  } else {
+    res <- roworder(res, -last_update_time) |> ss(1L)
+  }
 
   if(isTRUE(display)) print(colorDF::colorDF(res))
   return(invisible(res))

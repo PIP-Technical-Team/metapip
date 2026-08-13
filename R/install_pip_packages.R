@@ -22,7 +22,20 @@ install_latest_branch <- function(package = NULL) {
                   get_latest_branch_update(package[i], display = FALSE)
                   }) |>
     rowbind()
-  Map(\(x, y) install_branch(x, y), dat$package, dat$branch_name)
+
+  for (i in seq_len(nrow(dat))) {
+    pkg <- dat$package[i]
+    brn <- dat$branch_name[i]
+    sha_result <- compare_sha(pkg, brn)
+
+    if (identical(sha_result, TRUE)) {
+      cli::cli_alert_info("{.pkg {pkg}} already at HEAD of {.field {brn}}; skipping")
+      next
+    }
+
+    install_branch(pkg, brn)
+  }
+
   NULL
 }
 
@@ -94,7 +107,7 @@ install_pip_packages <- function(package = NULL, branch = NULL) {
 install_branch <- function(package = "pipapi", branch = NULL) {
   check_github_token()
   check_package_condition(package)
-  if(is.null(branch)) branch = get_package_current_branch(package = package)
+  if(is.null(branch)) branch <- get_package_current_branch(package = package)
   if(length(branch) != 1L) cli::cli_abort("Please enter a single branch name.")
   detach_package(package)
 

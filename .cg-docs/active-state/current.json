@@ -1,21 +1,25 @@
 {
   "schemaVersion": "compound-gpid-active-state-v1",
-  "updatedAt": "2026-08-12T17:34:00-04:00",
+  "updatedAt": "2026-08-13T14:50:00Z",
   "workflow": "/cg-work",
   "status": "completed",
-  "branch": null,
-  "plan": ".cg-docs/plans/2026-08-12-unblock-the-core.md",
-  "executionReport": ".cg-docs/work-reports/2026-08-12-unblock-the-core.md",
+  "branch": "install-robustness",
+  "plan": ".cg-docs/plans/2026-08-13-harden-install-pipeline.md",
+  "executionReport": ".cg-docs/work-reports/2026-08-13-harden-install-pipeline.md",
   "currentPhase": null,
   "evidenceStatus": [
-    {"id": "V1", "status": "passed", "artifact": "tests/testthat/test-install_pip_packages.R"},
-    {"id": "V2", "status": "passed", "artifact": "tests/testthat/test-get_complete_data.R"},
-    {"id": "V3", "status": "passed", "artifact": "tests/testthat/test-get_custom_branch.R"},
-    {"id": "V4", "status": "passed", "artifact": "tests/testthat/test-undeclared-deps.R"},
-    {"id": "V6", "status": "passed", "artifact": "tests/testthat/test-attach.R, tests/testthat/test-init_metapip.R"},
-    {"id": "V7", "status": "passed", "artifact": "rcmdcheck -- no undeclared fs/stringr"}
+    {"id": "V1", "status": "passed", "artifact": "tests/testthat/test-utils.R"},
+    {"id": "V2", "status": "passed", "artifact": "tests/testthat/test-init_metapip.R"},
+    {"id": "V3", "status": "passed", "artifact": "tests/testthat/test-init_metapip.R"},
+    {"id": "V4", "status": "passed", "artifact": "tests/testthat/test-init_metapip.R"},
+    {"id": "V5", "status": "passed", "artifact": "tests/testthat/test-init_metapip.R"},
+    {"id": "V6", "status": "passed", "artifact": "tests/testthat/test-get_branches.R"},
+    {"id": "V7", "status": "passed", "artifact": "tests/testthat/test-install_latest_branch.R"},
+    {"id": "V8", "status": "passed", "artifact": "tests/testthat/test-init_metapip.R + README.md"},
+    {"id": "V9", "status": "passed", "artifact": "tests/testthat/test-init_metapip.R"},
+    {"id": "V10", "status": "passed", "artifact": "devtools::test()"}
   ],
   "unresolvedDecisions": [],
   "artifactRefs": [],
-  "nextCommand": "/cg-review standard"
+  "nextCommand": "/cg-review mode:verify"
 }

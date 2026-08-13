@@ -117,7 +117,16 @@ is_core <- function(package) {
 }
 
 detach_package <- function(package) {
-  unloadNamespace(package)
+  tryCatch(
+    unloadNamespace(package),
+    error = function(e) {
+      cli::cli_warn(
+        "Could not unload namespace for {.pkg {package}}: {conditionMessage(e)}.
+         Restart R after installation to guarantee the new code is active."
+      )
+    }
+  )
+  invisible()
 }
 
 
