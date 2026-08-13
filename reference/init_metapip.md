@@ -15,8 +15,8 @@ update_pip_packages(exclude = NA, ask = TRUE, answer = 1)
 
 - exclude:
 
-  character: packages to exclude from attaching. if \[getwd\] is one of
-  the core PIP packages, that package will be excluded be default. To
+  character: packages to exclude from attaching. if \`getwd()\` is one
+  of the core PIP packages, that package will be excluded by default. To
   avoid that, set exclude to \`NULL\`.
 
 - ask:
@@ -30,7 +30,7 @@ update_pip_packages(exclude = NA, ask = TRUE, answer = 1)
 
 ## Value
 
-\`init_metapip()\` return invisible() output
+\`init_metapip()\` returns invisible() output
 
 \`update_pip_packages()\` return logical vector. TRUE if missing package
 were update. FALSE if all packages are up to date of the user selects

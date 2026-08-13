@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">metapip</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,6 +47,15 @@
 <div class="section level2">
 <h2 id="domain-rules">Domain Rules<a class="anchor" aria-label="anchor" href="#domain-rules"></a></h2>
 <!-- Project-specific rules that Copilot should always follow -->
+<div class="section level3">
+<h3 id="r-datatable-collapse-dialect-gotchas-discovered-2026-08-13">R: data.table-collapse dialect gotchas (discovered 2026-08-13)<a class="anchor" aria-label="anchor" href="#r-datatable-collapse-dialect-gotchas-discovered-2026-08-13"></a></h3>
+<ul><li>
+<code>fcase()</code> / <code>fifelse()</code> come from <strong>data.table</strong>, not collapse. collapse does not export them; use data.table’s (<code>import(data.table, except = fdroplevels)</code> is in NAMESPACE).</li>
+<li>
+<code>collapse::join(..., how = "full")</code> returns only the joined columns — it never creates a status column. Compute comparisons explicitly (e.g., <code><a href="https://rdrr.io/r/utils/compareVersion.html" class="external-link">utils::compareVersion</a></code> via <code>mapply</code>; it is scalar, not vectorized).</li>
+<li>GitHub timestamps (<code>...Z</code>) must be parsed with <code>as.POSIXct(x, format = "%Y-%m-%dT%H:%M:%OSZ", tz = "UTC")</code> — <code>%OS</code> handles optional fractional seconds; never rely on host TZ.</li>
+<li>Prefer <code><a href="https://cli.r-lib.org/reference/cli_abort.html" class="external-link">cli::cli_warn()</a></code> over <code><a href="https://cli.r-lib.org/reference/cli_alert.html" class="external-link">cli::cli_alert_warning()</a></code> when a test must <code>expect_warning()</code>.</li>
+</ul></div>
 </div>
 <div class="section level2">
 <h2 id="work-in-progress">Work in Progress<a class="anchor" aria-label="anchor" href="#work-in-progress"></a></h2>

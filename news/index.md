@@ -1,5 +1,17 @@
 # Changelog
 
+## metapip 0.0.3
+
+- `get_package_version()` now uses httr2 with timeouts and graceful
+  error handling.
+- Timestamp parsing uses explicit UTC timezone in
+  [`get_latest_branch_update()`](https://pip-technical-team.github.io/metapip/reference/get_latest_branch_update.md)
+  and
+  [`core_metadata()`](https://pip-technical-team.github.io/metapip/reference/core_metadata.md).
+- [`get_latest_branch_update()`](https://pip-technical-team.github.io/metapip/reference/get_latest_branch_update.md)
+  handles packages with only gh-pages branches gracefully.
+- Added httr2 to Imports.
+
 ## metapip 0.0.2
 
 - `detach_package()` now warns and continues on

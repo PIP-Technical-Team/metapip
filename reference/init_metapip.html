@@ -9,7 +9,7 @@ package versions from the branch"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">metapip</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,8 +57,8 @@ package versions from the branch</p>
 
 
 <dl><dt id="arg-exclude">exclude<a class="anchor" aria-label="anchor" href="#arg-exclude"></a></dt>
-<dd><p>character: packages to exclude from attaching. if [getwd] is
-one of the core PIP packages, that package will be excluded be default. To
+<dd><p>character: packages to exclude from attaching. if `getwd()` is
+one of the core PIP packages, that package will be excluded by default. To
 avoid that, set exclude to `NULL`.</p></dd>
 
 
@@ -73,7 +73,7 @@ purposes.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>`init_metapip()` return invisible() output</p>
+    <p>`init_metapip()` returns invisible() output</p>
 <p>`update_pip_packages()` return logical vector. TRUE if missing package
   were update. FALSE if all packages are up to date of the user selects not
   to update.</p>

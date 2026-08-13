@@ -1,7 +1,9 @@
 # Get details of the branch which was last updated
 
 This function is useful to get latest branch name, author of latest
-commit and time it was last updated.
+commit and time it was last updated. If \`package\` has only
+\`gh-pages\` branches, a warning is issued and a single-row data.frame
+filled with \`NA\` is returned invisibly.
 
 ## Usage
 
@@ -21,7 +23,10 @@ get_latest_branch_update(package = "pipapi", display = TRUE)
 
 ## Value
 
-colorDF::colorDF output along with an invisible single row dataframe
+colorDF::colorDF output along with an invisible single row dataframe.
+Timestamps (\`last_update_time\`) are returned as POSIXct in UTC. If
+\`package\` has only \`gh-pages\` branches, returns a single-row
+data.frame with \`NA\` values (and warns).
 
 ## Examples
 

@@ -4,7 +4,7 @@
 
  # devtools::load_all(".")
 library(metapip)
-#> ── Attaching packages ───────────────────────────────────────── metapip 0.0.2 ──
+#> ── Attaching packages ───────────────────────────────────────── metapip 0.0.3 ──
 #> ✔   ()
 ```
 

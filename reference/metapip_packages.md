@@ -18,6 +18,7 @@ metapip_packages(include_self = TRUE)
 
 ``` r
 metapip_packages()
-#>  [1] "cli"        "glue"       "gh"         "rstudioapi" "remotes"   
-#>  [6] "gitcreds"   "collapse"   "rlang"      "colorDF"    "metapip"   
+#>  [1] "cli"        "glue"       "gh"         "httr2"      "data.table"
+#>  [6] "rstudioapi" "remotes"    "gitcreds"   "collapse"   "rlang"     
+#> [11] "colorDF"    "metapip"   
 ```
