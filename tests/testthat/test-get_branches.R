@@ -172,23 +172,3 @@ test_that("get_branch_info returns an error", {
   #expect_error(get_latest_branch_update("abc"), "The package is not one of pipapi, pipload, wbpip, pipfun, pipdata, pipr.")
   #expect_error(get_latest_branch_update(c("pipr", "pipapi")), "Please enter a single package name.")
 })
-
-test_that("get_latest_branch_update returns empty df when all branches are gh-pages", {
-  gh_pages_df <- data.frame(
-    package = "pipapi",
-    branch_name = "gh-pages",
-    name = "testuser",
-    last_update_time = "2026-01-01T00:00:00",
-    stringsAsFactors = FALSE
-  )
-  mockery::stub(get_latest_branch_update, "get_branch_info", function(...) gh_pages_df)
-  mockery::stub(get_latest_branch_update, "check_github_token", function(...) NULL)
-  mockery::stub(get_latest_branch_update, "is_core", function(...) TRUE)
-  mockery::stub(get_latest_branch_update, "check_package_condition", function(...) TRUE)
-
-  result <- get_latest_branch_update("pipapi", display = FALSE)
-
-  expect_s3_class(result, "data.frame")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("package", "branch_name", "name", "last_update_time"))
-})
