@@ -256,3 +256,11 @@ set_custom_branch(pipr = 'main', 'pipapi' = 'DEV_v3')
 
 This is functionally equivalent to
 `options(metapip.custom_branch = list(pipr_branch = "main", pipapi_branch = "DEV_v3"))`.
+
+## Dependency management note
+
+[metapip](https://github.com/PIP-Technical-Team/metapip) installs PIP
+packages from GitHub branches and resolves non-PIP dependencies from
+CRAN independently, which can cause version skew. For coordinated
+dependency resolution across all packages, consider using
+[{renv}](https://rstudio.github.io/renv/) as a companion tool.

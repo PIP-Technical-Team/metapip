@@ -39,7 +39,20 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.2" id="metapip-002">metapip 0.0.2<a class="anchor" aria-label="anchor" href="#metapip-002"></a></h2>
-</div>
+<ul><li>
+<code>detach_package()</code> now warns and continues on <code><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">unloadNamespace()</a></code> failure instead of aborting.</li>
+<li>
+<code><a href="../reference/init_metapip.html">update_pip_packages()</a></code> isolates per-package failures and reports a summary (N succeeded, M failed).</li>
+<li>
+<code>update_pip_packages(ask=TRUE)</code> no longer hangs in non-interactive sessions; defaults to install with warning.</li>
+<li>
+<code>compare_sha()</code> returns <code>"unknown"</code> (not <code>FALSE</code>) when <code>RemoteSha</code> is missing (e.g., CRAN install).</li>
+<li>
+<code><a href="../reference/get_latest_branch_update.html">get_latest_branch_update()</a></code> handles empty branch lists gracefully.</li>
+<li>
+<code><a href="../reference/install_latest_branch.html">install_latest_branch()</a></code> skips packages already at HEAD of their branch.</li>
+<li>Added CRAN dependency gap note recommending <code>renv</code> for coordinated dependency management.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.1" id="metapip-001">metapip 0.0.1<a class="anchor" aria-label="anchor" href="#metapip-001"></a></h2>
 <ul><li>Remove dependencies from <code>tidyverse</code> packages <code>dplyr</code>, <code>tidyr</code>, <code>purrr</code>, <code>magrittr</code> and <code>tibble</code>.</li>

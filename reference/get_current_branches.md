@@ -16,11 +16,11 @@ get_package_current_branch(package)
 - package:
 
   character: vector with name of branches. E.g., c("pipdata",
-  "pipfaker"). TRUE
+  "pipfaker").
 
 - verbose:
 
-  logical: whether to display all current branches. Default is
+  logical: whether to display all current branches. Default is TRUE
 
 ## Value
 
