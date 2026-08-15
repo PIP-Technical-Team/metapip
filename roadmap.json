@@ -93,48 +93,48 @@
       "id": "lock-down-supply-chain",
       "title": "Lock Down the Supply Chain",
       "objective": "SHA-pinned installs, team lock manifest, least-privilege tokens, full pagination.",
-      "status": "in-progress",
+      "status": "done",
       "features": [
         {
           "id": "sha-pinned-install",
           "title": "SHA-pinned install_branch() with force=TRUE override (S1)",
-          "status": "active",
+          "status": "done",
           "plan": ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md"
         },
         {
           "id": "pip-lock-manifest",
           "title": "PIP_LOCK manifest format + pip_snapshot() writer (S1)",
-          "status": "active",
+          "status": "done",
           "plan": ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md"
         },
         {
           "id": "lock-driven-init",
           "title": "Lock-driven init_metapip() and lock-updating update_pip_packages() (S1)",
-          "status": "active",
+          "status": "done",
           "plan": ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md"
         },
         {
           "id": "install-latest-dev-only",
           "title": "install_latest_branch() becomes developer-only with warning (S1)",
-          "status": "active",
+          "status": "done",
           "plan": ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md"
         },
         {
           "id": "least-privilege-tokens",
           "title": "Least-privilege token handling \u2014 read-only functions work without PAT, redacted print() (S2)",
-          "status": "active",
+          "status": "done",
           "plan": ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md"
         },
         {
           "id": "remove-codecov-token",
           "title": "Remove committed Codecov badge token from README (S3)",
-          "status": "active",
+          "status": "done",
           "plan": ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md"
         },
         {
           "id": "full-gh-pagination",
           "title": "Full gh() pagination \u2014 per_page=100, .limit=100 (S4)",
-          "status": "active",
+          "status": "done",
           "plan": ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md"
         }
       ]

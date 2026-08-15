@@ -1,7 +1,9 @@
 ---
 date: 2026-08-14
 title: "Lock Down the Supply Chain — SHA-pinned installs, PIP_LOCK manifest, least-privilege tokens, full pagination"
-status: active
+status: completed
+completed-date: 2026-08-14
+completed-phases: [1, 2, 3, 4]
 scope: "Deep"
 brainstorm: null
 language: "R"

@@ -1,33 +1,36 @@
 {
   "schemaVersion": "compound-gpid-active-state-v1",
-  "updatedAt": "2026-08-14T17:59:45Z",
+  "updatedAt": "2026-08-14T18:45:00Z",
   "workflow": "/cg-work",
-  "status": "active",
+  "status": "completed",
   "branch": "lock-down-the-supply-chain",
   "plan": ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md",
   "executionReport": ".cg-docs/work-reports/2026-08-14-lock-down-supply-chain.md",
-  "currentPhase": 1,
+  "currentPhase": null,
   "evidenceStatus": [
-    {"id": "V1", "status": "pending", "artifact": "tests/testthat/test-get_branches.R"},
-    {"id": "V2", "status": "pending", "artifact": "README.Rmd + README.md"},
-    {"id": "V3", "status": "pending", "artifact": "tests/testthat/test-utils.R"},
-    {"id": "V4", "status": "pending", "artifact": "tests/testthat/test-get_branches.R"},
-    {"id": "V5", "status": "pending", "artifact": "tests/testthat/test-utils.R"},
-    {"id": "V6", "status": "pending", "artifact": "grep + tests"},
-    {"id": "V7", "status": "pending", "artifact": "tests/testthat/test-get_branches.R"},
-    {"id": "V8", "status": "pending", "artifact": "tests/testthat/test-get_branches.R"},
-    {"id": "V9", "status": "pending", "artifact": "tests/testthat/test-pip_snapshot.R"},
-    {"id": "V10", "status": "pending", "artifact": "tests/testthat/test-init_metapip.R"},
-    {"id": "V11", "status": "pending", "artifact": "tests/testthat/test-init_metapip.R"},
-    {"id": "V12", "status": "pending", "artifact": "tests/testthat/test-install_latest_branch.R"},
-    {"id": "V13", "status": "pending", "artifact": "devtools::test() + rcmdcheck"},
-    {"id": "V14", "status": "pending", "artifact": "git diff"}
+    {"id": "V1", "status": "passed", "artifact": "tests/testthat/test-get_branches.R"},
+    {"id": "V2", "status": "passed", "artifact": "README.Rmd + README.md"},
+    {"id": "V3", "status": "passed", "artifact": "tests/testthat/test-utils.R"},
+    {"id": "V4", "status": "passed", "artifact": "tests/testthat/test-get_branches.R"},
+    {"id": "V5", "status": "passed", "artifact": "tests/testthat/test-utils.R"},
+    {"id": "V6", "status": "passed", "artifact": "grep + tests"},
+    {"id": "V7", "status": "passed", "artifact": "tests/testthat/test-get_branches.R"},
+    {"id": "V8", "status": "passed", "artifact": "tests/testthat/test-get_branches.R"},
+    {"id": "V9", "status": "passed", "artifact": "tests/testthat/test-pip_snapshot.R"},
+    {"id": "V10", "status": "passed", "artifact": "tests/testthat/test-init_metapip.R"},
+    {"id": "V11", "status": "passed", "artifact": "tests/testthat/test-init_metapip.R"},
+    {"id": "V12", "status": "passed", "artifact": "tests/testthat/test-install_latest_branch.R"},
+    {"id": "V13", "status": "passed", "artifact": "devtools::test() + rcmdcheck"},
+    {"id": "V14", "status": "passed", "artifact": "git diff"}
   ],
   "unresolvedDecisions": [
-    {"id": "D1", "summary": "Approved plan-body fix mapping R15/R16 to Step 8 to pass artifact validation", "blocking": false}
+    {"id": "D1", "summary": "Plan-body R15/R16 mapping fix approved", "blocking": false},
+    {"id": "D2", "summary": "Vignette library(metapip) fix approved", "blocking": false},
+    {"id": "D3", "summary": "Merge origin/master into branch approved (C6)", "blocking": false}
   ],
   "artifactRefs": [
-    {"kind": "plan", "path": ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md", "status": "active"}
+    {"kind": "plan", "path": ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md", "status": "completed"},
+    {"kind": "work-report", "path": ".cg-docs/work-reports/2026-08-14-lock-down-supply-chain.md", "status": "completed"}
   ],
-  "nextCommand": "/cg-work phase1"
+  "nextCommand": "/cg-review mode:verify"
 }
