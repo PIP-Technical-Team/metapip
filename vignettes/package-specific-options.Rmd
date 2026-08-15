@@ -4,10 +4,12 @@ output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{package-specific-options}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteDepends{metapip}
   %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
+library(metapip)
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
