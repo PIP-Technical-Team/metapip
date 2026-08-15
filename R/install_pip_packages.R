@@ -136,7 +136,10 @@ install_branch <- function(package = "pipapi", branch = NULL, force = FALSE, sha
     return(remotes::install_github(glue::glue("PIP-Technical-Team/{package}@{branch}")))
   }
 
-  target_sha <- sha %||% latest_commit_for_branch(package, branch)$sha
+  target_sha <- sha
+  if (is.null(target_sha)) {
+    target_sha <- latest_commit_for_branch(package, branch)$sha
+  }
 
   if (is.null(target_sha)) {
     cli::cli_abort("Could not resolve SHA for {.pkg {package}}@{branch}. Check network access or pass {.arg sha} explicitly.")
