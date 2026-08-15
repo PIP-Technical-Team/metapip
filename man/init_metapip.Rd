@@ -10,8 +10,8 @@ init_metapip(exclude = NA, ask = TRUE, answer = 1)
 update_pip_packages(exclude = NA, ask = TRUE, answer = 1)
 }
 \arguments{
-\item{exclude}{character: packages to exclude from attaching. if [getwd] is
-one of the core PIP packages, that package will be excluded be default. To
+\item{exclude}{character: packages to exclude from attaching. if `getwd()` is
+one of the core PIP packages, that package will be excluded by default. To
 avoid that, set exclude to `NULL`.}
 
 \item{ask}{logical. Ask the user if she wants to install outdated packages. Default TRUE}
@@ -20,7 +20,7 @@ avoid that, set exclude to `NULL`.}
 purposes.}
 }
 \value{
-`init_metapip()` return invisible() output
+`init_metapip()` returns invisible() output
 
 `update_pip_packages()` return logical vector. TRUE if missing package
   were update. FALSE if all packages are up to date of the user selects not
@@ -29,6 +29,13 @@ purposes.}
 \description{
 Based on options() settings provides an option to download latest
 package versions from the branch
+}
+\details{
+`init_metapip()` is lock-driven: when a committed `PIP_LOCK.csv`
+  manifest is found (via [pip_lock_path()]) it installs every package at the
+  SHA recorded in the lock, giving team-level deterministic installs. When
+  the lock is absent it falls back to installing each package at its branch
+  HEAD SHA and suggests running [pip_snapshot()] to create a team lock.
 }
 \examples{
 \dontrun{
