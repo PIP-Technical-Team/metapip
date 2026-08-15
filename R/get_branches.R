@@ -78,10 +78,15 @@ get_branch_info <- function(package = "pipapi", branch = NULL, display = TRUE) {
 #' Get details of the branch which was last updated
 #' @description
 #' This function is useful to get latest branch name, author of latest commit and time it was last updated.
+#' If `package` has only `gh-pages` branches, a warning is issued and a single-row
+#' data.frame filled with `NA` is returned invisibly.
 #'
 #' @inheritParams get_branch_info
 #'
-#' @return colorDF::colorDF output along with an invisible single row dataframe
+#' @return colorDF::colorDF output along with an invisible single row dataframe.
+#'   Timestamps (`last_update_time`) are returned as POSIXct in UTC. If `package`
+#'   has only `gh-pages` branches, returns a single-row data.frame with `NA`
+#'   values (and warns).
 #'
 #' @examples
 #' \dontrun{
@@ -94,20 +99,24 @@ get_latest_branch_update <- function(package = "pipapi", display = TRUE) {
   is_core(package)
   check_package_condition(package)
   out <- get_branch_info(package, display = FALSE)
+  # Return only the latest information
   res <- out |>
-    fsubset(branch_name != "gh-pages") |>
-    fmutate(last_update_time = as.POSIXct(last_update_time, format = "%Y-%m-%dT%T"))
-
-  if (nrow(res) == 0) {
-    res <- data.frame(
-      package = character(0),
-      branch_name = character(0),
-      name = character(0),
-      last_update_time = as.POSIXct(character(0))
-    )
-  } else {
-    res <- roworder(res, -last_update_time) |> ss(1L)
+    fsubset(branch_name != "gh-pages")
+  if (nrow(res) == 0L) {
+    cli::cli_warn("No non-gh-pages branches found for {.pkg {package}}")
+    return(invisible(data.frame(
+      package = package,
+      branch_name = NA_character_,
+      last_commit_author_name = NA_character_,
+      last_update_time = as.POSIXct(NA, tz = "UTC")
+    )))
   }
+  res <- res |>
+    fmutate(last_update_time = as.POSIXct(last_update_time, format = "%Y-%m-%dT%H:%M:%OSZ", tz = "UTC")) |>
+    # arrange data in descending order
+    roworder(-last_update_time) |>
+    # Get the 1st row (latest)
+    ss(1L)
 
   if(isTRUE(display)) print(colorDF::colorDF(res))
   return(invisible(res))

@@ -65,6 +65,29 @@ package_branches <- function(
   return(c(list(common = common, local = local), result))
 }
 
+# DESCRIPTION version via httr2 with timeout, status check, and graceful failure
+#' @noRd
+get_version_for_url <- function(u) {
+  tryCatch(
+    {
+      resp <- httr2::request(u) |>
+        httr2::req_timeout(seconds = 10) |>
+        httr2::req_perform()
+      if (httr2::resp_status(resp) != 200L) {
+        return(NA_character_)
+      }
+      tc <- suppressWarnings(textConnection(httr2::resp_body_string(resp)))
+      on.exit(close(tc), add = TRUE)
+      mat <- suppressWarnings(read.dcf(tc))
+      if (!"Version" %in% colnames(mat)) {
+        return(NA_character_)
+      }
+      unname(mat[, "Version"])
+    },
+    error = function(e) NA_character_
+  )
+}
+
 #' @noRd
 get_package_version <- function(package) {
   lp <- length(package)
@@ -78,10 +101,7 @@ get_package_version <- function(package) {
     br <- get_branches(x, display = FALSE)
     br <- br[br != "gh-pages"]
     urls <- glue::glue("https://raw.githubusercontent.com/PIP-Technical-Team/{x}/{br}/DESCRIPTION")
-    versions <- sapply(urls, \(y) {
-      mat <- read.dcf(url(y))
-      mat[, "Version"]
-    })
+    versions <- vapply(urls, get_version_for_url, character(1L))
     names(versions) <- br
     lr[[x]] <- versions
   }
@@ -117,14 +137,25 @@ split_packages_into_list <- function(complete_data) {
 join_and_get_status <- function(local, dev, branch_to_compare) {
   # Join dev data with local data to create status column
   join(local, dev, "package", how = "full") |>
+    fmutate(
+      cmp = mapply(
+        function(a, b) {
+          if (is.na(a) || is.na(b)) return(0L)
+          utils::compareVersion(a, b)
+        },
+        local_version, version,
+        SIMPLIFY = TRUE
+      )
+    ) |>
     fmutate(local_status = fcase(
-      local_status == 1, paste("behind", branch_to_compare),
-      local_status == -1, paste("ahead", branch_to_compare),
       is.na(local_version), "Not in local",
       is.na(branch), paste(branch_to_compare, "not in repo"),
+      is.na(version), paste(branch_to_compare, "version unknown"),
+      cmp < 0, paste("behind", branch_to_compare),
+      cmp > 0, paste("ahead", branch_to_compare),
       default = "up-to-date"
     )) |>
-    fselect(-branch, -version)
+    fselect(-branch, -version, -cmp)
 }
 
 

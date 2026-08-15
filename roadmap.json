@@ -143,25 +143,25 @@
       "id": "resilient-networking-time",
       "title": "Resilient Networking & Time",
       "objective": "Robust HTTP fetch with httr2, correct UTC timestamp parsing.",
-      "status": "planned",
+      "status": "done",
       "features": [
         {
           "id": "httr2-fetch",
           "title": "Replace read.dcf(url()) with httr2 \u2014 timeouts, error handling, connection safety (R4)",
-          "status": "idea",
-          "plan": null
+          "status": "done",
+          "plan": ".cg-docs/plans/2026-08-12-resilient-networking-time.md"
         },
         {
           "id": "utc-timestamps",
           "title": "UTC-correct timestamp parsing in get_latest_branch_update() and core_metadata() (R5)",
-          "status": "idea",
-          "plan": null
+          "status": "done",
+          "plan": ".cg-docs/plans/2026-08-12-resilient-networking-time.md"
         },
         {
           "id": "guard-empty-ss",
           "title": "Guard ss(1L) on empty data in get_latest_branch_update() (R6 edge)",
-          "status": "idea",
-          "plan": null
+          "status": "done",
+          "plan": ".cg-docs/plans/2026-08-12-resilient-networking-time.md"
         }
       ]
     },

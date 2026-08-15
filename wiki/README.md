@@ -23,8 +23,9 @@ devtools::install_github("PIP-Technical-Team/metapip")
 ```
 
 `metapip` requires valid GitHub credentials. Authentication is handled via
-`{gitcreds}` and verified with `check_github_token()`. The package is released
-under the MIT license.
+`{gitcreds}` and verified with `check_github_token()`. Its runtime
+dependencies `httr2` (>= 1.0.0) and `data.table` are installed automatically.
+The package is released under the MIT license.
 <!-- cg:auto:end -->
 
 <!-- cg:auto:quick-start -->

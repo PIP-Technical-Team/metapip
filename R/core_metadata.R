@@ -50,7 +50,7 @@ core_metadata <- function(package = NULL) {
                     latest_release_time = sapply(latest_release, `[[`, 2),
                     latest_commit_branch = sapply(latest_commit, `[[`, "branch_name"),
                     latest_commit_author = sapply(latest_commit, `[[`, "last_commit_author_name"),
-                    latest_commit_time = as.POSIXct(sapply(latest_commit, `[[`, "last_update_time")))
+                    latest_commit_time = as.POSIXct(sapply(latest_commit, `[[`, "last_update_time"), tz = "UTC"))
   print(colorDF::colorDF(out))
   return(invisible(out))
 }
