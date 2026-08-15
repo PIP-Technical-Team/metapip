@@ -1,5 +1,5 @@
 {
-  "edge_count": 3,
+  "edge_count": 9,
   "edges": [
     {
       "edge_type": "reviews",
@@ -15,8 +15,44 @@
     },
     {
       "edge_type": "verifies",
+      "source": ".cg-docs/reviews/2026-08-12-unblock-the-core-verify-review-2.md",
+      "target": ".cg-docs/reviews/2026-08-12-unblock-the-core-review.md",
+      "target_missing": false
+    },
+    {
+      "edge_type": "verifies",
       "source": ".cg-docs/reviews/2026-08-12-unblock-the-core-verify-review.md",
       "target": ".cg-docs/reviews/2026-08-12-unblock-the-core-review.md",
+      "target_missing": false
+    },
+    {
+      "edge_type": "reviews",
+      "source": ".cg-docs/reviews/2026-08-13-harden-install-pipeline-verify-review.md",
+      "target": ".cg-docs/plans/2026-08-13-harden-install-pipeline.md",
+      "target_missing": false
+    },
+    {
+      "edge_type": "verifies",
+      "source": ".cg-docs/reviews/2026-08-13-harden-install-pipeline-verify-review.md",
+      "target": ".cg-docs/reviews/2026-08-12-unblock-the-core-review.md",
+      "target_missing": false
+    },
+    {
+      "edge_type": "reviews",
+      "source": ".cg-docs/reviews/2026-08-14-lock-down-supply-chain-review.md",
+      "target": ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md",
+      "target_missing": false
+    },
+    {
+      "edge_type": "references",
+      "source": ".cg-docs/solutions/build-errors/2026-08-14-system-file-empty-write-csv-stdout.md",
+      "target": ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md",
+      "target_missing": false
+    },
+    {
+      "edge_type": "references",
+      "source": ".cg-docs/solutions/testing-patterns/2026-08-14-installed-rcheck-condition-classes.md",
+      "target": ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md",
       "target_missing": false
     }
   ],
@@ -78,6 +114,95 @@
     },
     {
       "date": "2026-08-13",
+      "entity_type": "plan",
+      "path": ".cg-docs/plans/2026-08-13-harden-install-pipeline.md",
+      "slug": "2026-08-13-harden-install-pipeline",
+      "status": "completed",
+      "summary": "Make the metapip install/update flow robust across six verified issues from the engineering review (`inst/TMP/metapip-review.html`): safe namespace unloading, per-package failure isolation, interactive gating, tri-state SHA comparison, SHA short-circuit on already-current installs, and documenting the CRAN dependency gap. All fixes ship as a single mergeable PR targeting `master`.",
+      "tags": [
+        "install",
+        "robustness",
+        "namespace",
+        "sha",
+        "non-interactive",
+        "metapip"
+      ],
+      "title": "Harden the Install Pipeline — safe unload, failure isolation, interactive gate, tri-state SHA",
+      "top_keywords": [
+        "compare_sha",
+        "test-init_metapip.r",
+        "install_branch",
+        "update_pip_packages()",
+        "\"unknown\"",
+        "master",
+        "readme.md",
+        "news.md",
+        "renv",
+        "r/init_metapip.r"
+      ]
+    },
+    {
+      "date": "2026-08-13",
+      "entity_type": "plan",
+      "path": ".cg-docs/plans/2026-08-13-lock-down-supply-chain.md",
+      "slug": "2026-08-13-lock-down-supply-chain",
+      "status": "active",
+      "summary": "Close the supply-chain security findings from the engineering review (`inst/TMP/metapip-review.html`) across four verified issues (S1–S4) and seven roadmap features. Make installs deterministic via SHA pinning and a committed team lock manifest (`PIP_LOCK.csv`), remove over-privileged credential handling, drop the leaked Codecov badge token, and fix GitHub API pagination. All fixes ship as a single mergeable PR targeting `master`.",
+      "tags": [
+        "security",
+        "supply-chain",
+        "sha-pinning",
+        "lockfile",
+        "tokens",
+        "pagination",
+        "metapip"
+      ],
+      "title": "Lock Down the Supply Chain — SHA-pinned installs, PIP_LOCK manifest, least-privilege tokens, full pagination",
+      "top_keywords": [
+        "update_pip_packages()",
+        "check_github_token()",
+        "pip_snapshot()",
+        "test-get_branches.r",
+        "null",
+        "readme.rmd",
+        "news.md",
+        "compare_sha",
+        "get_branches()",
+        "init_metapip()"
+      ]
+    },
+    {
+      "date": "2026-08-14",
+      "entity_type": "plan",
+      "path": ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md",
+      "slug": "2026-08-14-lock-down-supply-chain",
+      "status": "completed",
+      "summary": "Close the supply-chain security findings from the engineering review (`inst/TMP/metapip-review.html`) across four verified issues (S1–S4) and seven roadmap features. Make installs deterministic via SHA pinning and a committed team lock manifest (`PIP_LOCK.csv`), remove over-privileged credential handling, drop the leaked Codecov badge token, and fix GitHub API pagination. All fixes ship as a single mergeable PR targeting `master`.",
+      "tags": [
+        "security",
+        "supply-chain",
+        "sha-pinning",
+        "lockfile",
+        "tokens",
+        "pagination",
+        "metapip"
+      ],
+      "title": "Lock Down the Supply Chain — SHA-pinned installs, PIP_LOCK manifest, least-privilege tokens, full pagination",
+      "top_keywords": [
+        "update_pip_packages()",
+        "pip_snapshot()",
+        "check_github_token()",
+        "install_branch",
+        "null",
+        "test-get_branches.r",
+        "get_branches()",
+        "latest_commit_for_branch",
+        "init_metapip()",
+        "readme.rmd"
+      ]
+    },
+    {
+      "date": "2026-08-13",
       "entity_type": "review",
       "path": ".cg-docs/reviews/2026-08-12-resilient-networking-time-review.md",
       "slug": "2026-08-12-resilient-networking-time-review",
@@ -121,6 +246,28 @@
       ]
     },
     {
+      "date": "2026-08-14",
+      "entity_type": "review",
+      "path": ".cg-docs/reviews/2026-08-12-unblock-the-core-verify-review-2.md",
+      "slug": "2026-08-12-unblock-the-core-verify-review-2",
+      "status": "",
+      "summary": "**Review mode**: verification (light depth, forced by mode:verify) **Parent review**: `.cg-docs/reviews/2026-08-12-unblock-the-core-review.md` **Files reviewed**: R/{get_branches,utils,install_pip_packages,init_metapip,pip_snapshot,core_metadata,package_branches}.R, tests/testthat/test-{get_branches,utils,init_metapip,install_latest_branch,pip_snapshot}.R, README, NEWS, charter, man/, vignettes **Findings**: 7 confirmed open (P1: 3, P2: 3, P3: 1)",
+      "tags": [],
+      "title": "2026-08-12-unblock-the-core-verify-review-2",
+      "top_keywords": [
+        "open",
+        "verify",
+        "awaiting",
+        "fix-triage",
+        "inst/pip_lock.csv",
+        "gh_token()",
+        "pip_snapshot.r",
+        "init_metapip.r",
+        "test-init_metapip.r",
+        "2026-08-12-unblock-the-core-review.md"
+      ]
+    },
+    {
       "date": "2026-08-13",
       "entity_type": "review",
       "path": ".cg-docs/reviews/2026-08-12-unblock-the-core-verify-review.md",
@@ -140,6 +287,79 @@
         "fix",
         "prior",
         "version"
+      ]
+    },
+    {
+      "date": "2026-08-13",
+      "entity_type": "review",
+      "path": ".cg-docs/reviews/2026-08-13-harden-install-pipeline-verify-review.md",
+      "slug": "2026-08-13-harden-install-pipeline-verify-review",
+      "status": "",
+      "summary": "**Review mode**: light (verify pass) **Files reviewed**: 10 **Findings**: 11 (P0: 0, P1: 0, P2: 6, P3: 5)",
+      "tags": [],
+      "title": "2026-08-13-harden-install-pipeline-verify-review",
+      "top_keywords": [
+        "init_metapip.r",
+        "test-init_metapip.r",
+        "@param",
+        "#'",
+        "compare_sha",
+        "verify",
+        "review",
+        "fix",
+        "install_calls",
+        "latest_commit_for_branch"
+      ]
+    },
+    {
+      "date": "2026-08-14",
+      "entity_type": "review",
+      "path": ".cg-docs/reviews/2026-08-14-lock-down-supply-chain-review.md",
+      "slug": "2026-08-14-lock-down-supply-chain-review",
+      "status": "",
+      "summary": "**Review mode**: full (auto-routed from /cg-work review:auto — security-risk: tokens/credentials/install paths) **Files reviewed**: 25 (R/, tests/, README, NEWS, charter, vignettes, man/) **Findings**: 21 (P0: 0, P1: 3, P2: 5, P3: 13)",
+      "tags": [],
+      "title": "2026-08-14-lock-down-supply-chain-review",
+      "top_keywords": [
+        "init_metapip.r",
+        "\"\"",
+        "update_pip_packages()",
+        "inst/pip_lock.csv",
+        "gh_token()",
+        "test-get_branches.r",
+        "pip_snapshot.r",
+        "test-init_metapip.r",
+        "fix",
+        "update_pip_packages"
+      ]
+    },
+    {
+      "date": "2026-08-14",
+      "entity_type": "solution",
+      "path": ".cg-docs/solutions/build-errors/2026-08-14-system-file-empty-write-csv-stdout.md",
+      "slug": "2026-08-14-system-file-empty-write-csv-stdout",
+      "status": "",
+      "summary": "`pip_snapshot()` and `update_pip_packages()` were designed to write a team lock manifest (`PIP_LOCK.csv`) to a default path derived from `system.file(\"PIP_LOCK.csv\", package = \"metapip\")`. With no committed `inst/PIP_LOCK.csv` (and no `inst/` directory), `system.file()` returned `\"\"`. Calling `utils::write.csv(lock_df, \"\")` then: - wrote the CSV **to stdout** on Windows (no file created, no error), and - the surrounding `cli_alert_success(\"Wrote PIP_LOCK to ...\")` reported success with an empty path — a silent false-success. The same root cause silently disabled the lock-driven install path: `file.exists(\"\")` and `nzchar(\"\")` are both `FALSE`, so `init_metapip()` could never enter its lock-driven branch, and `update_pip_packages()` never refreshed a lock.",
+      "tags": [
+        "system.file",
+        "write.csv",
+        "install.packages",
+        "default-path",
+        "PIP_LOCK",
+        "load_all"
+      ],
+      "title": "system.file() empty path and write.csv-to-stdout gotcha for default file targets",
+      "top_keywords": [
+        "system.file()",
+        "update_pip_packages()",
+        "inst/pip_lock.csv",
+        "\"\"",
+        "system",
+        "empty",
+        "csv-to-stdout",
+        "gotcha",
+        "update_pip_packages",
+        "pip_snapshot"
       ]
     },
     {
@@ -201,6 +421,64 @@
         "local_status",
         "optional",
         "fractional"
+      ]
+    },
+    {
+      "date": "2026-08-13",
+      "entity_type": "solution",
+      "path": ".cg-docs/solutions/testing-patterns/2026-08-13-tri-state-compare-sha-mockery.md",
+      "slug": "2026-08-13-tri-state-compare-sha-mockery",
+      "status": "",
+      "summary": "When testing `update_pip_packages()`, which uses `mapply(compare_sha, pkgs, default_branch[pkgs])`, mocking `compare_sha` to return different values per package (e.g., `\"unknown\"` for one, `FALSE` for another) did not work correctly. The mock was only partially intercepted by `mapply`.",
+      "tags": [
+        "mockery",
+        "mapply",
+        "tri-state",
+        "compare_sha",
+        "tryCatch"
+      ],
+      "title": "Tri-state compare_sha and mockery stubbing with mapply",
+      "top_keywords": [
+        "mapply",
+        "compare_sha",
+        "\"unknown\"",
+        "mockery",
+        "tri-state",
+        "test",
+        "stubbing",
+        "unknown",
+        "separately",
+        "map"
+      ]
+    },
+    {
+      "date": "2026-08-14",
+      "entity_type": "solution",
+      "path": ".cg-docs/solutions/testing-patterns/2026-08-14-installed-rcheck-condition-classes.md",
+      "slug": "2026-08-14-installed-rcheck-condition-classes",
+      "status": "",
+      "summary": "Unit tests for `check_github_token()` simulated `gitcreds` failures with: These passed under `devtools::load_all()`, but **failed in `R CMD check`** (installed-package context) with the raw error leaking through:",
+      "tags": [
+        "tryCatch",
+        "rlang",
+        "abort",
+        "condition-classes",
+        "R CMD check",
+        "load_all",
+        "mockery"
+      ],
+      "title": "stop(class=) conditions are not inheritable for tryCatch handlers - use rlang::abort",
+      "top_keywords": [
+        "trycatch",
+        "r cmd check",
+        "rlang",
+        "abort",
+        "foo",
+        "devtools::load_all()",
+        "\"foo\"",
+        "class",
+        "stop",
+        "load_all"
       ]
     },
     {
@@ -362,7 +640,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#safe-unload-namespace",
       "slug": "safe-unload-namespace",
-      "status": "idea",
+      "status": "done",
       "summary": "Safe unloadNamespace() with tryCatch + restart advisory (R1)",
       "tags": [],
       "title": "Safe unloadNamespace() with tryCatch + restart advisory (R1)",
@@ -384,7 +662,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#per-package-failure-isolation",
       "slug": "per-package-failure-isolation",
-      "status": "idea",
+      "status": "done",
       "summary": "Per-package failure isolation in update_pip_packages() loop (R2)",
       "tags": [],
       "title": "Per-package failure isolation in update_pip_packages() loop (R2)",
@@ -406,7 +684,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#interactive-gate",
       "slug": "interactive-gate",
-      "status": "idea",
+      "status": "done",
       "summary": "interactive() gate on utils::menu() (R3)",
       "tags": [],
       "title": "interactive() gate on utils::menu() (R3)",
@@ -428,7 +706,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#tri-state-compare-sha",
       "slug": "tri-state-compare-sha",
-      "status": "idea",
+      "status": "done",
       "summary": "Tri-state compare_sha() — treat CRAN-installed as unknown not missing (R6)",
       "tags": [],
       "title": "Tri-state compare_sha() — treat CRAN-installed as unknown not missing (R6)",
@@ -450,7 +728,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#sha-short-circuit",
       "slug": "sha-short-circuit",
-      "status": "idea",
+      "status": "done",
       "summary": "SHA short-circuit in install_latest_branch() (P3)",
       "tags": [],
       "title": "SHA short-circuit in install_latest_branch() (P3)",
@@ -472,7 +750,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#document-cran-gap",
       "slug": "document-cran-gap",
-      "status": "idea",
+      "status": "done",
       "summary": "Document CRAN dependency gap, recommend renv companion (S5 deferred)",
       "tags": [],
       "title": "Document CRAN dependency gap, recommend renv companion (S5 deferred)",
@@ -494,7 +772,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#sha-pinned-install",
       "slug": "sha-pinned-install",
-      "status": "idea",
+      "status": "done",
       "summary": "SHA-pinned install_branch() with force=TRUE override (S1)",
       "tags": [],
       "title": "SHA-pinned install_branch() with force=TRUE override (S1)",
@@ -516,7 +794,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#pip-lock-manifest",
       "slug": "pip-lock-manifest",
-      "status": "idea",
+      "status": "done",
       "summary": "PIP_LOCK manifest format + pip_snapshot() writer (S1)",
       "tags": [],
       "title": "PIP_LOCK manifest format + pip_snapshot() writer (S1)",
@@ -538,7 +816,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#lock-driven-init",
       "slug": "lock-driven-init",
-      "status": "idea",
+      "status": "done",
       "summary": "Lock-driven init_metapip() and lock-updating update_pip_packages() (S1)",
       "tags": [],
       "title": "Lock-driven init_metapip() and lock-updating update_pip_packages() (S1)",
@@ -560,7 +838,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#install-latest-dev-only",
       "slug": "install-latest-dev-only",
-      "status": "idea",
+      "status": "done",
       "summary": "install_latest_branch() becomes developer-only with warning (S1)",
       "tags": [],
       "title": "install_latest_branch() becomes developer-only with warning (S1)",
@@ -582,7 +860,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#least-privilege-tokens",
       "slug": "least-privilege-tokens",
-      "status": "idea",
+      "status": "done",
       "summary": "Least-privilege token handling — read-only functions work without PAT, redacted print() (S2)",
       "tags": [],
       "title": "Least-privilege token handling — read-only functions work without PAT, redacted print() (S2)",
@@ -604,7 +882,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#remove-codecov-token",
       "slug": "remove-codecov-token",
-      "status": "idea",
+      "status": "done",
       "summary": "Remove committed Codecov badge token from README (S3)",
       "tags": [],
       "title": "Remove committed Codecov badge token from README (S3)",
@@ -626,7 +904,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#full-gh-pagination",
       "slug": "full-gh-pagination",
-      "status": "idea",
+      "status": "done",
       "summary": "Full gh() pagination — per_page=100, .limit=100 (S4)",
       "tags": [],
       "title": "Full gh() pagination — per_page=100, .limit=100 (S4)",
@@ -842,10 +1120,10 @@
       ]
     }
   ],
-  "entity_count": 36,
-  "generated": "2026-08-13",
+  "entity_count": 45,
+  "generated": "2026-08-15",
   "schema_version": "0.2.0",
-  "topic_count": 4,
+  "topic_count": 6,
   "topics": [
     {
       "entity_count": 12,
@@ -909,6 +1187,22 @@
       "slug": "install-pipeline-objective-interactive-failure"
     },
     {
+      "entity_count": 4,
+      "entity_paths": [
+        ".cg-docs/reviews/2026-08-12-unblock-the-core-review.md",
+        ".cg-docs/reviews/2026-08-12-unblock-the-core-verify-review-2.md",
+        ".cg-docs/reviews/2026-08-13-harden-install-pipeline-verify-review.md",
+        ".cg-docs/reviews/2026-08-14-lock-down-supply-chain-review.md"
+      ],
+      "keywords": [
+        "init_metapip.r",
+        "test-init_metapip.r",
+        "fix"
+      ],
+      "label": "Init_Metapip.R / Test-Init_Metapip.R / Fix",
+      "slug": "init-metapip-r-test-init-metapip-r-fix"
+    },
+    {
       "entity_count": 3,
       "entity_paths": [
         "roadmap.json#httr2-fetch",
@@ -922,6 +1216,21 @@
       ],
       "label": "Resilient Networking / Time\nObjective / Get_Latest_Branch_Update",
       "slug": "resilient-networking-time-objective-get-latest-branch-update"
+    },
+    {
+      "entity_count": 3,
+      "entity_paths": [
+        ".cg-docs/plans/2026-08-13-harden-install-pipeline.md",
+        ".cg-docs/plans/2026-08-13-lock-down-supply-chain.md",
+        ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md"
+      ],
+      "keywords": [
+        "update_pip_packages()",
+        "compare_sha",
+        "install_branch"
+      ],
+      "label": "Update_Pip_Packages() / Compare_Sha / Install_Branch",
+      "slug": "update-pip-packages-compare-sha-install-branch"
     }
   ]
 }
