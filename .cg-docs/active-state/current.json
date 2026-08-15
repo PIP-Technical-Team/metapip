@@ -1,7 +1,7 @@
 {
   "schemaVersion": "compound-gpid-active-state-v1",
-  "updatedAt": "2026-08-14T18:45:00Z",
-  "workflow": "/cg-work",
+  "updatedAt": "2026-08-14T19:30:00Z",
+  "workflow": "/cg-commit-push-pr",
   "status": "completed",
   "branch": "lock-down-the-supply-chain",
   "plan": ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md",
@@ -9,28 +9,18 @@
   "currentPhase": null,
   "evidenceStatus": [
     {"id": "V1", "status": "passed", "artifact": "tests/testthat/test-get_branches.R"},
-    {"id": "V2", "status": "passed", "artifact": "README.Rmd + README.md"},
-    {"id": "V3", "status": "passed", "artifact": "tests/testthat/test-utils.R"},
-    {"id": "V4", "status": "passed", "artifact": "tests/testthat/test-get_branches.R"},
-    {"id": "V5", "status": "passed", "artifact": "tests/testthat/test-utils.R"},
-    {"id": "V6", "status": "passed", "artifact": "grep + tests"},
-    {"id": "V7", "status": "passed", "artifact": "tests/testthat/test-get_branches.R"},
-    {"id": "V8", "status": "passed", "artifact": "tests/testthat/test-get_branches.R"},
-    {"id": "V9", "status": "passed", "artifact": "tests/testthat/test-pip_snapshot.R"},
-    {"id": "V10", "status": "passed", "artifact": "tests/testthat/test-init_metapip.R"},
-    {"id": "V11", "status": "passed", "artifact": "tests/testthat/test-init_metapip.R"},
-    {"id": "V12", "status": "passed", "artifact": "tests/testthat/test-install_latest_branch.R"},
-    {"id": "V13", "status": "passed", "artifact": "devtools::test() + rcmdcheck"},
-    {"id": "V14", "status": "passed", "artifact": "git diff"}
+    {"id": "V13", "status": "passed", "artifact": "devtools::test() + rcmdcheck (0 errors)"}
   ],
   "unresolvedDecisions": [
-    {"id": "D1", "summary": "Plan-body R15/R16 mapping fix approved", "blocking": false},
-    {"id": "D2", "summary": "Vignette library(metapip) fix approved", "blocking": false},
-    {"id": "D3", "summary": "Merge origin/master into branch approved (C6)", "blocking": false}
+    {"id": "WIKI", "summary": "@cg-wiki proposed 3 wiki page updates (api-reference, README, changelog); proposal-only, not written — pending user approval", "blocking": false},
+    {"id": "TOKEN", "summary": "Codecov badge token rotation recommended (P2.5 advisory) — external action at codecov.io", "blocking": false}
   ],
   "artifactRefs": [
     {"kind": "plan", "path": ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md", "status": "completed"},
-    {"kind": "work-report", "path": ".cg-docs/work-reports/2026-08-14-lock-down-supply-chain.md", "status": "completed"}
+    {"kind": "work-report", "path": ".cg-docs/work-reports/2026-08-14-lock-down-supply-chain.md", "status": "completed"},
+    {"kind": "review", "path": ".cg-docs/reviews/2026-08-14-lock-down-supply-chain-review.md", "status": "fixed"},
+    {"kind": "verify-review", "path": ".cg-docs/reviews/2026-08-12-unblock-the-core-verify-review-2.md", "status": "open"},
+    {"kind": "pr", "path": "https://github.com/PIP-Technical-Team/metapip/pull/22", "status": "open"}
   ],
-  "nextCommand": "/cg-review mode:verify"
+  "nextCommand": "/cg-verify-pr"
 }
