@@ -14,8 +14,6 @@
 #' @export
 #'
 core_metadata <- function(package = NULL) {
-  check_github_token()
-
   if(is.null(package)) {
     package <- core
   } else {

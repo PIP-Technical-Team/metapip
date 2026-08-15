@@ -79,9 +79,47 @@ gitcreds_msg <- function(wh) {
 
 
 
+#' Return the GitHub token when available, or NULL
+#'
+#' Honours the `GITHUB_PAT` / `GITHUB_TOKEN` environment variables first, then
+#' falls back to `gitcreds::gitcreds_get()`. Never aborts: it returns `NULL`
+#' when no credentials are available so read-only `gh::gh()` calls can operate
+#' unauthenticated against the public `PIP-Technical-Team` org.
+#'
+#' @return Character string (the token) or `NULL` when no credentials are
+#'   available.
+#' @keywords internal
+gh_token <- function() {
+  env_token <- Sys.getenv(c("GITHUB_PAT", "GITHUB_TOKEN"))
+  env_token <- env_token[nzchar(env_token)]
+  if (length(env_token) > 0) {
+    return(unname(env_token[1]))
+  }
+
+  creds <- tryCatch(
+    gitcreds::gitcreds_get(),
+    error = function(e) NULL
+  )
+
+  if (is.null(creds)) {
+    return(NULL)
+  }
+
+  creds$password
+}
+
+
 #' make sure your GITHUB credentials are properly setup
 #'
-#' @return invisible TRUE if credentials are perfectly set
+#' @return invisible redacted list of credentials (token never exposed). The
+#'   return value carries the class `metapip_token`, whose `print()` method
+#'   shows blanked secret fields only. The real token is never carried back —
+#'   `remotes::install_github()` resolves credentials itself via gitcreds, so
+#'   this function is a validation gate, not a token carrier.
+#' @note This gate is a rate-limit guard (5000 authenticated vs 60
+#'   unauthenticated GitHub API requests/hour). Install reliability requires
+#'   the higher limit. The PIP-Technical-Team org is public; this is not a
+#'   security gate.
 #' @export
 #'
 #' @examples
@@ -99,10 +137,28 @@ check_github_token <- function() {
     gitcreds_nogit_error = function(e) cli::cli_abort("{gitcreds_msg(\"no_git\")}"),
     gitcreds_no_credentials = function(e) cli::cli_abort("{gitcreds_msg(\"no_creds\")}")
   )
-  invisible(creds)
+
+  redacted <- lapply(creds, function(x) {
+    if (is.character(x)) "" else x
+  })
+  class(redacted) <- c("metapip_token", "list")
+  invisible(redacted)
 
   # if (Sys.getenv("GITHUB_PAT") == "")
   #   cli::cli_abort("Enviroment variable `GITHUB_PAT` is empty. Please set it up using Sys.setenv(GITHUB_PAT = 'code')")
+}
+
+#' @export
+print.metapip_token <- function(x, ...) {
+  cli::cat_line("<metapip_token (redacted)>")
+  fields <- vapply(names(x), function(nm) {
+    val <- x[[nm]]
+    if (is.character(val) && nzchar(val)) val <- ""
+    if (is.character(val)) val <- dQuote(val)
+    sprintf("%s: %s", nm, paste(val, collapse = ", "))
+  }, character(1))
+  cli::cat_bullet(fields)
+  invisible(x)
 }
 
 check_package_condition <- function(package) {
