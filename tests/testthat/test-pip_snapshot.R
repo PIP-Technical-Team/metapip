@@ -44,7 +44,24 @@ test_that("pip_snapshot propagates write errors", {
   mockery::stub(pip_snapshot, "latest_commit_for_branch", function(pkg, brn) {
     list(sha = "abc")
   })
-  expect_error(pip_snapshot(path = file.path(tempdir(), "no-such-dir", "lock.csv")))
+  expect_error(
+    suppressWarnings(pip_snapshot(path = file.path(tempdir(), "no-such-dir", "lock.csv"))),
+    class = "simpleError"
+  )
+})
+
+test_that("pip_snapshot survives when no SHA can be resolved", {
+  mockery::stub(pip_snapshot, "get_core_pagkages", function(...) c("pipapi", "wbpip"))
+  mockery::stub(pip_snapshot, "get_package_current_branch", function(package) {
+    c(pipapi = "PROD", wbpip = "PROD")
+  })
+  mockery::stub(pip_snapshot, "latest_commit_for_branch", function(pkg, brn) {
+    list(sha = NULL)
+  })
+
+  tf <- tempfile(fileext = ".csv")
+  expect_message(pip_snapshot(path = tf), "Could not resolve any SHA")
+  expect_false(file.exists(tf))
 })
 
 test_that("pip_lock_path returns a path or empty string when lock absent", {

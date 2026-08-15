@@ -87,27 +87,67 @@ test_that("gh_token returns NULL when no creds and does not abort", {
 
 # check_github_token redaction --------
 test_that("check_github_token redacts the PAT on print", {
-  mockery::stub(check_github_token, "gitcreds::gitcreds_get", function() {
-    list(name = "x", password = "secret", protocol = "https", host = "github.com")
+  withr::with_envvar(c(GITHUB_PAT = "", GITHUB_TOKEN = ""), {
+    mockery::stub(check_github_token, "gh_token", function() NULL)
+    mockery::stub(check_github_token, "gitcreds::gitcreds_get", function() {
+      list(name = "x", password = "secret", protocol = "https", host = "github.com")
+    })
+    out <- capture.output(print(check_github_token()))
+    expect_false(any(grepl("secret", out)))
+    expect_true(any(grepl('""', out)))
   })
-  out <- capture.output(print(check_github_token()))
-  expect_false(any(grepl("secret", out)))
-  expect_true(any(grepl('""', out)))
 })
 
 test_that("check_github_token returns a redacted list (never the password)", {
-  mockery::stub(check_github_token, "gitcreds::gitcreds_get", function() {
-    list(name = "x", password = "secret", protocol = "https")
+  withr::with_envvar(c(GITHUB_PAT = "", GITHUB_TOKEN = ""), {
+    mockery::stub(check_github_token, "gh_token", function() NULL)
+    mockery::stub(check_github_token, "gitcreds::gitcreds_get", function() {
+      list(name = "x", password = "secret", protocol = "https")
+    })
+    res <- check_github_token()
+    expect_s3_class(res, "metapip_token")
+    expect_false("secret" %in% unlist(res))
+    expect_equal(res$password, "")
   })
-  res <- check_github_token()
-  expect_s3_class(res, "metapip_token")
-  expect_false("secret" %in% unlist(res))
-  expect_equal(res$password, "")
+})
+
+test_that("check_github_token passes when a token is available via env var", {
+  withr::with_envvar(c(GITHUB_PAT = "env-pat", GITHUB_TOKEN = ""), {
+    mockery::stub(check_github_token, "gitcreds::gitcreds_get", function() {
+      stop("should not be reached")
+    })
+    res <- check_github_token()
+    expect_s3_class(res, "metapip_token")
+    expect_equal(res$password, "")
+  })
 })
 
 test_that("check_github_token still aborts when no credentials are available", {
-  mockery::stub(check_github_token, "gitcreds::gitcreds_get", function() {
-    stop("no credentials")
+  withr::with_envvar(c(GITHUB_PAT = "", GITHUB_TOKEN = ""), {
+    mockery::stub(check_github_token, "gh_token", function() NULL)
+    mockery::stub(check_github_token, "gitcreds::gitcreds_get", function() {
+      stop("no credentials")
+    })
+    expect_error(check_github_token())
   })
-  expect_error(check_github_token())
+})
+
+test_that("check_github_token reports a missing git installation", {
+  withr::with_envvar(c(GITHUB_PAT = "", GITHUB_TOKEN = ""), {
+    mockery::stub(check_github_token, "gh_token", function() NULL)
+    mockery::stub(check_github_token, "gitcreds::gitcreds_get", function() {
+      rlang::abort("no git", class = "gitcreds_nogit_error")
+    })
+    expect_error(check_github_token(), "No git installation found")
+  })
+})
+
+test_that("check_github_token reports missing credentials", {
+  withr::with_envvar(c(GITHUB_PAT = "", GITHUB_TOKEN = ""), {
+    mockery::stub(check_github_token, "gh_token", function() NULL)
+    mockery::stub(check_github_token, "gitcreds::gitcreds_get", function() {
+      rlang::abort("no creds", class = "gitcreds_no_credentials")
+    })
+    expect_error(check_github_token(), "No git credentials found")
+  })
 })

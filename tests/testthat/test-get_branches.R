@@ -54,12 +54,13 @@ test_that("get_branches propagates gh errors", {
 
 test_that("get_branches works without GITHUB_PAT", {
   gh_called <- FALSE
+  token_seen <- "unset"
   withr::with_envvar(c(GITHUB_PAT = "", GITHUB_TOKEN = ""), {
     mockery::stub(get_branches, "gh_token", function() NULL)
     mockery::stub(get_branches, "check_package_condition", \(...) TRUE)
     mockery::stub(get_branches, "gh::gh", function(..., .token = NULL) {
       gh_called <<- TRUE
-      expect_null(.token)
+      token_seen <<- .token
       list(list(name = "abc", num = 1))
     })
 
@@ -67,6 +68,7 @@ test_that("get_branches works without GITHUB_PAT", {
   })
 
   expect_true(gh_called)
+  expect_null(token_seen)
   expect_equal(res, "abc")
 })
 
@@ -193,6 +195,9 @@ test_that("install_branch honours an explicit sha override", {
   mockery::stub(install_branch, "latest_commit_for_branch", function(...) {
     list(sha = "branchhead")
   })
+  mockery::stub(install_branch, "utils::packageDescription", function(...) {
+    NA_character_
+  })
   mockery::stub(install_branch, "remotes::install_github", function(x) {
     install_refs <<- c(install_refs, x)
     TRUE
@@ -201,6 +206,15 @@ test_that("install_branch honours an explicit sha override", {
   install_branch(branch = "abc", sha = "deadbeef")
 
   expect_equal(install_refs, "PIP-Technical-Team/pipapi@deadbeef")
+})
+
+test_that("install_branch aborts for an invalid branch name", {
+  mockery::stub(install_branch, "check_github_token", function() NULL)
+  mockery::stub(install_branch, "check_package_condition", function(...) TRUE)
+  mockery::stub(install_branch, "detach_package", function(...) invisible())
+  mockery::stub(install_branch, "get_branches", function(...) c("abc", "def"))
+
+  expect_error(install_branch(branch = "nope"), "Not a valid branch name")
 })
 
 test_that("is_core works as expected", {
