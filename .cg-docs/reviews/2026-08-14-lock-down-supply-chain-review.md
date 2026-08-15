@@ -4,27 +4,27 @@ depth: full
 type: standard
 plan: .cg-docs/plans/2026-08-14-lock-down-supply-chain.md
 findings:
-  P1.1: open
-  P1.2: open
-  P1.3: open
-  P2.1: open
-  P2.2: open
-  P2.3: open
-  P2.4: open
-  P2.5: open
-  P3.1: open
-  P3.2: open
-  P3.3: open
-  P3.4: open
-  P3.5: open
-  P3.6: open
-  P3.7: open
-  P3.8: open
-  P3.9: open
-  P3.10: open
-  P3.11: open
-  P3.12: open
-  P3.13: open
+  P1.1: fixed
+  P1.2: fixed
+  P1.3: fixed
+  P2.1: fixed
+  P2.2: fixed
+  P2.3: fixed
+  P2.4: fixed
+  P2.5: skipped
+  P3.1: fixed
+  P3.2: skipped
+  P3.3: fixed
+  P3.4: skipped
+  P3.5: skipped
+  P3.6: fixed
+  P3.7: fixed
+  P3.8: fixed
+  P3.9: fixed
+  P3.10: fixed
+  P3.11: skipped
+  P3.12: fixed
+  P3.13: skipped
 ---
 
 ## Review Report
