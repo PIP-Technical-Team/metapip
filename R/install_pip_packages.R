@@ -143,7 +143,6 @@ install_branch <- function(package = "pipapi", branch = NULL, force = FALSE, sha
 
   if (is.null(target_sha)) {
     cli::cli_abort("Could not resolve SHA for {.pkg {package}}@{branch}. Check network access or pass {.arg sha} explicitly.")
-    return(invisible(NULL))
   }
 
   local_sha <- utils::packageDescription(package, fields = "RemoteSha") |>

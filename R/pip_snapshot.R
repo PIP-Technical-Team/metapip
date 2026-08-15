@@ -25,6 +25,10 @@ pip_snapshot <- function(path = NULL) {
     )
   }
 
+  if (!nzchar(path)) {
+    cli::cli_abort("Could not resolve a PIP_LOCK write target. Pass {.arg path} explicitly or set {.fn options} metapip.lock_path = \"path/to/PIP_LOCK.csv\".")
+  }
+
   pkgs <- get_core_pagkages()
   branches <- get_package_current_branch(package = pkgs)
 
@@ -50,17 +54,25 @@ pip_snapshot <- function(path = NULL) {
     )
   }
 
+  resolved <- Filter(Negate(is.null), rows)
+  if (length(resolved) == 0) {
+    cli::cli_alert_warning("Could not resolve any SHA; PIP_LOCK not written")
+    return(invisible(path))
+  }
+
   if (length(skipped) > 0) {
     cli::cli_alert_warning("Could not resolve SHA for {.pkg {skipped}}; skipping")
   }
 
-  lock_df <- rowbind(Filter(Negate(is.null), rows))
+  lock_df <- rowbind(resolved)
 
   utils::write.csv(lock_df, path, row.names = FALSE)
   cli::cli_alert_success("Wrote PIP_LOCK to {.path {path}} ({nrow(lock_df)} packages)")
   invisible(path)
 }
 
+#' Path to the committed PIP_LOCK.csv manifest
+#'
 #' @return path to the committed `PIP_LOCK.csv`, or `""` when the file is
 #'   absent (installed package without a lock). Read-only; callers should guard
 #'   with `file.exists(p) && nzchar(p)` before reading.

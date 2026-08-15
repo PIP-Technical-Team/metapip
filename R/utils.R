@@ -127,8 +127,15 @@ gh_token <- function() {
 #' check_github_token()
 #' }
 check_github_token <- function() {
-  # Check that either GITHUB_PAT is set or credentials have been stored using gitcreds
-  # If not, abort with a message
+  # Check that either GITHUB_PAT / GITHUB_TOKEN is set or credentials have been
+  # stored using gitcreds. If not, abort with a message.
+
+  token <- gh_token()
+  if (!is.null(token)) {
+    redacted <- list(username = "", password = "", protocol = "https")
+    class(redacted) <- c("metapip_token", "list")
+    return(invisible(redacted))
+  }
 
   tryCatch(
     expr = {

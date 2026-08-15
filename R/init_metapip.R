@@ -29,6 +29,7 @@ init_metapip <- function(exclude = NA,
     lock <- utils::read.csv(lock_path, stringsAsFactors = FALSE)
     pkgs <- get_core_pagkages(exclude = exclude)
     lock <- lock[lock$package %in% pkgs, , drop = FALSE]
+    lock <- lock[!is.na(lock$sha), , drop = FALSE]
 
     if (nrow(lock) > 0) {
       if (ask) {
@@ -68,15 +69,32 @@ init_metapip <- function(exclude = NA,
     cli::cli_alert_info("No PIP_LOCK found; installing at branch HEAD. Run {.fn pip_snapshot} to create a team lock manifest.")
     pkgs <- get_core_pagkages(exclude = exclude)
     branches <- get_package_current_branch(package = pkgs)
-    for (pkg in pkgs) {
-      tryCatch(
-        install_branch(package = pkg, branch = unname(branches[pkg])),
-        error = function(e) {
-          cli::cli_alert_danger(
-            "Failed to install {.pkg {pkg}}: {conditionMessage(e)}"
-          )
-        }
-      )
+
+    if (ask) {
+      if (interactive()) {
+        answer <- utils::menu(
+          choices = c("Yes", "No"),
+          title = "Do you want to install all core packages at their branch HEAD now?"
+        )
+      } else {
+        cli::cli_alert_warning("Non-interactive session: installing packages by default")
+        answer <- 1
+      }
+    }
+
+    if (identical(answer, 1)) {
+      for (pkg in pkgs) {
+        tryCatch(
+          install_branch(package = pkg, branch = unname(branches[pkg])),
+          error = function(e) {
+            cli::cli_alert_danger(
+              "Failed to install {.pkg {pkg}}: {conditionMessage(e)}"
+            )
+          }
+        )
+      }
+    } else {
+      cli::cli_alert_danger("Skipping installation.")
     }
   }
 
@@ -89,6 +107,12 @@ init_metapip <- function(exclude = NA,
 
 
 #' Update PIP package
+#'
+#' @description Refreshes the committed team `PIP_LOCK` manifest: it resolves
+#'   each core package's branch HEAD SHA, writes the updated `PIP_LOCK.csv`,
+#'   and (with confirmation) installs any outdated packages at their newly
+#'   resolved pinned SHAs. Preserves the milestone-2 per-package failure
+#'   isolation and interactive gate.
 #'
 #' @param answer numeric: Developers  argument. Only works for demonstration
 #'   purposes.
@@ -174,11 +198,15 @@ update_pip_packages <- \(exclude = NA,
     )
   }
 
-  lock_df <- rowbind(lock_rows)
   lock_path <- getOption("metapip.lock_path", pip_lock_path())
-  if (nrow(lock_df) > 0 && nzchar(lock_path)) {
-    utils::write.csv(lock_df, lock_path, row.names = FALSE)
-    cli::cli_alert_info("Updated {.path PIP_LOCK} - commit this change.")
+  if (length(lock_rows) > 0) {
+    lock_df <- rowbind(lock_rows)
+    if (nrow(lock_df) > 0 && nzchar(lock_path)) {
+      utils::write.csv(lock_df, lock_path, row.names = FALSE)
+      cli::cli_alert_info("Updated {.path PIP_LOCK} - commit this change.")
+    }
+  } else {
+    cli::cli_alert_warning("Could not resolve any SHA; PIP_LOCK not updated")
   }
 
   if (length(missing_pkgs) > 0) {
