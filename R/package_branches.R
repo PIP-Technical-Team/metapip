@@ -211,23 +211,29 @@ split_packages_into_list <- function(complete_data) {
 #'
 #' @keywords internal
 join_and_get_status <- function(local, dev, branch_to_compare) {
+  # Remote DESCRIPTION Version fields are untrusted: an empty or malformed
+  # value must degrade to a defined status instead of crashing the whole
+  # report (compareVersion errors on non-parseable input).
+  safe_cmp <- function(a, b) {
+    if (is.na(a) || is.na(b)) return(0L)
+    if (!nzchar(trimws(a)) || !nzchar(trimws(b))) return(NA_integer_)
+    tryCatch(
+      utils::compareVersion(trimws(a), trimws(b)),
+      error = function(e) NA_integer_
+    )
+  }
   join(local, dev, "package", how = "full") |>
     fmutate(
       cmp = mapply(
-        function(a, b) {
-          if (is.na(a) || is.na(b)) return(0L)
-          utils::compareVersion(a, b)
-        },
+        function(a, b) safe_cmp(a, b),
         local_version, version,
         SIMPLIFY = TRUE
       )
     ) |>
     fmutate(local_status = fcase(
       is.na(local_version), "Not in local",
-      is.na(branch),
-        paste(branch_to_compare, "not in repo"),
-      is.na(version),
-        paste(branch_to_compare, "version unknown"),
+      is.na(branch), paste(branch_to_compare, "not in repo"),
+      is.na(version) || is.na(cmp), "unknown",
       cmp < 0, paste("behind", branch_to_compare),
       cmp > 0, paste("ahead of", branch_to_compare),
       default = "up-to-date"
