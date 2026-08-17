@@ -1,22 +1,34 @@
-#' Update metapip packages
+#' Check for CRAN updates to metapip and its dependencies
 #'
-#' This will check to see if all metapip packages (and optionally, their
-#' dependencies) are up-to-date, and will install after an interactive
-#' confirmation.
+#' @description
+#' Checks whether `metapip` (and optionally its PIP package dependencies)
+#' are up-to-date relative to the versions available on CRAN. Prints
+#' the packages that need updating along with the R code to do so.
 #'
-#' @param pkg A character string for the model being updated.
-#' @param recursive If `TRUE`, will also check all dependencies of
-#'   metapip packages.
-#' @param ... Extra arguments to pass to [utils::install.packages()]
-#' @return Nothing is returned but a message is printed to the
-#'  console about which packages (if any) should be installed along
-#'  with code to do so.
-#' @export
+#' @param pkg Character scalar. Package to check. Defaults to `"metapip"`.
+#' @param recursive Logical. If `TRUE`, also checks all transitive
+#'   dependencies of `pkg`. Default `FALSE`.
+#' @param ... Additional arguments passed to [utils::install.packages()]
+#'   in the generated install expression.
+#'
+#' @return `invisible()`. Prints a human-readable update report; does
+#'   not modify any packages directly.
+#'
+#' @details
+#' When `metapip` is not on CRAN (pre-release), a hardcoded dependency
+#' list is used as fallback (see `pkg_deps()`).
+#'
+#' @seealso
+#' [pkg_deps()]
+#'
 #' @examples
 #' \dontrun{
 #' metapip_update()
+#' metapip_update(recursive = TRUE)
 #' }
+#'
 #' @importFrom utils install.packages
+#' @export
 metapip_update <- function(pkg = "metapip", recursive = FALSE, ...) {
   deps <- pkg_deps(pkg, recursive)
   behind <- fsubset(deps, behind)
@@ -28,25 +40,60 @@ metapip_update <- function(pkg = "metapip", recursive = FALSE, ...) {
 
   cli::cat_line("The following packages are out of date:")
   cli::cat_line()
-  cli::cat_bullet(format(behind$package), " (", behind$local, " -> ", behind$cran, ")")
+  cli::cat_bullet(
+    format(behind$package), " (",
+    behind$local, " -> ", behind$cran, ")"
+  )
 
   cli::cat_line()
   cli::cat_line("Start a clean R session then run:")
 
   install_opt <- rlang::quos(...)
   install_pkg <- behind$package
-  inst_expr <- rlang::quo(install.packages(c(!!!install_pkg), !!!install_opt))
+  inst_expr <- rlang::quo(
+    install.packages(c(!!!install_pkg), !!!install_opt)
+  )
   pkg_str <- deparse(rlang::quo_squash(inst_expr))
   cli::cat_line(pkg_str)
 
   invisible()
 }
 
-#' List all dependencies
+
+#' Compare current package versions against CRAN
 #'
-#' @param x A character string for the packages being evaluated.
-#' @param recursive If `TRUE`, will also list all dependencies of
-#'   metapip packages.
+#' @description
+#' Queries CRAN for the latest versions of the specified packages and
+#' their (optionally recursive) dependencies, then compares with locally
+#' installed versions.
+#'
+#' @param x Character scalar. Package name to check. Defaults to
+#'   `"metapip"`.
+#' @param recursive Logical. If `TRUE`, includes all transitive
+#'   dependencies. Default `FALSE`.
+#'
+#' @return A `data.frame` with columns:
+#'   \describe{
+#'     \item{package}{Character. Package name.}
+#'     \item{cran}{Character. CRAN version.}
+#'     \item{local}{Character. Locally installed version.}
+#'     \item{behind}{Logical. `TRUE` if the CRAN version is newer.}
+#'   }
+#'   Base R packages are excluded.
+#'
+#' @details
+#' When `"metapip"` is in `x` and is not yet on CRAN, a hardcoded set
+#' of dependencies is returned as fallback.
+#'
+#' @seealso
+#' [metapip_update()]
+#'
+#' @examples
+#' \dontrun{
+#' pkg_deps()
+#' pkg_deps("metapip", recursive = TRUE)
+#' }
+#'
 #' @export
 pkg_deps <- function(x = "metapip", recursive = FALSE) {
   pkgs <- utils::available.packages()
@@ -54,27 +101,23 @@ pkg_deps <- function(x = "metapip", recursive = FALSE) {
 
   # NULL before package is on CRAN
   if ("metapip" %in% x && is.null(deps$metapip)) {
-    deps$metapip <-
-      c(
-        "pipapi", "pipaux", "pipload", "wbpip", "pipfun", "pipdata", "pipr",
-        "cli", "rstudioapi"
-      )
+    deps$metapip <- c("pipapi", "pipaux", "pipload", "wbpip",
+                       "pipfun", "pipdata", "pipr", "cli",
+                       "rstudioapi")
   }
 
-  # include self in list
   pkg_deps <- unique(sort(c(names(deps), unlist(deps))))
   pkg_deps <- pkg_deps[pkg_deps %in% pkgs]
 
-  base_pkgs <- c(
-    "base", "compiler", "datasets", "graphics", "grDevices", "grid",
-    "methods", "parallel", "splines", "stats", "stats4", "tools", "tcltk",
-    "utils"
-  )
+  base_pkgs <- c("base", "compiler", "datasets", "graphics",
+                 "grDevices", "grid", "methods", "parallel",
+                 "splines", "stats", "stats4", "tools",
+                 "tcltk", "utils")
   pkg_deps <- setdiff(pkg_deps, base_pkgs)
 
-  cran_version <- lapply(pkgs[pkg_deps, "Version"], base::package_version)
+  cran_version <- lapply(pkgs[pkg_deps, "Version"],
+                         base::package_version)
   local_version <- lapply(pkg_deps, utils::packageVersion)
-
   behind <- mapply(`>`, cran_version, local_version)
 
   data.frame(
@@ -84,4 +127,3 @@ pkg_deps <- function(x = "metapip", recursive = FALSE) {
     behind = behind
   )
 }
-

@@ -2,36 +2,73 @@
 % Please edit documentation in R/install_pip_packages.R
 \name{install_branch}
 \alias{install_branch}
-\title{Install branch from a package}
+\title{Install a specific branch of a PIP package}
 \usage{
 install_branch(package = "pipapi", branch = NULL, force = FALSE, sha = NULL)
 }
 \arguments{
-\item{package}{one of the core package name (default "pipapi")}
+\item{package}{Character scalar. Core PIP package name. Defaults to
+`"pipapi"`.}
 
-\item{branch}{valid branch name (default "PROD")}
+\item{branch}{Character scalar. Branch to install. When `NULL`
+(default), the package's configured default branch is used.}
 
-\item{force}{logical: when TRUE, bypasses SHA pinning and the idempotency
-check, installing the live branch HEAD (`@<branch>`) instead. Intended for
-developers. Default FALSE.}
+\item{force}{Logical. If `TRUE`, bypasses SHA pinning and the
+idempotency check, installing the live branch HEAD (`@<branch>`)
+directly. Intended for developers. Default `FALSE`.}
 
-\item{sha}{character: optional commit SHA to install at. When supplied it
-overrides the resolved branch HEAD SHA. When NULL (default) and
-`force = FALSE`, the branch HEAD SHA is resolved and pinned.}
+\item{sha}{Character scalar. Optional commit SHA to install at. When
+supplied, overrides the resolved branch HEAD SHA. When `NULL`
+(default, and `force = FALSE`), the branch HEAD SHA is resolved
+automatically.}
 }
 \value{
-invisible NULL, or the result of `remotes::install_github()` when an
-  install is performed
+`NULL` invisibly when installation is skipped (already at target
+  SHA), or the result of [remotes::install_github()] when an install is
+  actually performed.
 }
 \description{
-Install branch from a package
+Installs a single core PIP package from a specified branch on GitHub.
+By default (`force = FALSE`), the branch HEAD SHA is resolved and pinned,
+giving session-level deterministic installs. If the package is already at
+the target SHA, installation is skipped.
 }
-\examples{
-\dontrun{
-  install_branch()
-  install_branch("pipfun", "ongoing")
-  install_branch("pipfun", "ongoing", force = TRUE)
-  install_branch("pipfun", "ongoing", sha = "a1b2c3d")
+\section{SHA pinning}{
+
+When `force = FALSE` (the default):
+1. Resolves the branch HEAD SHA from GitHub.
+2. Checks if the locally installed package already matches that SHA.
+3. If they match, skips installation (idempotent). Otherwise, installs
+   at the resolved (or explicitly provided) SHA.
+
+This ensures deterministic installs: running the same `install_branch()`
+call twice will not re-install.
 }
 
+\section{Errors}{
+
+- Aborts if `package` is not a core PIP package.
+- Aborts if `branch` is not in the package's available branches.
+- Aborts if the SHA cannot be resolved (network error or invalid ref).
+}
+
+\examples{
+\dontrun{
+# Install default branch of pipapi
+install_branch()
+
+# Install a specific branch
+install_branch("pipfun", "ongoing")
+
+# Force install (bypass SHA pinning)
+install_branch("pipfun", "ongoing", force = TRUE)
+
+# Install at a specific SHA
+install_branch("pipfun", "ongoing", sha = "a1b2c3d")
+}
+
+}
+\seealso{
+[install_pip_packages()], [install_latest_branch()],
+[get_branches()]
 }

@@ -3,28 +3,66 @@
 \name{get_current_branches}
 \alias{get_current_branches}
 \alias{get_package_current_branch}
-\title{get the current branches that are meant to be used}
+\title{View current branch assignments for all (or selected) packages}
 \usage{
 get_current_branches(package = NULL, verbose = TRUE)
 
 get_package_current_branch(package)
 }
 \arguments{
-\item{package}{character: vector with name of branches. E.g., c("pipdata",
-"pipfaker").}
+\item{package}{Character vector. One or more core PIP package names.}
 
-\item{verbose}{logical: whether to display all current branches. Default is TRUE}
+\item{verbose}{Logical. If `TRUE` (default), prints the result via the
+[print.metapip_simplelist()] method and returns it visibly. If `FALSE`,
+returns a named list invisibly.}
 }
 \value{
-list with names of packages and branches
+A named list of class `"metapip_simplelist"` where names are
+  package names and values are the configured branch (character scalar).
+  When `verbose = FALSE`, returned invisibly.
 
-named character vector with branches of package
+Named character vector. Names are package names, values are
+  branch names.
 }
 \description{
-It does not necessarily mean that these are the branches currently installed.
-[init_metapip] will notify you if that is the case.
+Returns the branch each core PIP package is *configured* to use, not
+necessarily the branch currently installed. Use [init_metapip()] to
+detect and close the gap between configured and installed branches.
+
+Branch resolution order:
+1. Custom per-package overrides (from [set_custom_branch()]).
+2. Global default (from [get_default_branch()]).
+
+Convenience wrapper around [get_current_branches()] that returns the
+branch name(s) as a plain character vector (not a `metapip_simplelist`).
 }
+\section{Errors}{
+
+Aborts if any `package` is not in the set of core packages.
+}
+
 \examples{
+# Print all current branch assignments
 get_current_branches()
-get_package_current_branch(c("pipdata", "pipfaker"))
+
+# Silent retrieval for scripting
+branches <- get_current_branches(verbose = FALSE)
+
+\dontrun{
+# Restrict to specific packages
+get_current_branches(package = c("pipdata", "pipfaker"))
 }
+
+get_package_current_branch("pipdata")
+get_package_current_branch(c("pipdata", "pipfaker"))
+
+}
+\seealso{
+[get_package_current_branch()], [set_custom_branch()],
+[init_metapip()]
+
+Other branch configuration:
+\code{\link[=get_default_branch]{get_default_branch()}},
+\code{\link[=set_custom_branch]{set_custom_branch()}}
+}
+\concept{branch configuration}

@@ -2,9 +2,7 @@
 % Please edit documentation in R/package_branches.R
 \name{package_branches}
 \alias{package_branches}
-\title{Status tables of package versions in different branches along with local
-installations. For local installation,a status column is returned which
-indicates if the local version is ahead or behind the PROD branch.}
+\title{Compare package versions across branches and local installations}
 \usage{
 package_branches(
   package = NULL,
@@ -12,21 +10,40 @@ package_branches(
 )
 }
 \arguments{
-\item{package}{One (or more) of the PIP core packages. Default NULL will
-include all the packages}
+\item{package}{Character vector. One or more core PIP package names.
+If `NULL` (default), all core packages are included.}
 
-\item{branch_to_compare}{character: names of branch to compare to. Default is
-"PROD".}
+\item{branch_to_compare}{Character scalar. Branch to use as the
+comparison baseline for the local status column. Defaults to
+`getOption("metapip.default_branch")`.}
 }
 \value{
-table of pip packages and the corresponding package versions of
-  branch
+A named list with three elements:
+  \describe{
+    \item{common}{`data.frame` pivoted wide with columns for each of
+      the common branches (`PROD`, `DEV_v2`, `QA`) and the package
+      version on that branch.}
+    \item{local}{`data.frame` with columns: `package`, `local_branch`,
+      `local_version`, and `local_status` (one of `"behind {branch}"`,
+      `"ahead of {branch}"`, `"up-to-date"`, `"Not in local"`,
+      `"{branch} not in repo"`, `"{branch} version unknown"`).}
+    \item{*}{One additional `data.frame` per package listing its
+      non-common branches and their versions.}
+  }
 }
 \description{
-Status tables of package versions in different branches along with local
-installations. For local installation,a status column is returned which
-indicates if the local version is ahead or behind the PROD branch.
+For each requested core PIP package, retrieves the DESCRIPTION version
+from every branch on GitHub and compares it with the locally installed
+version. Returns a list of tables showing version information, common
+branch versions, and a local status indicator (ahead/behind/up-to-date
+relative to a comparison branch).
 }
+\section{Progress}{
+
+Shows a progress bar while fetching DESCRIPTION files from GitHub for
+every branch of every package.
+}
+
 \examples{
 \dontrun{
 package_branches()
@@ -34,4 +51,7 @@ package_branches(c("pipapi", "wbpip"))
 package_branches(branch_to_compare = "QA")
 }
 
+}
+\seealso{
+[core_metadata()], [get_branches()]
 }

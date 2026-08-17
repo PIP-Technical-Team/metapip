@@ -2,23 +2,26 @@
 % Please edit documentation in R/utils.R
 \name{rowname_to_column}
 \alias{rowname_to_column}
-\title{Non tidyverse alternative to tibble::rownames_to_column}
+\title{Move row names to a column}
 \usage{
 rowname_to_column(data, var)
 }
 \arguments{
-\item{data}{Dataframe}
+\item{data}{A data.frame.}
 
-\item{var}{column name to store rownames}
+\item{var}{Character scalar. Name of the new column to hold row names.}
 }
 \value{
-Dataframe with an additional column of rownames
+A data.frame with the same columns as `data` plus the new
+  column `var` as the first column. Row names are removed.
 }
 \description{
-Non tidyverse alternative to tibble::rownames_to_column
+A lightweight alternative to `tibble::rownames_to_column()` that does
+not require the tibble package. Prepends the row names of a data.frame
+as a new column.
 }
 \examples{
-\dontrun{
-rowname_to_column(mtcars, "rn")
-}
+df <- data.frame(x = 1:3, row.names = c("a", "b", "c"))
+rowname_to_column(df, "id")
+
 }

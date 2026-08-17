@@ -1,7 +1,7 @@
-# This is basically a copy of tidyverse and tidymodels
-
-# Dropping pipr from this core packages as it is not available under PIP-Technical-Team
-core <- c("pipapi", "pipload", "wbpip", "pipfun", "pipdata", "pipster", "pipaux","pipfaker")
+# Internal vector of all core PIP ecosystem package names.
+# Dropping pipr -- it is not available under PIP-Technical-Team.
+core <- c("pipapi", "pipload", "wbpip", "pipfun", "pipdata",
+           "pipster", "pipaux", "pipfaker")
 
 pkg_loaded <- function(pkg = NULL) {
   if (is.null(pkg)) {
@@ -32,43 +32,38 @@ metapip_attach <- function(pkg = NULL) {
     ),
     startup = TRUE
   )
-  # Check if all core packages are installed, if not show appropriate message
+
   installed_packages <- utils::installed.packages()
   not_installed_core_packages <- setdiff(core, rownames(installed_packages))
   if (length(not_installed_core_packages) > 0L) {
     to_load <- setdiff(core, not_installed_core_packages)
-
     to_install <- paste0("c(",
                          shQuote(not_installed_core_packages) |>
                            paste(collapse = ", ") ,")")
-
-    cli::cli_warn(c("Package{?s} {not_installed_core_packages} {?is/are} not installed.",
-                    "i" = "you may try {.run metapip::install_pip_packages({to_install})}"))
+    cli::cli_warn(c(
+      "Package{?s} {not_installed_core_packages} {?is/are} not installed.",
+      "i" = "you may try {.run metapip::install_pip_packages({to_install})}"
+    ))
   }
 
   versions <- vapply(to_load, package_version, character(1L))
   branch_name <- vapply(to_load,
                         \(x) {
-                            y <- utils::packageDescription(x, fields = "GithubRef")
-                            if (is.na(y)) {
-                              y <- "local"
-                            }
-                            y
-                          },
+                          y <- utils::packageDescription(x, fields = "GithubRef")
+                          if (is.na(y)) {
+                            y <- "local"
+                          }
+                          y
+                        },
                         character(1L))
 
   clean_versions <- gsub(cli::ansi_regex(), "", versions, perl = TRUE)
   packages <- paste0(
-    cli::col_green(cli::symbol$tick), " ", cli::col_blue(format(to_load)), " ",
+    cli::col_green(cli::symbol$tick), " ",
+    cli::col_blue(format(to_load)), " ",
     cli::ansi_align(versions, max(nchar(clean_versions))), " ",
     cli::col_blue("(", branch_name, ")")
   )
-  # Due to displaying branch name the package names in 2 columns do not look uniform so showing only 1 package per line
-  # if (length(packages) %% 2 == 1) {
-  #   packages <- append(packages, "")
-  # }
-  # col1 <- seq_len(length(packages) / 2)
-  # info <- paste0(packages[col1], "          ", packages[-col1])
 
   msg(paste(packages, collapse = "\n"), startup = TRUE)
 

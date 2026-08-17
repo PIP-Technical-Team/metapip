@@ -2,14 +2,16 @@
 % Please edit documentation in R/utils.R
 \name{rs_theme}
 \alias{rs_theme}
-\title{Set theme for colorDF}
+\title{Detect RStudio theme for colorDF display settings (internal)}
 \usage{
 rs_theme()
 }
 \value{
-invisible RStudio theme
+A list with elements `editor`, `global`, `dark`,
+  `foreground`, `background`. Returns an empty template when
+  RStudio is not available.
 }
 \description{
-Set theme for colorDF
+Detect RStudio theme for colorDF display settings (internal)
 }
 \keyword{internal}

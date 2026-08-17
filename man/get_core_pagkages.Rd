@@ -2,22 +2,42 @@
 % Please edit documentation in R/init_metapip.R
 \name{get_core_pagkages}
 \alias{get_core_pagkages}
-\title{Get core PIP ecosystem package}
+\title{Get the list of core PIP ecosystem packages}
 \usage{
 get_core_pagkages(exclude = NULL)
 }
 \arguments{
-\item{exclude}{character: packages to exclude from attaching. if `getwd()` is
-one of the core PIP packages, that package will be excluded by default. To
-avoid that, set exclude to `NULL`.}
+\item{exclude}{Exclusion specification:
+- `NULL`: return all core packages (no exclusions).
+- `NA` (default): auto-detect and exclude the package whose source
+  is the current working directory.
+- Character vector: explicitly named packages to exclude.}
 }
 \value{
-character vector with names of PIP packages
+Character vector of core PIP package names, in the standard
+  ordering.
 }
 \description{
-Get core PIP ecosystem package
+Returns the character vector of core PIP package names, with optional
+exclusions. When `exclude = NA` (the default), auto-detects if the
+current working directory is a core PIP package and excludes it --
+useful for package development workflows where you don't want to
+update the package you're actively working on.
 }
+\section{Errors}{
+
+Aborts if any explicitly named `exclude` package is not in the core
+set.
+}
+
 \examples{
+# All core packages
 get_core_pagkages()
+
+# Exclude specific packages
 get_core_pagkages(exclude = "pipdata")
+
+# Auto-detect (for package development)
+get_core_pagkages(exclude = NA)
+
 }

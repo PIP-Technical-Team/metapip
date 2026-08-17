@@ -2,16 +2,23 @@
 % Please edit documentation in R/utils.R
 \name{metapip_packages}
 \alias{metapip_packages}
-\title{List all packages in metapip}
+\title{List all metapip package dependencies}
 \usage{
 metapip_packages(include_self = TRUE)
 }
 \arguments{
-\item{include_self}{Include metapip in the list?}
+\item{include_self}{Logical. If `TRUE` (default), includes
+`"metapip"` in the returned vector.}
+}
+\value{
+Character vector of package names.
 }
 \description{
-List all packages in metapip
+Returns the names of all packages listed in the `Imports` field of
+metapip's DESCRIPTION. Optionally includes `"metapip"` itself.
 }
 \examples{
 metapip_packages()
+metapip_packages(include_self = FALSE)
+
 }

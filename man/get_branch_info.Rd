@@ -2,28 +2,57 @@
 % Please edit documentation in R/get_branches.R
 \name{get_branch_info}
 \alias{get_branch_info}
-\title{Get last update time of branches in a package}
+\title{Get last commit metadata for specific branches}
 \usage{
 get_branch_info(package = "pipapi", branch = NULL, display = TRUE)
 }
 \arguments{
-\item{package}{one of the core package (default "pipapi")}
+\item{package}{Character. Single core PIP package name. Defaults to
+`"pipapi"`.}
 
-\item{branch}{valid branch name for the package}
+\item{branch}{Character vector. Branch name(s) to inspect. When `NULL`
+(default), uses the package's current branch assignment (via
+[get_package_current_branch()]).}
 
-\item{display}{(default TRUE) do you want to display the branches in the console?}
+\item{display}{Logical. If `TRUE` (default), prints a colourised table
+to the console.}
 }
 \value{
-a colorDF::colorDF output with an invisible dataframe
+A `data.frame` (returned invisibly) with columns:
+  \describe{
+    \item{package}{Character. Package name.}
+    \item{branch_name}{Character. Branch name.}
+    \item{last_commit_author_name}{Character. Name of the last committer.}
+    \item{last_update_time}{Character. ISO 8601 timestamp of the last
+      commit (e.g., `"2023-09-04T13:06:47Z"`).}
+  }
 }
 \description{
-Returns a dataframe with information about package name, branch name, author of the last commit and
-when was the last commit made to the branch
+For each requested branch of a PIP package, returns a data.frame with the
+package name, branch name, last commit author name, and timestamp of the
+last commit. Results are displayed in a colourised table via
+[colorDF::colorDF()].
 }
+\section{Errors}{
+
+Aborts if any requested branch name is not found in the package's branch
+list.
+}
+
 \examples{
 \dontrun{
-get_branch_info()
-get_branch_info(branch = c("PROD", "QA"), display = FALSE)
+# Single branch
+get_branch_info(package = "pipr", branch = "DEV")
+
+# Multiple branches
 get_branch_info(package = "wbpip", branch = c("PROD", "QA"))
+
+# Use current branch (default)
+get_branch_info(package = "wbpip")
 }
+
+}
+\seealso{
+[get_branches()], [get_latest_branch_update()],
+[latest_commit_for_branch()]
 }

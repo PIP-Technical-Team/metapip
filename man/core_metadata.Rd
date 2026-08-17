@@ -7,18 +7,51 @@
 core_metadata(package = NULL)
 }
 \arguments{
-\item{package}{One (or more) core packages, if NULL shows information about all of them.}
+\item{package}{Character vector. One or more core PIP package names.
+If `NULL` (default), all core packages are included.}
 }
 \value{
-a colorDF::colorDF output with details about the core packages
+A `data.frame` (returned invisibly) with columns:
+  \describe{
+    \item{package}{Character. Package name.}
+    \item{no_of_branches}{Integer. Number of branches on GitHub.}
+    \item{latest_release_tag}{Character. Most recent release tag, or `NA`
+      if no releases exist.}
+    \item{latest_release_time}{Character. ISO 8601 timestamp of the latest
+      release, or `NA`.}
+    \item{latest_commit_branch}{Character. Branch with the most recent
+      commit.}
+    \item{latest_commit_author}{Character. Author of that commit.}
+    \item{latest_commit_time}{POSIXct (UTC). Timestamp of that commit.}
+  }
 }
 \description{
-Returns information like name of the package, number of branches it has, last release tag,
-last release time, last commit author etc.
+For each requested core PIP package, retrieves and displays:
+- Number of branches.
+- Latest release tag and release date (from GitHub releases).
+- Branch name, author, and timestamp of the most recent commit.
 }
+\section{Progress}{
+
+Uses [cli::cli_progress_along()] to show progress bars for branch
+retrieval, release lookup, and commit resolution.
+}
+
+\section{Errors}{
+
+Aborts if any `package` is not a core PIP package.
+}
+
 \examples{
 \dontrun{
+# All packages
 core_metadata()
+
+# Specific packages
 core_metadata(c("pipapi", "wbpip"))
 }
+
+}
+\seealso{
+[get_branches()], [get_latest_branch_update()]
 }

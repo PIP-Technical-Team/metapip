@@ -3,53 +3,107 @@
 \name{init_metapip}
 \alias{init_metapip}
 \alias{update_pip_packages}
-\title{Initializes and updates the pip core packages}
+\title{Initialise and update PIP core packages}
 \usage{
 init_metapip(exclude = NA, ask = TRUE, answer = 1)
 
 update_pip_packages(exclude = NA, ask = TRUE, answer = 1)
 }
 \arguments{
-\item{exclude}{character: packages to exclude from attaching. if `getwd()` is
-one of the core PIP packages, that package will be excluded by default. To
-avoid that, set exclude to `NULL`.}
+\item{exclude}{Character vector. Packages to exclude from
+installation and attachment. When `NA` (default), the function
+checks if the current working directory is a core PIP package and
+excludes it automatically (useful during package development).
+Pass `NULL` to exclude nothing. Pass a character vector of package
+names to exclude explicitly.}
 
-\item{ask}{logical. Ask the user if she wants to install outdated packages. Default TRUE}
+\item{ask}{Logical. If `TRUE` (default), prompts interactively before
+installing. In non-interactive sessions, always installs with a
+warning.}
 
-\item{answer}{numeric: Developers  argument. Only works for demonstration
-purposes.}
+\item{answer}{Numeric. Developer argument for demonstration purposes.
+`1` = Yes, `2` = No.}
 }
 \value{
-`init_metapip()` returns invisible() output
+`invisible()`. Called for its side effects: installing
+  packages and attaching them.
 
-`update_pip_packages()` return logical vector. TRUE if missing package
-  were update. FALSE if all packages are up to date of the user selects not
-  to update.
+Logical (invisibly). `TRUE` when packages were installed,
+  `FALSE` when all packages were up-to-date or the user declined.
 }
 \description{
-Based on options() settings provides an option to download latest
-package versions from the branch
+`init_metapip()` is the primary entry point for setting up the PIP
+package ecosystem. It checks that all core packages are installed at
+the correct versions and attaches them.
 
-Refreshes the committed team `PIP_LOCK` manifest: it resolves
-  each core package's branch HEAD SHA, writes the updated `PIP_LOCK.csv`,
-  and (with confirmation) installs any outdated packages at their newly
-  resolved pinned SHAs. Preserves the milestone-2 per-package failure
-  isolation and interactive gate.
+When a committed `PIP_LOCK.csv` manifest is found (via
+[pip_lock_path()]), installs every package at the SHA recorded in the
+lock for deterministic, team-consistent results. When the lock is
+absent, falls back to installing each package at its branch HEAD SHA
+and suggests running [pip_snapshot()] to create a team lock.
+
+`update_pip_packages()` is the companion to [pip_snapshot()] and
+[init_metapip()]. It:
+
+1. Compares each core package's locally installed SHA against its
+   branch HEAD on GitHub.
+2. Refreshes the `PIP_LOCK.csv` manifest with the resolved branch
+   HEAD SHAs.
+3. Installs any outdated packages at their newly resolved SHAs (with
+   confirmation).
+
+Per-package installation failures are isolated and reported in a
+summary (N succeeded, M failed).
 }
 \details{
-`init_metapip()` is lock-driven: when a committed `PIP_LOCK.csv`
-  manifest is found (via [pip_lock_path()]) it installs every package at the
-  SHA recorded in the lock, giving team-level deterministic installs. When
-  the lock is absent it falls back to installing each package at its branch
-  HEAD SHA and suggests running [pip_snapshot()] to create a team lock.
+**Lock-driven workflow:**
+1. Reads `PIP_LOCK.csv` via [pip_lock_path()].
+2. Filters to packages that are not excluded.
+3. Installs each at its recorded SHA.
+
+**Fallback workflow (no lock):**
+1. Resolves each package's configured branch.
+2. Installs at branch HEAD SHA.
+3. Suggests running [pip_snapshot()] to create a lock.
+
+After installation, attaches all available core packages via
+[metapip_attach()].
+
+The function checks for three local states:
+- `TRUE`: Local SHA matches branch HEAD (up-to-date).
+- `FALSE`: Local SHA differs (outdated).
+- `"unknown"`: No `RemoteSha` metadata (e.g., CRAN install); package
+  is skipped with a warning.
 }
+\section{Errors}{
+
+Individual package install failures are caught and reported without
+aborting the remaining installs.
+}
+
 \examples{
 \dontrun{
-  init_metapip()
+# Interactive: prompts before installing
+init_metapip()
+
+# Non-interactive: auto-install
+init_metapip(ask = FALSE)
+
+# Exclude specific packages
+init_metapip(exclude = c("pipdata", "pipfaker"))
 }
 
 \dontrun{
-update_pip_packages(ask = FALSE,
-answer = 2) # this is to make it work in examples and vignettes.
+update_pip_packages()
+
+# Non-interactive (for CI/scripts)
+update_pip_packages(ask = FALSE)
 }
+
+}
+\seealso{
+[update_pip_packages()], [pip_snapshot()],
+[install_branch()], [get_core_pagkages()]
+
+[init_metapip()], [pip_snapshot()], [compare_sha()]
 }

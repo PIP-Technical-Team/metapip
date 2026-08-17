@@ -3,28 +3,46 @@
 \name{get_default_branch}
 \alias{get_default_branch}
 \alias{set_default_branch}
-\title{Get default branch in PIP ecosystem}
+\title{Get or set the global default branch}
 \usage{
 get_default_branch()
 
 set_default_branch(branch)
 }
 \arguments{
-\item{branch}{chracter: name of default branch.}
+\item{branch}{Character. Name of the branch to set as the global default.}
 }
 \value{
-name of branch
+`get_default_branch()`: character string of the current default
+  branch.
 
-name of branch invisible
+`set_default_branch()`: the new default branch value (returned
+  invisibly).
 }
 \description{
-Get default branch in PIP ecosystem
-
-Modify default branch
+`get_default_branch()` returns the value of the `metapip.default_branch`
+option, which controls the default branch for all core PIP packages.
+`set_default_branch()` modifies it.
+}
+\details{
+The global default branch is the fallback used by all functions that
+accept a `branch` argument when no explicit branch is provided. Per-package
+overrides (set via [set_custom_branch()]) take precedence over this
+global default.
 }
 \examples{
+# View current default
 get_default_branch()
+
 \dontrun{
-set_default_branch("PROD")
+# Change global default (persists for session)
+set_default_branch("DEV")
 }
+
 }
+\seealso{
+Other branch configuration:
+\code{\link[=get_current_branches]{get_current_branches()}},
+\code{\link[=set_custom_branch]{set_custom_branch()}}
+}
+\concept{branch configuration}
