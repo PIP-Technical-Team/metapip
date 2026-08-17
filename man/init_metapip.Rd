@@ -29,6 +29,19 @@ purposes.}
 \description{
 Based on options() settings provides an option to download latest
 package versions from the branch
+
+Refreshes the committed team `PIP_LOCK` manifest: it resolves
+  each core package's branch HEAD SHA, writes the updated `PIP_LOCK.csv`,
+  and (with confirmation) installs any outdated packages at their newly
+  resolved pinned SHAs. Preserves the milestone-2 per-package failure
+  isolation and interactive gate.
+}
+\details{
+`init_metapip()` is lock-driven: when a committed `PIP_LOCK.csv`
+  manifest is found (via [pip_lock_path()]) it installs every package at the
+  SHA recorded in the lock, giving team-level deterministic installs. When
+  the lock is absent it falls back to installing each package at its branch
+  HEAD SHA and suggests running [pip_snapshot()] to create a team lock.
 }
 \examples{
 \dontrun{

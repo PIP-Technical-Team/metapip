@@ -4,12 +4,24 @@
 \alias{install_branch}
 \title{Install branch from a package}
 \usage{
-install_branch(package = "pipapi", branch = NULL)
+install_branch(package = "pipapi", branch = NULL, force = FALSE, sha = NULL)
 }
 \arguments{
 \item{package}{one of the core package name (default "pipapi")}
 
 \item{branch}{valid branch name (default "PROD")}
+
+\item{force}{logical: when TRUE, bypasses SHA pinning and the idempotency
+check, installing the live branch HEAD (`@<branch>`) instead. Intended for
+developers. Default FALSE.}
+
+\item{sha}{character: optional commit SHA to install at. When supplied it
+overrides the resolved branch HEAD SHA. When NULL (default) and
+`force = FALSE`, the branch HEAD SHA is resolved and pinned.}
+}
+\value{
+invisible NULL, or the result of `remotes::install_github()` when an
+  install is performed
 }
 \description{
 Install branch from a package
@@ -18,6 +30,8 @@ Install branch from a package
 \dontrun{
   install_branch()
   install_branch("pipfun", "ongoing")
+  install_branch("pipfun", "ongoing", force = TRUE)
+  install_branch("pipfun", "ongoing", sha = "a1b2c3d")
 }
 
 }

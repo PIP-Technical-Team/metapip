@@ -9,6 +9,11 @@
 #' package versions from the branch
 #'
 #' @returns `init_metapip()` returns invisible() output
+#' @details `init_metapip()` is lock-driven: when a committed `PIP_LOCK.csv`
+#'   manifest is found (via [pip_lock_path()]) it installs every package at the
+#'   SHA recorded in the lock, giving team-level deterministic installs. When
+#'   the lock is absent it falls back to installing each package at its branch
+#'   HEAD SHA and suggests running [pip_snapshot()] to create a team lock.
 #' @examples
 #' \dontrun{
 #'   init_metapip()
@@ -18,17 +23,96 @@
 init_metapip <- function(exclude = NA,
                          ask     = TRUE,
                          answer  = 1) {
-  update_pip_packages(exclude = exclude,
-                      ask = ask,
-                      answer  = answer)
+  lock_path <- pip_lock_path()
+
+  if (file.exists(lock_path) && nzchar(lock_path)) {
+    lock <- utils::read.csv(lock_path, stringsAsFactors = FALSE)
+    pkgs <- get_core_pagkages(exclude = exclude)
+    lock <- lock[lock$package %in% pkgs, , drop = FALSE]
+    lock <- lock[!is.na(lock$sha), , drop = FALSE]
+
+    if (nrow(lock) > 0) {
+      if (ask) {
+        if (interactive()) {
+          answer <- utils::menu(
+            choices = c("Yes", "No"),
+            title = "Do you want to install the locked packages now?"
+          )
+        } else {
+          cli::cli_alert_warning("Non-interactive session: installing locked packages by default")
+          answer <- 1
+        }
+      }
+
+      if (identical(answer, 1)) {
+        cli::cli_alert_info("Installing {nrow(lock)} package{?s} from the lock...")
+        for (i in seq_len(nrow(lock))) {
+          tryCatch(
+            install_branch(
+              package = lock$package[i],
+              branch = lock$branch[i],
+              sha = lock$sha[i],
+              force = FALSE
+            ),
+            error = function(e) {
+              cli::cli_alert_danger(
+                "Failed to install {.pkg {lock$package[i]}}: {conditionMessage(e)}"
+              )
+            }
+          )
+        }
+      } else {
+        cli::cli_alert_danger("Skipping installation.")
+      }
+    }
+  } else {
+    cli::cli_alert_info("No PIP_LOCK found; installing at branch HEAD. Run {.fn pip_snapshot} to create a team lock manifest.")
+    pkgs <- get_core_pagkages(exclude = exclude)
+    branches <- get_package_current_branch(package = pkgs)
+
+    if (ask) {
+      if (interactive()) {
+        answer <- utils::menu(
+          choices = c("Yes", "No"),
+          title = "Do you want to install all core packages at their branch HEAD now?"
+        )
+      } else {
+        cli::cli_alert_warning("Non-interactive session: installing packages by default")
+        answer <- 1
+      }
+    }
+
+    if (identical(answer, 1)) {
+      for (pkg in pkgs) {
+        tryCatch(
+          install_branch(package = pkg, branch = unname(branches[pkg])),
+          error = function(e) {
+            cli::cli_alert_danger(
+              "Failed to install {.pkg {pkg}}: {conditionMessage(e)}"
+            )
+          }
+        )
+      }
+    } else {
+      cli::cli_alert_danger("Skipping installation.")
+    }
+  }
+
   # Finally load all the packages once it is installed.
   metapip_attach()
+  invisible()
 }
 
 
 
 
 #' Update PIP package
+#'
+#' @description Refreshes the committed team `PIP_LOCK` manifest: it resolves
+#'   each core package's branch HEAD SHA, writes the updated `PIP_LOCK.csv`,
+#'   and (with confirmation) installs any outdated packages at their newly
+#'   resolved pinned SHAs. Preserves the milestone-2 per-package failure
+#'   isolation and interactive gate.
 #'
 #' @param answer numeric: Developers  argument. Only works for demonstration
 #'   purposes.
@@ -87,6 +171,44 @@ update_pip_packages <- \(exclude = NA,
     )
   }
 
+  # Refresh the lock manifest with the resolved branch HEAD SHAs.
+  lock_rows <- list()
+  resolved_sha <- character(0)
+  lock_skipped <- character(0)
+  for (i in seq_along(pkgs)) {
+    pkg <- pkgs[i]
+    brn <- unname(default_branch[pkg])
+    sha <- latest_commit_for_branch(pkg, brn)$sha
+    if (is.null(sha)) {
+      lock_skipped <- c(lock_skipped, pkg)
+      next
+    }
+    resolved_sha[[pkg]] <- sha
+    lock_rows[[pkg]] <- data.frame(
+      package = pkg,
+      branch = brn,
+      sha = sha,
+      stringsAsFactors = FALSE
+    )
+  }
+
+  if (length(lock_skipped) > 0) {
+    cli::cli_alert_warning(
+      "Could not resolve SHA for {.pkg {lock_skipped}}; not written to PIP_LOCK"
+    )
+  }
+
+  lock_path <- getOption("metapip.lock_path", pip_lock_path())
+  if (length(lock_rows) > 0) {
+    lock_df <- rowbind(lock_rows)
+    if (nrow(lock_df) > 0 && nzchar(lock_path)) {
+      utils::write.csv(lock_df, lock_path, row.names = FALSE)
+      cli::cli_alert_info("Updated {.path PIP_LOCK} - commit this change.")
+    }
+  } else {
+    cli::cli_alert_warning("Could not resolve any SHA; PIP_LOCK not updated")
+  }
+
   if (length(missing_pkgs) > 0) {
     cli::cli_alert_warning(
       "The following packages do not have the updated version of default branch
@@ -114,7 +236,11 @@ update_pip_packages <- \(exclude = NA,
       for (pkg in missing_pkgs) {
         tryCatch(
           {
-            install_branch(pkg, default_branch[pkg])
+            install_branch(
+              pkg,
+              default_branch[pkg],
+              sha = resolved_sha[[pkg]]
+            )
             n_success <- n_success + 1L
           },
           error = function(e) {

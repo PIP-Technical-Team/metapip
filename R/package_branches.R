@@ -22,7 +22,6 @@ package_branches <- function(
   package = NULL,
   branch_to_compare = getOption("metapip.default_branch")
 ) {
-  check_github_token()
   if (!is.null(package)) {
     is_core(package)
   } else {

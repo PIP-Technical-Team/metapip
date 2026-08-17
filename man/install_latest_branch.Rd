@@ -11,6 +11,9 @@ install_latest_branch(package = NULL)
 }
 \description{
 Based on the last commit of the branch it installs the latest branch of the package.
+This is a developer-only tool: it deliberately bypasses the team
+`PIP_LOCK` manifest and installs the live HEAD of each branch. Use
+[pip_snapshot()] + [init_metapip()] for team-consistent installs.
 }
 \examples{
 \dontrun{

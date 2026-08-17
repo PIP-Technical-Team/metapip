@@ -47,3 +47,107 @@ test_that("rs_theme returns correct theme information", {
     expect_equal(getOption("colorDF_theme"), "bw")
   })
 })
+
+# gh_token --------
+test_that("gh_token returns the token from gitcreds when available", {
+  mockery::stub(gh_token, "gitcreds::gitcreds_get", function() {
+    list(username = "x", password = "abc", protocol = "https")
+  })
+  withr::with_envvar(c(GITHUB_PAT = "", GITHUB_TOKEN = ""), {
+    expect_equal(gh_token(), "abc")
+  })
+})
+
+test_that("gh_token honors GITHUB_PAT env var first", {
+  mockery::stub(gh_token, "gitcreds::gitcreds_get", function() {
+    list(username = "x", password = "from-gitcreds", protocol = "https")
+  })
+  withr::with_envvar(c(GITHUB_PAT = "env-pat", GITHUB_TOKEN = ""), {
+    expect_equal(gh_token(), "env-pat")
+  })
+})
+
+test_that("gh_token honors GITHUB_TOKEN env var second", {
+  mockery::stub(gh_token, "gitcreds::gitcreds_get", function() {
+    list(username = "x", password = "from-gitcreds", protocol = "https")
+  })
+  withr::with_envvar(c(GITHUB_PAT = "", GITHUB_TOKEN = "env-token"), {
+    expect_equal(gh_token(), "env-token")
+  })
+})
+
+test_that("gh_token returns NULL when no creds and does not abort", {
+  mockery::stub(gh_token, "gitcreds::gitcreds_get", function() {
+    stop("no credentials")
+  })
+  withr::with_envvar(c(GITHUB_PAT = "", GITHUB_TOKEN = ""), {
+    expect_null(gh_token())
+  })
+})
+
+# check_github_token redaction --------
+test_that("check_github_token redacts the PAT on print", {
+  withr::with_envvar(c(GITHUB_PAT = "", GITHUB_TOKEN = ""), {
+    mockery::stub(check_github_token, "gh_token", function() NULL)
+    mockery::stub(check_github_token, "gitcreds::gitcreds_get", function() {
+      list(name = "x", password = "secret", protocol = "https", host = "github.com")
+    })
+    out <- capture.output(print(check_github_token()))
+    expect_false(any(grepl("secret", out)))
+    expect_true(any(grepl('""', out)))
+  })
+})
+
+test_that("check_github_token returns a redacted list (never the password)", {
+  withr::with_envvar(c(GITHUB_PAT = "", GITHUB_TOKEN = ""), {
+    mockery::stub(check_github_token, "gh_token", function() NULL)
+    mockery::stub(check_github_token, "gitcreds::gitcreds_get", function() {
+      list(name = "x", password = "secret", protocol = "https")
+    })
+    res <- check_github_token()
+    expect_s3_class(res, "metapip_token")
+    expect_false("secret" %in% unlist(res))
+    expect_equal(res$password, "")
+  })
+})
+
+test_that("check_github_token passes when a token is available via env var", {
+  withr::with_envvar(c(GITHUB_PAT = "env-pat", GITHUB_TOKEN = ""), {
+    mockery::stub(check_github_token, "gitcreds::gitcreds_get", function() {
+      stop("should not be reached")
+    })
+    res <- check_github_token()
+    expect_s3_class(res, "metapip_token")
+    expect_equal(res$password, "")
+  })
+})
+
+test_that("check_github_token still aborts when no credentials are available", {
+  withr::with_envvar(c(GITHUB_PAT = "", GITHUB_TOKEN = ""), {
+    mockery::stub(check_github_token, "gh_token", function() NULL)
+    mockery::stub(check_github_token, "gitcreds::gitcreds_get", function() {
+      stop("no credentials")
+    })
+    expect_error(check_github_token())
+  })
+})
+
+test_that("check_github_token reports a missing git installation", {
+  withr::with_envvar(c(GITHUB_PAT = "", GITHUB_TOKEN = ""), {
+    mockery::stub(check_github_token, "gh_token", function() NULL)
+    mockery::stub(check_github_token, "gitcreds::gitcreds_get", function() {
+      rlang::abort("no git", class = "gitcreds_nogit_error")
+    })
+    expect_error(check_github_token(), "No git installation found")
+  })
+})
+
+test_that("check_github_token reports missing credentials", {
+  withr::with_envvar(c(GITHUB_PAT = "", GITHUB_TOKEN = ""), {
+    mockery::stub(check_github_token, "gh_token", function() NULL)
+    mockery::stub(check_github_token, "gitcreds::gitcreds_get", function() {
+      rlang::abort("no creds", class = "gitcreds_no_credentials")
+    })
+    expect_error(check_github_token(), "No git credentials found")
+  })
+})
