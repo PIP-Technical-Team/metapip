@@ -38,7 +38,6 @@ reference:
     desc: Team-wide reproducible installs via PIP_LOCK.csv
     contents:
       - pip_snapshot
-      - pip_lock_path
 
   - title: Credentials
     desc: GitHub token validation
@@ -53,6 +52,7 @@ reference:
       - metapip_update
       - pkg_deps
       - rowname_to_column
+      - print.metapip_simplelist
       - metapip
 
 articles:
@@ -68,5 +68,5 @@ articles:
 
   - title: Workflows
     contents:
-      - package-development
+      - package_development
       - package-specific-options
