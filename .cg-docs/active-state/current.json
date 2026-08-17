@@ -1,26 +1,26 @@
 {
   "schemaVersion": "compound-gpid-active-state-v1",
   "updatedAt": "2026-08-14T19:30:00Z",
-  "workflow": "/cg-commit-push-pr",
+  "workflow": "/cg-work",
   "status": "completed",
-  "branch": "lock-down-the-supply-chain",
-  "plan": ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md",
-  "executionReport": ".cg-docs/work-reports/2026-08-14-lock-down-supply-chain.md",
+  "branch": "performance-tests-release",
+  "plan": ".cg-docs/plans/2026-08-13-performance-tests-release.md",
+  "executionReport": ".cg-docs/work-reports/2026-08-14-performance-tests-release.md",
   "currentPhase": null,
   "evidenceStatus": [
-    {"id": "V1", "status": "passed", "artifact": "tests/testthat/test-get_branches.R"},
-    {"id": "V13", "status": "passed", "artifact": "devtools::test() + rcmdcheck (0 errors)"}
+    {"id": "V1", "status": "passed", "artifact": "tests/testthat/test-get_branches.R + test-core_metadata.R"},
+    {"id": "V2", "status": "passed", "artifact": "R/attach.R"},
+    {"id": "V3", "status": "passed", "artifact": "devtools::test()"},
+    {"id": "V4", "status": "passed", "artifact": "rcmdcheck::rcmdcheck()"},
+    {"id": "V5", "status": "passed", "artifact": ".github/workflows/codecov.yml"},
+    {"id": "V6", "status": "passed", "artifact": "DESCRIPTION"},
+    {"id": "V7", "status": "passed", "artifact": "NEWS.md"},
+    {"id": "V8", "status": "passed", "artifact": "tests/testthat/test-install_*.R"}
   ],
-  "unresolvedDecisions": [
-    {"id": "WIKI", "summary": "@cg-wiki proposed 3 wiki page updates (api-reference, README, changelog); proposal-only, not written — pending user approval", "blocking": false},
-    {"id": "TOKEN", "summary": "Codecov badge token rotation recommended (P2.5 advisory) — external action at codecov.io", "blocking": false}
-  ],
+  "unresolvedDecisions": [],
   "artifactRefs": [
-    {"kind": "plan", "path": ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md", "status": "completed"},
-    {"kind": "work-report", "path": ".cg-docs/work-reports/2026-08-14-lock-down-supply-chain.md", "status": "completed"},
-    {"kind": "review", "path": ".cg-docs/reviews/2026-08-14-lock-down-supply-chain-review.md", "status": "fixed"},
-    {"kind": "verify-review", "path": ".cg-docs/reviews/2026-08-12-unblock-the-core-verify-review-2.md", "status": "open"},
-    {"kind": "pr", "path": "https://github.com/PIP-Technical-Team/metapip/pull/22", "status": "open"}
+    {"kind": "review", "path": ".cg-docs/reviews/2026-08-12-unblock-the-core-verify-review.md", "status": "open"},
+    {"kind": "plan", "path": ".cg-docs/plans/2026-08-13-performance-tests-release.md", "status": "completed"}
   ],
-  "nextCommand": "/cg-verify-pr"
+  "nextCommand": "/cg-commit-push-pr"
 }

@@ -62,4 +62,5 @@ Without this companion fix, the inner names remain URLs and the new `get_complet
 
 ## Related
 
+- `.cg-docs/solutions/data-quality/2026-08-14-untrusted-version-parse-compareversion.md` (safe parsing of the same remote DESCRIPTION `Version` data)
 - `.cg-docs/solutions/data-quality/2026-08-13-resilient-httr2-utc-fetching.md` — companion fix: `get_package_version()` now uses httr2 with `vapply(character(1L))` (stable typing) and named branch vectors, keeping this named-list contract intact.

@@ -1,8 +1,16 @@
 # Changelog
 
 <!-- cg:auto:version-history -->
-## Unreleased
+## 0.1.0
 
+- New exported function `get_core_packages()` — a correctly-spelled alias for
+  the deprecated `get_core_pagkages()` (typo). Both remain exported.
+- `package_branches()` now reports an accurate `local_status` column
+  (`behind` / `ahead` / `up-to-date`, plus `"Not in local"`, `"not in repo"`,
+  and `"unknown"`), replacing the previous broken lookup against a column that
+  was never produced.
+- GitHub API calls are now memoized per R session (performance improvement).
+  Restart R to clear the memoized results.
 - `install_branch()` pins to the resolved branch HEAD SHA by default
   (`force = TRUE` installs live HEAD, bypassing the lock; `sha =` overrides
   the resolved commit), with an idempotent skip when the installed
@@ -28,6 +36,7 @@
 - `get_branches()` now paginates through all branches (`.limit = Inf`), so
   repositories with more than 30 branches are fully returned.
 - The README Codecov badge no longer carries a `?token=` parameter.
+- Version bumped to 0.1.0.
 
 ## 0.0.3
 

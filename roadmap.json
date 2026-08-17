@@ -169,43 +169,43 @@
       "id": "performance-tests-release",
       "title": "Performance, Tests & Release",
       "objective": "Cache API calls, un-skip tests, harden CI, ship 0.1.0.",
-      "status": "planned",
+      "status": "done",
       "features": [
         {
           "id": "api-memoization",
           "title": "Per-session API memoization for get_branches() / latest_commit_for_branch() (P1)",
-          "status": "idea",
-          "plan": null
+          "status": "done",
+          "plan": ".cg-docs/plans/2026-08-13-performance-tests-release.md"
         },
         {
           "id": "require-namespace-checks",
           "title": "Replace installed.packages() with requireNamespace() per-package checks (P2)",
-          "status": "idea",
-          "plan": null
+          "status": "done",
+          "plan": ".cg-docs/plans/2026-08-13-performance-tests-release.md"
         },
         {
           "id": "unskip-install-tests",
           "title": "Un-skip and rewrite install tests with mockery stubs",
-          "status": "idea",
-          "plan": null
+          "status": "done",
+          "plan": ".cg-docs/plans/2026-08-13-performance-tests-release.md"
         },
         {
           "id": "network-test-gating",
           "title": "Mark network tests with skip_if_offline() + skip_on_cran()",
-          "status": "idea",
-          "plan": null
+          "status": "done",
+          "plan": ".cg-docs/plans/2026-08-13-performance-tests-release.md"
         },
         {
           "id": "windows-ci",
           "title": "Windows CI matrix + pin actions/checkout@v4 + document GH_TOKEN policy",
-          "status": "idea",
-          "plan": null
+          "status": "done",
+          "plan": ".cg-docs/plans/2026-08-13-performance-tests-release.md"
         },
         {
           "id": "version-bump-010",
           "title": "Version bump to 0.1.0, NEWS.md rewrite, API hygiene (typos, globalVariables, roxygen)",
-          "status": "idea",
-          "plan": null
+          "status": "done",
+          "plan": ".cg-docs/plans/2026-08-13-performance-tests-release.md"
         }
       ]
     }
