@@ -76,20 +76,23 @@ test_that("get_package_version handles branches whose DESCRIPTION 404s", {
 
 test_that("join_and_get_status computes ahead/behind/up-to-date", {
   local <- data.frame(
-    package = c("pipapi", "wbpip"),
-    local_branch = c("DEV", "PROD"),
-    local_version = c("1.0.0", "0.9.0"),
+    package = c("pipapi", "wbpip", "pipfun"),
+    local_branch = c("DEV", "PROD", "DEV"),
+    local_version = c("1.0.0", "0.9.0", "2.0.0"),
     stringsAsFactors = FALSE
   )
   dev <- data.frame(
-    package = c("pipapi", "wbpip"),
-    branch = c("PROD", "PROD"),
-    version = c("1.0.1", "0.9.0"),
+    package = c("pipapi", "wbpip", "pipfun"),
+    branch = c("PROD", "PROD", "PROD"),
+    version = c("1.0.1", "0.9.0", "1.5.0"),
     stringsAsFactors = FALSE
   )
   res <- join_and_get_status(local, dev, "PROD")
   res <- res[order(res$package), ]
-  expect_identical(res$local_status, c("behind PROD", "up-to-date"))
+  expect_identical(
+    res$local_status,
+    c("behind PROD", "ahead of PROD", "up-to-date")
+  )
 })
 
 test_that("join_and_get_status reports unknown compared version as NA", {
