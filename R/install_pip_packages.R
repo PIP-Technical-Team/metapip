@@ -220,18 +220,20 @@ install_branch <- function(package = "pipapi", branch = NULL,
   }
 
   if (isTRUE(force)) {
-    cli::cli_alert_warning(
-      "force = TRUE bypasses the team lock; installing live HEAD of
-      {.field {branch}}"
+  cli::cli_alert_warning(
+    "force = TRUE bypasses the team lock; installing live HEAD of
+    {.field {branch}}"
     )
     cli::cli_alert_info(
       glue::glue(
         "Installing branch {branch} from package {package}"
       )
     )
-    return(remotes::install_github(
+    out <- remotes::install_github(
       glue::glue("PIP-Technical-Team/{package}@{branch}")
-    ))
+    )
+    cache_invalidate(package)
+    return(out)
   }
 
   target_sha <- sha
@@ -261,7 +263,12 @@ install_branch <- function(package = "pipapi", branch = NULL,
       "Installing branch {branch} from package {package} at {target_sha}"
     )
   )
-  remotes::install_github(
+  out <- remotes::install_github(
     glue::glue("PIP-Technical-Team/{package}@{target_sha}")
   )
+
+  # Invalidate memoized API results for the installed package so post-install
+  # checks (e.g., compare_sha) do not compare against stale cached data.
+  cache_invalidate(package)
+  out
 }

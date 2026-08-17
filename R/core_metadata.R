@@ -58,21 +58,34 @@ core_metadata <- function(package = NULL) {
   )
   no_of_branches <- lengths(branches)
 
-  cli::cli_alert_info(
-    "Gathering latest tag and published date."
-  )
-  latest_release <- lapply(
-    cli::cli_progress_along(package),
-    \(i) {
-      dat <- tryCatch(
-        gh::gh("GET /repos/{owner}/{repo}/releases/latest",
-               owner = "PIP-Technical-Team",
-               repo = package[i]),
-        error = \(err) data.frame(tag_name = NA, published_at = NA)
-      )
-      c(dat$tag_name, dat$published_at)
+  cli::cli_alert_info("Gathering latest tag and published date.")
+  latest_release <- lapply(cli::cli_progress_along(package),
+                           \(i) {
+    key <- paste0("release:", package[i])
+    dat <- cache_get(key)
+    if (is.null(dat)) {
+      ok <- FALSE
+      dat <- tryCatch({
+        out <- gh::gh("GET /repos/{owner}/{repo}/releases/latest",
+            owner = "PIP-Technical-Team",
+            repo = package[i])
+        ok <- TRUE
+        out
+        }, error = function(err) {
+        # A 404 means the package genuinely has no "latest" release: cache it.
+        # Other (transient) errors are returned but not cached so the next
+        # call retries instead of poisoning the session cache.
+        if (inherits(err, "gh_error") && isTRUE(err$status_code == 404L)) {
+          ok <<- TRUE
+        }
+        data.frame(tag_name = NA_character_, published_at = NA_character_)
+        }
+        )
+      if (ok) cache_set(key, dat)
     }
-  )
+
+    c(dat$tag_name, dat$published_at)
+  })
 
   cli::cli_alert_info("Gathering latest branch information")
   latest_commit <- lapply(
@@ -80,19 +93,12 @@ core_metadata <- function(package = NULL) {
     \(i) get_latest_branch_update(package[i], display = FALSE)
   )
 
-  out <- data.frame(
-    package,
-    no_of_branches,
-    latest_release_tag = sapply(latest_release, `[[`, 1),
-    latest_release_time = sapply(latest_release, `[[`, 2),
-    latest_commit_branch = sapply(latest_commit, `[[`, "branch_name"),
-    latest_commit_author = sapply(
-      latest_commit, `[[`, "last_commit_author_name"
-    ),
-    latest_commit_time = as.POSIXct(
-      sapply(latest_commit, `[[`, "last_update_time"), tz = "UTC"
-    )
-  )
+  out <- data.frame(package, no_of_branches, latest_release_tag = sapply(latest_release, `[[`, 1),
+                    latest_release_time = as.POSIXct(sapply(latest_release, `[[`, 2),
+                                                     format = "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"),
+                    latest_commit_branch = sapply(latest_commit, `[[`, "branch_name"),
+                    latest_commit_author = sapply(latest_commit, `[[`, "last_commit_author_name"),
+                    latest_commit_time = as.POSIXct(sapply(latest_commit, `[[`, "last_update_time"), tz = "UTC"))
   print(colorDF::colorDF(out))
   return(invisible(out))
 }
@@ -116,12 +122,25 @@ core_metadata <- function(package = NULL) {
 #'
 #' @keywords internal
 latest_commit_for_branch <- function(package, branch) {
-  tryCatch(
-    gh::gh("GET /repos/{owner}/{repo}/commits/{branch}",
-           owner = "PIP-Technical-Team",
-           repo = package, branch = branch),
-    error = function(err) {
+  key <- paste0("commit:", package, ":", branch)
+  out <- cache_get(key)
+  if (is.null(out)) {
+    ok <- FALSE
+    out <- tryCatch({
+      res <- gh::gh("GET /repos/{owner}/{repo}/commits/{branch}", owner = "PIP-Technical-Team",
+                    repo = package, branch = branch)
+      ok <- TRUE
+      res
+    }, error = function(err) {
+      # A 404 means the branch genuinely has no commits data: cache it.
+      # Other (transient) errors are returned but not cached so the next
+      # call retries instead of poisoning the session cache.
+      if (inherits(err, "gh_error") && isTRUE(err$status_code == 404L)) {
+        ok <<- TRUE
+      }
       list(commit = list(author = list(date = NA, name = NA)))
-    }
-  )
+    })
+    if (ok) cache_set(key, out)
+  }
+  out
 }
