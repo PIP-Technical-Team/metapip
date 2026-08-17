@@ -27,6 +27,9 @@ automatically.}
   SHA), or the result of [remotes::install_github()] when an install is
   actually performed.
 }
+\value{
+invisible TRUE on successful installation
+}
 \description{
 Installs a single core PIP package from a specified branch on GitHub.
 By default (`force = FALSE`), the branch HEAD SHA is resolved and pinned,

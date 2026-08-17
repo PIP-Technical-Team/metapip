@@ -13,6 +13,9 @@ metapip_packages(include_self = TRUE)
 \value{
 Character vector of package names.
 }
+\value{
+character vector of package names imported by metapip
+}
 \description{
 Returns the names of all packages listed in the `Imports` field of
 metapip's DESCRIPTION. Optionally includes `"metapip"` itself.
