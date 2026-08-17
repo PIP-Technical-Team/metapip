@@ -55,3 +55,22 @@ test_that("cache key isolation between packages", {
   # Cleanup so cached values do not leak into other test files
   cache_clear("branches:")
 })
+
+test_that("cache functions guard against a NULL cache binding", {
+  # Temporarily simulate the pre-.onLoad state
+  ns <- asNamespace("metapip")
+  original <- get(".metapip_cache", envir = ns)
+  unlockBinding(".metapip_cache", ns)
+  on.exit({
+    assign(".metapip_cache", original, envir = ns)
+    lockBinding(".metapip_cache", ns)
+  }, add = TRUE)
+  assign(".metapip_cache", NULL, envir = ns)
+
+  expect_null(cache_get("any"))
+  expect_silent(cache_clear("any"))
+
+  # cache_set lazily recreates the cache environment
+  cache_set("k", "v")
+  expect_equal(cache_get("k"), "v")
+})

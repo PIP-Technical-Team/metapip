@@ -14,6 +14,23 @@ test_that("install_latest_branch emits the bypass-the-lock warning", {
   expect_true(captured$force)
 })
 
+test_that("install_latest_branch defaults to all core packages when package is NULL", {
+  captured <- NULL
+  mockery::stub(install_latest_branch, "check_github_token", function(...) NULL)
+  mockery::stub(install_latest_branch, "is_core", function(...) TRUE)
+  mockery::stub(install_latest_branch, "get_latest_branch_update", function(pkg, display) {
+    data.frame(package = pkg, branch_name = "PROD", name = "user", last_update_time = Sys.time(), stringsAsFactors = FALSE)
+  })
+  mockery::stub(install_latest_branch, "compare_sha", function(pkg, branch) "unknown")
+  mockery::stub(install_latest_branch, "install_branch", function(pkg, branch, force) {
+    captured <<- list(pkg = pkg, branch = branch, force = force)
+  })
+
+  suppressMessages(install_latest_branch())
+  expect_true(!is.null(captured))
+  expect_true(captured$pkg %in% metapip:::core)
+})
+
 test_that("install_latest_branch skips packages already at HEAD", {
   install_calls <- character(0)
   info_messages <- character(0)

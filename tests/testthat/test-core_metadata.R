@@ -121,6 +121,66 @@ test_that("install_branch clears the memoization cache after install", {
   expect_null(cache_get("commit:pipapi:PROD"))
 })
 
+gh_404 <- function() {
+  structure(
+    list(
+      message = "Not Found (HTTP 404)",
+      call = NULL,
+      status_code = 404L
+    ),
+    class = c("gh_error", "error", "condition")
+  )
+}
+
+test_that("core_metadata caches a 404 gh_error release lookup", {
+  cache_clear("release:")
+  mockery::stub(core_metadata, "check_github_token", function(...) list(password = "x"))
+  mockery::stub(core_metadata, "is_core", function(...) TRUE)
+  mockery::stub(core_metadata, "get_branches", function(package, display) c("PROD"))
+  mockery::stub(core_metadata, "gh::gh", function(...) stop(gh_404()))
+  mockery::stub(core_metadata, "get_latest_branch_update", function(package, display) {
+    data.frame(
+      package = package,
+      branch_name = "PROD",
+      last_commit_author_name = "user",
+      last_update_time = as.POSIXct("2026-01-01 00:00:00"),
+      stringsAsFactors = FALSE
+    )
+  })
+
+  expect_warning(out <- core_metadata("pipapi"), NA)
+  expect_true(is.na(out$latest_release_tag))
+
+  # 404 is a genuine "no release" state: it is cached, so a second run must
+  # not re-invoke gh::gh. Verify by replacing the stub with a failure trap.
+  trap <- FALSE
+  mockery::stub(core_metadata, "gh::gh", function(...) {
+    trap <<- TRUE
+    stop(gh_404())
+  })
+  expect_warning(core_metadata("pipapi"), NA)
+  expect_false(trap)
+  cache_clear("release:")
+})
+
+test_that("latest_commit_for_branch caches a 404 gh_error commit lookup", {
+  cache_clear("commit:")
+  mockery::stub(latest_commit_for_branch, "gh::gh", function(...) stop(gh_404()))
+
+  out1 <- latest_commit_for_branch("pipapi", "gh-pages")
+  expect_true(is.na(out1$commit$author$date))
+
+  trap <- FALSE
+  mockery::stub(latest_commit_for_branch, "gh::gh", function(...) {
+    trap <<- TRUE
+    stop(gh_404())
+  })
+  out2 <- latest_commit_for_branch("pipapi", "gh-pages")
+  expect_false(trap)
+  expect_identical(out1, out2)
+  cache_clear("commit:")
+})
+
 test_that("core_metadata latest_commit_time is UTC", {
   withr::local_envvar(TZ = "America/New_York")
   mockery::stub(core_metadata, "check_github_token",
