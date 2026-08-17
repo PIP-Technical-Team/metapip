@@ -56,6 +56,16 @@
 <li>GitHub timestamps (<code>...Z</code>) must be parsed with <code>as.POSIXct(x, format = "%Y-%m-%dT%H:%M:%OSZ", tz = "UTC")</code> — <code>%OS</code> handles optional fractional seconds; never rely on host TZ.</li>
 <li>Prefer <code><a href="https://cli.r-lib.org/reference/cli_abort.html" class="external-link">cli::cli_warn()</a></code> over <code><a href="https://cli.r-lib.org/reference/cli_alert.html" class="external-link">cli::cli_alert_warning()</a></code> when a test must <code>expect_warning()</code>.</li>
 </ul></div>
+<div class="section level3">
+<h3 id="supply-chain--install-conventions-discovered-2026-08-14">Supply-chain / install conventions (discovered 2026-08-14)<a class="anchor" aria-label="anchor" href="#supply-chain--install-conventions-discovered-2026-08-14"></a></h3>
+<ul><li>A committed team lock manifest lives at <code>inst/PIP_LOCK.csv</code> (<code>package,branch,sha</code>). <code><a href="reference/pip_snapshot.html">pip_snapshot()</a></code> writes/refreshes it; <code><a href="reference/init_metapip.html">init_metapip()</a></code> installs from it (falls back to branch HEAD when absent); <code><a href="reference/init_metapip.html">update_pip_packages()</a></code> refreshes it. <code>options(metapip.lock_path)</code> overrides the write target; <code><a href="reference/pip_lock_path.html">pip_lock_path()</a></code> (read-only, via <code>system.file</code>) is the read path.</li>
+<li>
+<code><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file()</a></code> returns <code>""</code> when a file is absent — never rely on it for a default write target without <code><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nzchar()</a></code> guarding (and <code>write.csv(x, "")</code> silently writes to stdout on Windows).</li>
+<li>Least-privilege tokens: read-only GitHub functions work without a PAT; install functions gate on <code><a href="reference/check_github_token.html">check_github_token()</a></code>, which returns a redacted <code>metapip_token</code> (env-var first via <code><a href="reference/gh_token.html">gh_token()</a></code>, gitcreds fallback).</li>
+<li>R testing: <code>stop(msg, class = "foo")</code> does NOT produce a condition a <code>tryCatch</code> handler named <code>foo</code> inherits — use <code>rlang::abort(..., class=)</code>; validate with an installed <code>rcmdcheck</code>, not just <code>load_all()</code>, since internal-symbol/condition semantics differ.</li>
+<li>
+<code>mapply(compare_sha, ...)</code> resists per-argument mockery mocks — keep mock return values single-valued per test block (see <code>.cg-docs/solutions/testing-patterns/2026-08-13-tri-state-compare-sha-mockery.md</code>).</li>
+</ul></div>
 </div>
 <div class="section level2">
 <h2 id="work-in-progress">Work in Progress<a class="anchor" aria-label="anchor" href="#work-in-progress"></a></h2>

@@ -44,7 +44,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">install_branch</span><span class="op">(</span>package <span class="op">=</span> <span class="st">"pipapi"</span>, branch <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">install_branch</span><span class="op">(</span>package <span class="op">=</span> <span class="st">"pipapi"</span>, branch <span class="op">=</span> <span class="cn">NULL</span>, force <span class="op">=</span> <span class="cn">FALSE</span>, sha <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -58,13 +58,32 @@
 <dt id="arg-branch">branch<a class="anchor" aria-label="anchor" href="#arg-branch"></a></dt>
 <dd><p>valid branch name (default "PROD")</p></dd>
 
+
+<dt id="arg-force">force<a class="anchor" aria-label="anchor" href="#arg-force"></a></dt>
+<dd><p>logical: when TRUE, bypasses SHA pinning and the idempotency
+check, installing the live branch HEAD (`@&lt;branch&gt;`) instead. Intended for
+developers. Default FALSE.</p></dd>
+
+
+<dt id="arg-sha">sha<a class="anchor" aria-label="anchor" href="#arg-sha"></a></dt>
+<dd><p>character: optional commit SHA to install at. When supplied it
+overrides the resolved branch HEAD SHA. When NULL (default) and
+`force = FALSE`, the branch HEAD SHA is resolved and pinned.</p></dd>
+
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>invisible NULL, or the result of `remotes::install_github()` when an
+  install is performed</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span>  <span class="fu">install_branch</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu">install_branch</span><span class="op">(</span><span class="st">"pipfun"</span>, <span class="st">"ongoing"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">install_branch</span><span class="op">(</span><span class="st">"pipfun"</span>, <span class="st">"ongoing"</span>, force <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">install_branch</span><span class="op">(</span><span class="st">"pipfun"</span>, <span class="st">"ongoing"</span>, sha <span class="op">=</span> <span class="st">"a1b2c3d"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

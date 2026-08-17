@@ -19,6 +19,7 @@
 <url><loc>https://pip-technical-team.github.io/metapip/reference/get_current_branches.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/get_default_branch.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/get_latest_branch_update.html</loc></url>
+<url><loc>https://pip-technical-team.github.io/metapip/reference/gh_token.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/index.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/init_metapip.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/install_branch.html</loc></url>
@@ -29,6 +30,8 @@
 <url><loc>https://pip-technical-team.github.io/metapip/reference/metapip_packages.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/metapip_update.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/package_branches.html</loc></url>
+<url><loc>https://pip-technical-team.github.io/metapip/reference/pip_lock_path.html</loc></url>
+<url><loc>https://pip-technical-team.github.io/metapip/reference/pip_snapshot.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/pkg_deps.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/print.metapip_simplelist.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/rowname_to_column.html</loc></url>

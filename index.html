@@ -93,11 +93,13 @@
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PIP-Technical-Team/metapip" class="external-link">metapip</a></span><span class="op">)</span></span></code></pre></div>
-<p>Since <code>metapip</code> works with Github API, you need to make sure that your GitHub credentials are properly set in you R environment. The best way to do so is using the <a href="https://gitcreds.r-lib.org/" class="external-link">gitcreds</a> package. You may find a simple explanation about how you can generate a token for yourself and set it up <a href="https://happygitwithr.com/https-pat#tldr" class="external-link">here</a>.</p>
+<p>Since <code>metapip</code> works with Github API, install functions (<code><a href="reference/install_branch.html">install_branch()</a></code>, <code><a href="reference/install_pip_packages.html">install_pip_packages()</a></code>) need your GitHub credentials to be properly set in your R environment for rate-limit reliability. The best way to do so is using the <a href="https://gitcreds.r-lib.org/" class="external-link">gitcreds</a> package, or by setting the <code>GITHUB_PAT</code>/<code>GITHUB_TOKEN</code> environment variables. You may find a simple explanation about how you can generate a token for yourself and set it up <a href="https://happygitwithr.com/https-pat#tldr" class="external-link">here</a>.</p>
+<p>Read-only functions (<code><a href="reference/get_branches.html">get_branches()</a></code>, <code><a href="reference/get_branch_info.html">get_branch_info()</a></code>, <code><a href="reference/get_latest_branch_update.html">get_latest_branch_update()</a></code>, <code><a href="reference/core_metadata.html">core_metadata()</a></code>, <code><a href="reference/package_branches.html">package_branches()</a></code>) work without a token against the public <code>PIP-Technical-Team</code> org.</p>
 <p>You can check if your credentials are properly set by running the following command.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/check_github_token.html">check_github_token</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>The printed output is redacted — the <code>metapip_token</code> print method shows <code>""</code> in place of the actual token.</p>
 <p>Let us now go through the functions in metapip.</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -174,7 +176,7 @@
 <ol start="4" style="list-style-type: decimal">
 <li><code><a href="reference/install_latest_branch.html">install_latest_branch()</a></code></li>
 </ol>
-<p>This function installs the packages from the branch which was last updated i.e the latest branch.</p>
+<p>This function installs the packages from the branch which was last updated i.e the latest branch. It is a <strong>developer-only</strong> tool: it deliberately bypasses the team <code>PIP_LOCK</code> manifest and installs the live HEAD of each branch. Use <code><a href="reference/pip_snapshot.html">pip_snapshot()</a></code> + <code><a href="reference/init_metapip.html">init_metapip()</a></code> for team-consistent installs.</p>
 <p>If you pass no arguments to it, it will install latest branch for all pip core R packages. However, you can also restrict it to only a few packages as well.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/install_latest_branch.html">install_latest_branch</a></span><span class="op">(</span><span class="op">)</span></span>

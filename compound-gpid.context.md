@@ -26,6 +26,38 @@ Additional context for Copilot and the Compound GPID plugin. Edit freely
   [`cli::cli_alert_warning()`](https://cli.r-lib.org/reference/cli_alert.html)
   when a test must `expect_warning()`.
 
+### Supply-chain / install conventions (discovered 2026-08-14)
+
+- A committed team lock manifest lives at `inst/PIP_LOCK.csv`
+  (`package,branch,sha`).
+  [`pip_snapshot()`](https://pip-technical-team.github.io/metapip/reference/pip_snapshot.md)
+  writes/refreshes it;
+  [`init_metapip()`](https://pip-technical-team.github.io/metapip/reference/init_metapip.md)
+  installs from it (falls back to branch HEAD when absent);
+  [`update_pip_packages()`](https://pip-technical-team.github.io/metapip/reference/init_metapip.md)
+  refreshes it. `options(metapip.lock_path)` overrides the write target;
+  [`pip_lock_path()`](https://pip-technical-team.github.io/metapip/reference/pip_lock_path.md)
+  (read-only, via `system.file`) is the read path.
+- [`system.file()`](https://rdrr.io/r/base/system.file.html) returns
+  `""` when a file is absent — never rely on it for a default write
+  target without [`nzchar()`](https://rdrr.io/r/base/nchar.html)
+  guarding (and `write.csv(x, "")` silently writes to stdout on
+  Windows).
+- Least-privilege tokens: read-only GitHub functions work without a PAT;
+  install functions gate on
+  [`check_github_token()`](https://pip-technical-team.github.io/metapip/reference/check_github_token.md),
+  which returns a redacted `metapip_token` (env-var first via
+  [`gh_token()`](https://pip-technical-team.github.io/metapip/reference/gh_token.md),
+  gitcreds fallback).
+- R testing: `stop(msg, class = "foo")` does NOT produce a condition a
+  `tryCatch` handler named `foo` inherits — use
+  `rlang::abort(..., class=)`; validate with an installed `rcmdcheck`,
+  not just `load_all()`, since internal-symbol/condition semantics
+  differ.
+- `mapply(compare_sha, ...)` resists per-argument mockery mocks — keep
+  mock return values single-valued per test block (see
+  `.cg-docs/solutions/testing-patterns/2026-08-13-tri-state-compare-sha-mockery.md`).
+
 ## Work in Progress
 
 ## Workspace Notes

@@ -1,0 +1,35 @@
+# Snapshot the current PIP package SHAs into a lock manifest
+
+Resolves the current branch HEAD SHA of every core PIP package and
+writes a \`PIP_LOCK.csv\` manifest (\`package,branch,sha\`) that teams
+can commit to make installs deterministic. \[init_metapip()\] installs
+from this lock, and \[update_pip_packages()\] refreshes it.
+
+## Usage
+
+``` r
+pip_snapshot(path = NULL)
+```
+
+## Arguments
+
+- path:
+
+  file path to write the lock to. Defaults to
+  \`getOption("metapip.lock_path")\`, falling back to
+  \`system.file("PIP_LOCK.csv", package = "metapip")\` (the source
+  \`inst/\` directory in a \`devtools::load_all()\` session). Set it
+  explicitly to control where the lock is written (e.g., a
+  \`tempfile()\` in tests).
+
+## Value
+
+invisible path to the written lock file
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+pip_snapshot()
+} # }
+```

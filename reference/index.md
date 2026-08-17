@@ -40,6 +40,8 @@
   local installations. For local installation,a status column is
   returned which indicates if the local version is ahead or behind the
   PROD branch.
+- [`pip_snapshot()`](https://pip-technical-team.github.io/metapip/reference/pip_snapshot.md)
+  : Snapshot the current PIP package SHAs into a lock manifest
 - [`pkg_deps()`](https://pip-technical-team.github.io/metapip/reference/pkg_deps.md)
   : List all dependencies
 - [`print(`*`<metapip_simplelist>`*`)`](https://pip-technical-team.github.io/metapip/reference/print.metapip_simplelist.md)

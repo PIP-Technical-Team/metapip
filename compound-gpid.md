@@ -31,9 +31,14 @@ pipaux, pipload, wbpip, pipfun, pipdata, pipr).
 
 - Manages exactly the core PIP packages: pipapi, pipaux, pipload, wbpip,
   pipfun, pipdata, pipr
-- Requires valid GitHub credentials/token
+- Read-only functions (`get_branches`, `core_metadata`,
+  `package_branches`, `get_branch_info`, `get_latest_branch_update`)
+  work without a GitHub token against the public `PIP-Technical-Team`
+  org. Install functions (`install_branch`, `install_pip_packages`)
+  still require valid GitHub credentials
   ([gitcreds](https://gitcreds.r-lib.org/), checked via
   [`check_github_token()`](https://pip-technical-team.github.io/metapip/reference/check_github_token.md))
+  for rate-limit reliability.
 - License: MIT
 
 ## Current Focus

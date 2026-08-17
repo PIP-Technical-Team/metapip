@@ -57,7 +57,7 @@
 <div class="section level2">
 <h2 id="constraints">Constraints<a class="anchor" aria-label="anchor" href="#constraints"></a></h2>
 <ul><li>Manages exactly the core PIP packages: pipapi, pipaux, pipload, wbpip, pipfun, pipdata, pipr</li>
-<li>Requires valid GitHub credentials/token (<a href="https://gitcreds.r-lib.org/" class="external-link">gitcreds</a>, checked via <code><a href="reference/check_github_token.html">check_github_token()</a></code>)</li>
+<li>Read-only functions (<code>get_branches</code>, <code>core_metadata</code>, <code>package_branches</code>, <code>get_branch_info</code>, <code>get_latest_branch_update</code>) work without a GitHub token against the public <code>PIP-Technical-Team</code> org. Install functions (<code>install_branch</code>, <code>install_pip_packages</code>) still require valid GitHub credentials (<a href="https://gitcreds.r-lib.org/" class="external-link">gitcreds</a>, checked via <code><a href="reference/check_github_token.html">check_github_token()</a></code>) for rate-limit reliability.</li>
 <li>License: MIT</li>
 </ul></div>
 <div class="section level2">

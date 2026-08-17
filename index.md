@@ -63,11 +63,23 @@ packages it remains as “PROD”.
 library(metapip)
 ```
 
-Since `metapip` works with Github API, you need to make sure that your
-GitHub credentials are properly set in you R environment. The best way
-to do so is using the [gitcreds](https://gitcreds.r-lib.org/) package.
-You may find a simple explanation about how you can generate a token for
-yourself and set it up [here](https://happygitwithr.com/https-pat#tldr).
+Since `metapip` works with Github API, install functions
+([`install_branch()`](https://pip-technical-team.github.io/metapip/reference/install_branch.md),
+[`install_pip_packages()`](https://pip-technical-team.github.io/metapip/reference/install_pip_packages.md))
+need your GitHub credentials to be properly set in your R environment
+for rate-limit reliability. The best way to do so is using the
+[gitcreds](https://gitcreds.r-lib.org/) package, or by setting the
+`GITHUB_PAT`/`GITHUB_TOKEN` environment variables. You may find a simple
+explanation about how you can generate a token for yourself and set it
+up [here](https://happygitwithr.com/https-pat#tldr).
+
+Read-only functions
+([`get_branches()`](https://pip-technical-team.github.io/metapip/reference/get_branches.md),
+[`get_branch_info()`](https://pip-technical-team.github.io/metapip/reference/get_branch_info.md),
+[`get_latest_branch_update()`](https://pip-technical-team.github.io/metapip/reference/get_latest_branch_update.md),
+[`core_metadata()`](https://pip-technical-team.github.io/metapip/reference/core_metadata.md),
+[`package_branches()`](https://pip-technical-team.github.io/metapip/reference/package_branches.md))
+work without a token against the public `PIP-Technical-Team` org.
 
 You can check if your credentials are properly set by running the
 following command.
@@ -77,6 +89,9 @@ following command.
 check_github_token() |> 
   print()
 ```
+
+The printed output is redacted — the `metapip_token` print method shows
+`""` in place of the actual token.
 
 Let us now go through the functions in metapip.
 
@@ -180,7 +195,12 @@ get_branch_info(package = "wbpip", branch = c("PROD", "QA"))
 4.  [`install_latest_branch()`](https://pip-technical-team.github.io/metapip/reference/install_latest_branch.md)
 
 This function installs the packages from the branch which was last
-updated i.e the latest branch.
+updated i.e the latest branch. It is a **developer-only** tool: it
+deliberately bypasses the team `PIP_LOCK` manifest and installs the live
+HEAD of each branch. Use
+[`pip_snapshot()`](https://pip-technical-team.github.io/metapip/reference/pip_snapshot.md) +
+[`init_metapip()`](https://pip-technical-team.github.io/metapip/reference/init_metapip.md)
+for team-consistent installs.
 
 If you pass no arguments to it, it will install latest branch for all
 pip core R packages. However, you can also restrict it to only a few
