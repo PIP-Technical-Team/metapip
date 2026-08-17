@@ -86,7 +86,7 @@ test_that("install_latest_branch errors propagate when install_branch throws", {
     data.frame(package = pkg, branch_name = "PROD", name = "user", last_update_time = Sys.time(), stringsAsFactors = FALSE)
   })
   mockery::stub(install_latest_branch, "compare_sha", function(pkg, branch) FALSE)
-  mockery::stub(install_latest_branch, "install_branch", function(pkg, branch) {
+  mockery::stub(install_latest_branch, "install_branch", function(pkg, branch, ...) {
     stop("simulated install failure")
   })
 
@@ -105,7 +105,7 @@ test_that("install_latest_branch runs twice with a fully stubbed pipeline", {
     data.frame(package = pkg, branch_name = "PROD", name = "user", last_update_time = Sys.time(), stringsAsFactors = FALSE)
   })
   mockery::stub(install_latest_branch, "compare_sha", function(pkg, branch) "unknown")
-  mockery::stub(install_latest_branch, "install_branch", function(pkg, branch) {
+  mockery::stub(install_latest_branch, "install_branch", function(pkg, branch, ...) {
     install_calls <<- c(install_calls, pkg)
   })
 
