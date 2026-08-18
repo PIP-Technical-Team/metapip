@@ -1,0 +1,171 @@
+---
+title: "Lockfile Workflow for Team Reproducibility"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Lockfile Workflow for Team Reproducibility}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## The Problem
+
+When multiple team members install PIP packages from GitHub branches, they may
+get different code if new commits are pushed between installations. This leads
+to inconsistent results and hard-to-debug differences.
+
+## The Solution: PIP_LOCK.csv
+
+`metapip` solves this with a lockfile (`PIP_LOCK.csv`) that records the exact
+commit SHA for every core package. When team members install from the lock,
+they all get identical code.
+
+## The Lockfile Format
+
+`PIP_LOCK.csv` is a simple CSV with three columns:
+
+```
+package,branch,sha
+pipapi,DEV,94365f9a1ce45ad0d562e73f0612a0cef49727d9
+pipload,PROD,ff9a81e386a09fb2531c154f63fd2b91521313c6
+wbpip,DEV,fd2c687ed527ebe33d0a7addf9859f72f71ff39f
+...
+```
+
+## Team Workflow
+
+### Step 1: Create the lock (project lead)
+
+Decide which versions of each package your team should use, then snapshot:
+
+```r
+library(metapip)
+
+# Verify packages are at the desired versions
+get_current_branches()
+core_metadata()
+
+# Write the lock
+pip_snapshot()
+```
+
+The lock is written to `system.file("PIP_LOCK.csv", package = "metapip")`.
+
+### Step 2: Commit the lock
+
+The lockfile should be committed to the metapip repository (or your project
+repo) so it's version-controlled:
+
+```bash
+git add inst/PIP_LOCK.csv
+git commit -m "Lock PIP packages to SHA xyz"
+git push
+```
+
+### Step 3: Team members install from the lock
+
+Each team member runs:
+
+```r
+library(metapip)
+init_metapip()
+```
+
+`init_metapip()` reads the lock and installs every package at its recorded
+SHA. This is deterministic: the same lock always produces the same
+installation.
+
+### Step 4: Update the lock
+
+When the team decides to update packages:
+
+```r
+update_pip_packages()
+```
+
+This:
+
+1. Compares local installations against branch HEADs.
+2. Refreshes the lockfile with new SHAs.
+3. Installs any outdated packages.
+4. Prints a reminder to commit the updated lock.
+
+### Step 5: Commit the updated lock
+
+```bash
+git add inst/PIP_LOCK.csv
+git commit -m "Update PIP lock to latest SHAs"
+git push
+```
+
+## For Developers: Bypass the Lock
+
+During development, you may need the absolute latest code from a branch,
+bypassing the lock:
+
+```r
+install_branch("pipfun", "ongoing", force = TRUE)
+```
+
+Or install the live HEAD of the most recently updated branch for all packages:
+
+```r
+install_latest_branch()
+```
+
+Both functions warn that they bypass the team lockfile.
+
+## Custom Lock Paths
+
+By default, the lock lives in the metapip `inst/` directory. To use a
+project-specific lock:
+
+```r
+# Set a custom lock path
+options(metapip.lock_path = "path/to/my/project/PIP_LOCK.csv")
+
+# Now pip_snapshot() and init_metapip() use this path
+pip_snapshot()
+init_metapip()
+```
+
+## Non-Interactive Usage
+
+For CI/CD pipelines or scripts, suppress interactive prompts:
+
+```r
+init_metapip(ask = FALSE)
+update_pip_packages(ask = FALSE)
+```
+
+In non-interactive sessions (e.g., `Rscript`), these functions automatically
+install without prompting.
+
+## Combining with renv
+
+`metapip` manages PIP packages from GitHub. For non-PIP CRAN dependencies,
+consider using [`renv`](https://rstudio.github.io/renv/) as a companion:
+
+```r
+renv::init()
+renv::snapshot()
+```
+
+The combination of `PIP_LOCK.csv` (for PIP packages) and `renv.lock` (for
+CRAN packages) gives full reproducibility.
+
+## Summary
+
+| Action                      | Function                         |
+|-----------------------------|----------------------------------|
+| Create/update lock          | `pip_snapshot()`                 |
+| Install from lock           | `init_metapip()`                 |
+| Refresh lock + install      | `update_pip_packages()`          |
+| Developer: bypass lock      | `install_branch(force = TRUE)`   |
+| Custom lock location        | `options(metapip.lock_path = …)` |

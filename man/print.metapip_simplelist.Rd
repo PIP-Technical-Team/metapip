@@ -7,10 +7,19 @@
 \method{print}{metapip_simplelist}(x, ...)
 }
 \arguments{
-\item{x}{A named list of character vectors (class 'metapip_simplelist').}
+\item{x}{A named list of character vectors with class
+`"metapip_simplelist"`. Attributes:
+- `title`: cli-formatted header string.
+- `to_red`: character scalar to highlight in red.}
 
-\item{...}{Further arguments passed to or from other methods (ignored).}
+\item{...}{Additional arguments passed to or from other methods
+(currently ignored).}
+}
+\value{
+`x` invisibly (for use in pipelines).
 }
 \description{
-Prints a named list of character vectors (possibly empty) in a readable way using the cli package.
+S3 method that prints a named list of character vectors in a readable,
+aligned format using the cli package. Default branches are shown in
+red; custom branches are shown in blue.
 }

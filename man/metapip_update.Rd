@@ -2,30 +2,39 @@
 % Please edit documentation in R/update.R
 \name{metapip_update}
 \alias{metapip_update}
-\title{Update metapip packages}
+\title{Check for CRAN updates to metapip and its dependencies}
 \usage{
 metapip_update(pkg = "metapip", recursive = FALSE, ...)
 }
 \arguments{
-\item{pkg}{A character string for the model being updated.}
+\item{pkg}{Character scalar. Package to check. Defaults to `"metapip"`.}
 
-\item{recursive}{If `TRUE`, will also check all dependencies of
-metapip packages.}
+\item{recursive}{Logical. If `TRUE`, also checks all transitive
+dependencies of `pkg`. Default `FALSE`.}
 
-\item{...}{Extra arguments to pass to [utils::install.packages()]}
+\item{...}{Additional arguments passed to [utils::install.packages()]
+in the generated install expression.}
 }
 \value{
-Nothing is returned but a message is printed to the
- console about which packages (if any) should be installed along
- with code to do so.
+`invisible()`. Prints a human-readable update report; does
+  not modify any packages directly.
 }
 \description{
-This will check to see if all metapip packages (and optionally, their
-dependencies) are up-to-date, and will install after an interactive
-confirmation.
+Checks whether `metapip` (and optionally its PIP package dependencies)
+are up-to-date relative to the versions available on CRAN. Prints
+the packages that need updating along with the R code to do so.
+}
+\details{
+When `metapip` is not on CRAN (pre-release), a hardcoded dependency
+list is used as fallback (see `pkg_deps()`).
 }
 \examples{
 \dontrun{
 metapip_update()
+metapip_update(recursive = TRUE)
 }
+
+}
+\seealso{
+[pkg_deps()]
 }

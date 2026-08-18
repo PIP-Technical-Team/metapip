@@ -2,16 +2,43 @@
 % Please edit documentation in R/update.R
 \name{pkg_deps}
 \alias{pkg_deps}
-\title{List all dependencies}
+\title{Compare current package versions against CRAN}
 \usage{
 pkg_deps(x = "metapip", recursive = FALSE)
 }
 \arguments{
-\item{x}{A character string for the packages being evaluated.}
+\item{x}{Character scalar. Package name to check. Defaults to
+`"metapip"`.}
 
-\item{recursive}{If `TRUE`, will also list all dependencies of
-metapip packages.}
+\item{recursive}{Logical. If `TRUE`, includes all transitive
+dependencies. Default `FALSE`.}
+}
+\value{
+A `data.frame` with columns:
+  \describe{
+    \item{package}{Character. Package name.}
+    \item{cran}{Character. CRAN version.}
+    \item{local}{Character. Locally installed version.}
+    \item{behind}{Logical. `TRUE` if the CRAN version is newer.}
+  }
+  Base R packages are excluded.
 }
 \description{
-List all dependencies
+Queries CRAN for the latest versions of the specified packages and
+their (optionally recursive) dependencies, then compares with locally
+installed versions.
+}
+\details{
+When `"metapip"` is in `x` and is not yet on CRAN, a hardcoded set
+of dependencies is returned as fallback.
+}
+\examples{
+\dontrun{
+pkg_deps()
+pkg_deps("metapip", recursive = TRUE)
+}
+
+}
+\seealso{
+[metapip_update()]
 }

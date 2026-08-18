@@ -2,22 +2,45 @@
 % Please edit documentation in R/install_pip_packages.R
 \name{install_latest_branch}
 \alias{install_latest_branch}
-\title{Install latest branch from a package}
+\title{Install the live HEAD of a branch (developer-only)}
 \usage{
 install_latest_branch(package = NULL)
 }
 \arguments{
-\item{package}{one (or more) of core packages. default NULL would install latest branch for all packages}
+\item{package}{Character vector. One or more core PIP package names.
+If `NULL` (default), all core packages are installed.}
+}
+\value{
+`NULL` invisibly. Called for its side effect of installing
+  packages.
 }
 \description{
-Based on the last commit of the branch it installs the latest branch of the package.
-This is a developer-only tool: it deliberately bypasses the team
-`PIP_LOCK` manifest and installs the live HEAD of each branch. Use
-[pip_snapshot()] + [init_metapip()] for team-consistent installs.
+Installs the current live HEAD of the most recently updated branch for
+each requested package. This is a **developer-only** utility that
+deliberately bypasses the team `PIP_LOCK` manifest.
+
+For reproducible team installs, use [pip_snapshot()] to create a lock
+manifest, then [init_metapip()] to install from it.
 }
+\section{Behaviour}{
+
+Packages already at the HEAD SHA of their latest branch are skipped
+with an informational message.
+}
+
+\section{Warning}{
+
+This function warns on entry that it bypasses the team lockfile.
+}
+
 \examples{
 \dontrun{
-  install_latest_branch()
-  install_latest_branch(c("pipfun", "pipapi"))
+install_latest_branch()
+install_latest_branch(c("pipfun", "pipapi"))
 }
+
+}
+\seealso{
+[install_branch()], [install_pip_packages()],
+[pip_snapshot()], [init_metapip()]
 }

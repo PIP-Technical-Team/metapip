@@ -4,3 +4,69 @@ template:
 
 development:
   mode: auto
+
+reference:
+  - title: Installation
+    desc: Install and initialise PIP packages
+    contents:
+      - init_metapip
+      - install_branch
+      - install_pip_packages
+      - install_latest_branch
+      - update_pip_packages
+
+  - title: Inspection
+    desc: Explore branches, versions, and commit history
+    contents:
+      - get_branches
+      - get_branch_info
+      - get_latest_branch_update
+      - core_metadata
+      - package_branches
+
+  - title: Branch Configuration
+    desc: Set and query default and custom branch assignments
+    contents:
+      - get_default_branch
+      - set_default_branch
+      - get_current_branches
+      - get_package_current_branch
+      - set_custom_branch
+      - get_custom_branch
+
+  - title: Lock Management
+    desc: Team-wide reproducible installs via PIP_LOCK.csv
+    contents:
+      - pip_snapshot
+
+  - title: Credentials
+    desc: GitHub token validation
+    contents:
+      - check_github_token
+
+  - title: Utilities
+    desc: Package metadata and helper functions
+    contents:
+      - get_core_pagkages
+      - metapip_packages
+      - metapip_update
+      - pkg_deps
+      - rowname_to_column
+      - print.metapip_simplelist
+      - metapip
+
+articles:
+  - title: Getting Started
+    navbar: ~
+    contents:
+      - getting-started
+
+  - title: Core Concepts
+    contents:
+      - architecture
+      - lockfile-workflow
+
+  - title: Workflows
+    contents:
+      - package_development
+      - package-specific-options

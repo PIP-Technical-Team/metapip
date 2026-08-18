@@ -1,9 +1,8 @@
 .onAttach <- function(...) {
-
-  # set options to display tables
+  # set display options
   set_colorDF()
 
-  # Load the core packages --------
+  # Load the core packages
   needed <- core[!is_attached(core)]
   if (length(needed) > 0) {
     suppressWarnings(metapip_attach(needed))
@@ -24,11 +23,9 @@ metapip_default_options <- list(
   )
 )
 
-
-
 .onLoad <- function(libname, pkgname) {
   op <- options()
   toset <- !(names(metapip_default_options) %in% names(op))
-  if (any(toset)) options(metapip_default_options [toset])
+  if (any(toset)) options(metapip_default_options[toset])
   invisible()
 }

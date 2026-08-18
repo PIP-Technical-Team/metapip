@@ -2,29 +2,51 @@
 % Please edit documentation in R/get_branches.R
 \name{get_latest_branch_update}
 \alias{get_latest_branch_update}
-\title{Get details of the branch which was last updated}
+\title{Get details of the most recently updated branch}
 \usage{
 get_latest_branch_update(package = "pipapi", display = TRUE)
 }
 \arguments{
-\item{package}{one of the core package (default "pipapi")}
+\item{package}{Character. Single core PIP package name. Defaults to
+`"pipapi"`.}
 
-\item{display}{(default TRUE) do you want to display the branches in the console?}
+\item{display}{Logical. If `TRUE` (default), prints a colourised table
+to the console.}
 }
 \value{
-colorDF::colorDF output along with an invisible single row dataframe.
-  Timestamps (`last_update_time`) are returned as POSIXct in UTC. If `package`
-  has only `gh-pages` branches, returns a single-row data.frame with `NA`
-  values (and warns).
+A single-row `data.frame` (returned invisibly) with columns:
+  \describe{
+    \item{package}{Character. Package name.}
+    \item{branch_name}{Character. Name of the most recently updated branch,
+      or `NA` when only `gh-pages` exists.}
+    \item{last_commit_author_name}{Character. Author of the latest commit.}
+    \item{last_update_time}{POSIXct (UTC). Timestamp of the latest commit,
+      or `NA` when only `gh-pages` exists.}
+  }
 }
 \description{
-This function is useful to get latest branch name, author of latest commit and time it was last updated.
-If `package` has only `gh-pages` branches, a warning is issued and a single-row
-data.frame filled with `NA` is returned invisibly.
+Inspects all branches of a core PIP package (excluding `gh-pages`) and
+returns the one with the most recent commit. Useful for identifying which
+branch has the latest development activity.
+
+If `package` has only `gh-pages` branches, a warning is issued and a
+single-row data.frame of `NA` values is returned.
 }
+\section{Edge cases}{
+
+- Packages with only `gh-pages` branches: returns `NA` values with a
+  warning.
+- Packages whose branches all fail to resolve (network errors): returns
+  `NA` values without aborting.
+}
+
 \examples{
 \dontrun{
 get_latest_branch_update()
 get_latest_branch_update("wbpip", display = FALSE)
 }
+
+}
+\seealso{
+[get_branch_info()], [get_branches()]
 }

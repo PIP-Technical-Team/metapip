@@ -2,14 +2,17 @@
 % Please edit documentation in R/utils.R
 \name{set_colorDF}
 \alias{set_colorDF}
-\title{identify RStudio theme}
+\title{Set colorDF theme based on RStudio theme (internal)}
 \usage{
 set_colorDF()
 }
 \value{
-invisible RStudio theme
+Invisible list. The RStudio theme information from
+  [rs_theme()].
 }
 \description{
-identify RStudio theme
+Detects the current RStudio dark/light theme and sets the
+`colorDF_theme` option accordingly (`"wb"` for dark, `"bw"` for
+light).
 }
 \keyword{internal}
