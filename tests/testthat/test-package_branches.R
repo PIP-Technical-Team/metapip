@@ -35,7 +35,10 @@ test_that("join_and_get_status reports behind/ahead/up-to-date", {
 
   res <- suppressMessages(join_and_get_status(local, dev, "PROD"))
 
-  expect_equal(res$local_status, c("behind PROD", "up-to-date", "ahead PROD"))
+  expect_equal(
+    res$local_status,
+    c("behind PROD", "up-to-date", "ahead of PROD")
+  )
 })
 
 test_that("join_and_get_status degrades malformed remote versions to unknown", {

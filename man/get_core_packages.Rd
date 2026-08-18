@@ -7,9 +7,12 @@
 get_core_packages(exclude = NULL)
 }
 \arguments{
-\item{exclude}{character: packages to exclude from attaching. if `getwd()` is
-one of the core PIP packages, that package will be excluded by default. To
-avoid that, set exclude to `NULL`.}
+\item{exclude}{Character vector. Packages to exclude from
+installation and attachment. When `NA` (default), the function
+checks if the current working directory is a core PIP package and
+excludes it automatically (useful during package development).
+Pass `NULL` to exclude nothing. Pass a character vector of package
+names to exclude explicitly.}
 }
 \value{
 character vector with names of PIP packages

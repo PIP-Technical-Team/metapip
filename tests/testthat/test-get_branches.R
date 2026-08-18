@@ -192,10 +192,21 @@ test_that("install_branch works correctly", {
           cache_clear("commit:")
           expect_true(install_branch(branch = "abc"))
           expect_equal(install_refs, "PIP-Technical-Team/pipapi@abc123")
-          expect_error(install_branch(branch = c("abc", "def")), "Please enter a single branch name.")
           expect_message(install_branch(branch = "abc"), "Installing branch abc from package pipapi")
         }
       )
+    )
+  )
+
+  # The validation error is intentionally outside the packageDescription mock.
+  # cli/rlang formats the error through utils::packageVersion("cli").
+  with_mocked_bindings(
+    check_github_token = function(...) NULL,
+    check_package_condition = function(...) TRUE,
+    .package = "metapip",
+    code = expect_error(
+      install_branch(branch = c("abc", "def")),
+      "Please enter a single branch name."
     )
   )
 })

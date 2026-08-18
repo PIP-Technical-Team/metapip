@@ -30,7 +30,6 @@ text_col <- function(x) {
 #'   `"metapip"` in the returned vector.
 #'
 #' @return Character vector of package names.
-#'
 #' @examples
 #' metapip_packages()
 #' metapip_packages(include_self = FALSE)
