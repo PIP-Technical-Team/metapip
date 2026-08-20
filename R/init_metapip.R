@@ -447,3 +447,20 @@ get_core_pagkages <- function(exclude = NULL) {
     ))
   }
 }
+
+#' Get core PIP ecosystem package
+#'
+#' @inheritParams init_metapip
+#'
+#' @returns character vector with names of PIP packages
+#' @note `get_core_packages` is an alias for [get_core_pagkages()]. The
+#'   `get_core_pagkages` spelling (typo) is retained and deprecated for
+#'   backward compatibility.
+#' @export
+#'
+#' @examples
+#' get_core_packages()
+#' get_core_packages(exclude = "pipdata")
+get_core_packages <- function(exclude = NULL) {
+  get_core_pagkages(exclude = exclude)
+}

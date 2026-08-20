@@ -1,5 +1,5 @@
 {
-  "edge_count": 9,
+  "edge_count": 10,
   "edges": [
     {
       "edge_type": "reviews",
@@ -11,6 +11,12 @@
       "edge_type": "reviews",
       "source": ".cg-docs/reviews/2026-08-12-unblock-the-core-review.md",
       "target": ".cg-docs/plans/2026-08-12-unblock-the-core.md",
+      "target_missing": false
+    },
+    {
+      "edge_type": "reviews",
+      "source": ".cg-docs/reviews/2026-08-12-unblock-the-core-verify-review-2.md",
+      "target": ".cg-docs/plans/2026-08-13-performance-tests-release.md",
       "target_missing": false
     },
     {
@@ -172,6 +178,36 @@
       ]
     },
     {
+      "date": "2026-08-13",
+      "entity_type": "plan",
+      "path": ".cg-docs/plans/2026-08-13-performance-tests-release.md",
+      "slug": "2026-08-13-performance-tests-release",
+      "status": "completed",
+      "summary": "Harden metapip for production use: eliminate GitHub API performance bottlenecks via per-session memoization, replace the O(N) `installed.packages()` scan with O(1) per-package checks, achieve full test coverage with no un-skipped production-path tests, add Windows CI, and ship version 0.1.0 with a clean changelog.",
+      "tags": [
+        "performance",
+        "testing",
+        "ci",
+        "release",
+        "memoization",
+        "mockery",
+        "github-actions"
+      ],
+      "title": "Performance, Tests & Release — memoization, test coverage, CI hardening, ship 0.1.0",
+      "top_keywords": [
+        "test scenarios",
+        "test-install_all_packages.r",
+        "news.md",
+        "metapip-package.r",
+        "test-install_latest_branch.r",
+        "test-install_pip_packages.r",
+        "core_metadata()",
+        "metapip_attach()",
+        "globalvariables",
+        "skip()"
+      ]
+    },
+    {
       "date": "2026-08-14",
       "entity_type": "plan",
       "path": ".cg-docs/plans/2026-08-14-lock-down-supply-chain.md",
@@ -251,20 +287,20 @@
       "path": ".cg-docs/reviews/2026-08-12-unblock-the-core-verify-review-2.md",
       "slug": "2026-08-12-unblock-the-core-verify-review-2",
       "status": "",
-      "summary": "**Review mode**: verification (light depth, forced by mode:verify) **Parent review**: `.cg-docs/reviews/2026-08-12-unblock-the-core-review.md` **Files reviewed**: R/{get_branches,utils,install_pip_packages,init_metapip,pip_snapshot,core_metadata,package_branches}.R, tests/testthat/test-{get_branches,utils,init_metapip,install_latest_branch,pip_snapshot}.R, README, NEWS, charter, man/, vignettes **Findings**: 7 confirmed open (P1: 3, P2: 3, P3: 1)",
+      "summary": "**Review mode**: light (verify pass) **Files reviewed**: 18 (milestone changes + tests) **Findings**: 16 (P0: 0, P1: 3, P2: 6, P3: 8)",
       "tags": [],
       "title": "2026-08-12-unblock-the-core-verify-review-2",
       "top_keywords": [
-        "open",
-        "verify",
-        "awaiting",
-        "fix-triage",
-        "inst/pip_lock.csv",
-        "gh_token()",
-        "pip_snapshot.r",
-        "init_metapip.r",
-        "test-init_metapip.r",
-        "2026-08-12-unblock-the-core-review.md"
+        "latest_release_time",
+        "2026-08-12-unblock-the-core-review.md",
+        "fix",
+        "suppresswarnings()",
+        "package_branches.r",
+        "core_metadata.r",
+        "install_pip_packages.r",
+        "test-get_branches.r",
+        "test-cache.r",
+        "fixed"
       ]
     },
     {
@@ -336,6 +372,35 @@
     {
       "date": "2026-08-14",
       "entity_type": "solution",
+      "path": ".cg-docs/solutions/bugs/2026-08-14-collapse-fcase-fifelse-not-exported.md",
+      "slug": "2026-08-14-collapse-fcase-fifelse-not-exported",
+      "status": "",
+      "summary": "`package_branches()` crashed at runtime with `could not find function \"fcase\"`. A rewrite to `fifelse()` failed identically. Worse, the original `join_and_get_status()` referenced a `local_status` column (`fcase(local_status == 1, ...)`) that `collapse::join(local, dev, \"package\", how = \"full\")` never actually produces, so the function was **always broken** — it had simply never been executed because its only test was permanently `skip(\"avoid live network\")`.",
+      "tags": [
+        "collapse",
+        "fcase",
+        "fifelse",
+        "ifelse",
+        "join",
+        "local_status"
+      ],
+      "title": "collapse does not export fcase/fifelse and join() never produces local_status",
+      "top_keywords": [
+        "local_status",
+        "fcase",
+        "fifelse",
+        "collapse",
+        "join",
+        "never",
+        "export",
+        "produces",
+        "ifelse",
+        "local_version"
+      ]
+    },
+    {
+      "date": "2026-08-14",
+      "entity_type": "solution",
       "path": ".cg-docs/solutions/build-errors/2026-08-14-system-file-empty-write-csv-stdout.md",
       "slug": "2026-08-14-system-file-empty-write-csv-stdout",
       "status": "",
@@ -388,7 +453,7 @@
         "lists",
         "rebuilding",
         "losing",
-        "description"
+        "version"
       ]
     },
     {
@@ -421,6 +486,63 @@
         "local_status",
         "optional",
         "fractional"
+      ]
+    },
+    {
+      "date": "2026-08-14",
+      "entity_type": "solution",
+      "path": ".cg-docs/solutions/data-quality/2026-08-14-untrusted-version-parse-compareversion.md",
+      "slug": "2026-08-14-untrusted-version-parse-compareversion",
+      "status": "",
+      "summary": "`package_branches()` reads `Version:` fields straight from `raw.githubusercontent.com/.../DESCRIPTION` files via `read.dcf(url(...))` — fully untrusted input controlled by any branch or contributor. The first attempt parsed them with `pv <- function(x) suppressWarnings(base::package_version(x))`. `package_version()` **errors** on `\"v1.2.3\"`, `\"1.2\"` (no patch), `\"\"`, `\"not-a-version\"`, etc., and `suppressWarnings()` does not suppress errors. One malformed value in any branch of any repo aborted the whole exported `package_branches()` report for all packages — and because base `ifelse` evaluates all branches eagerly, even rows that should be \"Not in local\" were killed.",
+      "tags": [
+        "package_version",
+        "compareVersion",
+        "untrusted-input",
+        "DESCRIPTION",
+        "ifelse"
+      ],
+      "title": "Parse untrusted remote version strings safely with compareVersion + tryCatch",
+      "top_keywords": [
+        "package_version()",
+        "trycatch",
+        "compareversion",
+        "\"unknown\"",
+        "ifelse",
+        "package_branches()",
+        "\"\"",
+        "utils::compareversion()",
+        "package_version",
+        "version"
+      ]
+    },
+    {
+      "date": "2026-08-14",
+      "entity_type": "solution",
+      "path": ".cg-docs/solutions/performance-issues/2026-08-14-memoize-only-successful-responses.md",
+      "slug": "2026-08-14-memoize-only-successful-responses",
+      "status": "",
+      "summary": "Per-session memoization of GitHub API calls in metapip initially cached the **error fallback** returned by `tryCatch`. If the first call for a key hit a transient failure (rate limit 403, network blip, 5xx), the NA payload was written to the cache and **every subsequent call in the session silently reused it** instead of retrying. Via `latest_commit_for_branch()` this made `compare_sha()` return `NULL`, so `update_pip_packages()` wrongly reported \"branch not available\" and never raised the install prompt — for the rest of the session, with no error surfaced.",
+      "tags": [
+        "memoization",
+        "cache",
+        "tryCatch",
+        "gh",
+        "rate-limit",
+        "retry"
+      ],
+      "title": "Memoize only successful API responses to avoid session cache poisoning",
+      "top_keywords": [
+        "gh_error",
+        "<-",
+        "<<-",
+        "trycatch",
+        "cache",
+        "ok",
+        "$status_code",
+        "api",
+        "session",
+        "memoize"
       ]
     },
     {
@@ -992,7 +1114,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#api-memoization",
       "slug": "api-memoization",
-      "status": "idea",
+      "status": "done",
       "summary": "Per-session API memoization for get_branches() / latest_commit_for_branch() (P1)",
       "tags": [],
       "title": "Per-session API memoization for get_branches() / latest_commit_for_branch() (P1)",
@@ -1014,7 +1136,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#require-namespace-checks",
       "slug": "require-namespace-checks",
-      "status": "idea",
+      "status": "done",
       "summary": "Replace installed.packages() with requireNamespace() per-package checks (P2)",
       "tags": [],
       "title": "Replace installed.packages() with requireNamespace() per-package checks (P2)",
@@ -1036,7 +1158,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#unskip-install-tests",
       "slug": "unskip-install-tests",
-      "status": "idea",
+      "status": "done",
       "summary": "Un-skip and rewrite install tests with mockery stubs",
       "tags": [],
       "title": "Un-skip and rewrite install tests with mockery stubs",
@@ -1058,7 +1180,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#network-test-gating",
       "slug": "network-test-gating",
-      "status": "idea",
+      "status": "done",
       "summary": "Mark network tests with skip_if_offline() + skip_on_cran()",
       "tags": [],
       "title": "Mark network tests with skip_if_offline() + skip_on_cran()",
@@ -1080,7 +1202,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#windows-ci",
       "slug": "windows-ci",
-      "status": "idea",
+      "status": "done",
       "summary": "Windows CI matrix + pin actions/checkout@v4 + document GH_TOKEN policy",
       "tags": [],
       "title": "Windows CI matrix + pin actions/checkout@v4 + document GH_TOKEN policy",
@@ -1102,7 +1224,7 @@
       "entity_type": "feature",
       "path": "roadmap.json#version-bump-010",
       "slug": "version-bump-010",
-      "status": "idea",
+      "status": "done",
       "summary": "Version bump to 0.1.0, NEWS.md rewrite, API hygiene (typos, globalVariables, roxygen)",
       "tags": [],
       "title": "Version bump to 0.1.0, NEWS.md rewrite, API hygiene (typos, globalVariables, roxygen)",
@@ -1120,10 +1242,10 @@
       ]
     }
   ],
-  "entity_count": 45,
+  "entity_count": 49,
   "generated": "2026-08-17",
   "schema_version": "0.2.0",
-  "topic_count": 6,
+  "topic_count": 7,
   "topics": [
     {
       "entity_count": 12,
@@ -1189,6 +1311,22 @@
     {
       "entity_count": 4,
       "entity_paths": [
+        ".cg-docs/solutions/bugs/2026-08-14-collapse-fcase-fifelse-not-exported.md",
+        ".cg-docs/solutions/data-quality/2026-08-13-resilient-httr2-utc-fetching.md",
+        ".cg-docs/solutions/data-quality/2026-08-14-untrusted-version-parse-compareversion.md",
+        ".cg-docs/solutions/testing-patterns/2026-08-13-tri-state-compare-sha-mockery.md"
+      ],
+      "keywords": [
+        "fcase",
+        "mapply",
+        "local_status"
+      ],
+      "label": "Fcase / Mapply / Local_Status",
+      "slug": "fcase-mapply-local-status"
+    },
+    {
+      "entity_count": 4,
+      "entity_paths": [
         ".cg-docs/reviews/2026-08-12-unblock-the-core-review.md",
         ".cg-docs/reviews/2026-08-12-unblock-the-core-verify-review-2.md",
         ".cg-docs/reviews/2026-08-13-harden-install-pipeline-verify-review.md",
@@ -1196,11 +1334,11 @@
       ],
       "keywords": [
         "init_metapip.r",
-        "test-init_metapip.r",
-        "fix"
+        "fix",
+        "test-init_metapip.r"
       ],
-      "label": "Init_Metapip.R / Test-Init_Metapip.R / Fix",
-      "slug": "init-metapip-r-test-init-metapip-r-fix"
+      "label": "Init_Metapip.R / Fix / Test-Init_Metapip.R",
+      "slug": "init-metapip-r-fix-test-init-metapip-r"
     },
     {
       "entity_count": 3,

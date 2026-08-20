@@ -48,6 +48,42 @@ test_that("rs_theme returns correct theme information", {
   })
 })
 
+test_that("rs_theme uses requireNamespace for rstudioapi detection", {
+  # RSTUDIO=1 with rstudioapi available reads the theme via requireNamespace
+  withr::with_envvar(c(RSTUDIO = "1"), {
+    with_mocked_bindings(
+      getThemeInfo = function() list(editor = "x", global = "y", dark = TRUE, foreground = "f", background = "b"),
+      .package = "rstudioapi",
+      code = with_mocked_bindings(
+        isAvailable = function() TRUE,
+        hasFun = function(...) TRUE,
+        .package = "rstudioapi",
+        code = {
+          # requireNamespace("rstudioapi") is TRUE when installed
+          res <- rs_theme()
+          expect_true(res$dark)
+        }
+      )
+    )
+  })
+})
+
+test_that(".onLoad initializes the session cache", {
+  ns <- asNamespace("metapip")
+  original <- get(".metapip_cache", envir = ns)
+  unlockBinding(".metapip_cache", ns)
+  on.exit({
+    assign(".metapip_cache", original, envir = ns)
+    lockBinding(".metapip_cache", ns)
+  }, add = TRUE)
+  assign(".metapip_cache", NULL, envir = ns)
+
+  .onLoad(NULL, "metapip")
+
+  expect_true(!is.null(metapip:::.metapip_cache))
+  expect_true(is.environment(metapip:::.metapip_cache))
+})
+
 # gh_token --------
 test_that("gh_token returns the token from gitcreds when available", {
   mockery::stub(gh_token, "gitcreds::gitcreds_get", function() {

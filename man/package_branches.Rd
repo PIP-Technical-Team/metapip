@@ -24,9 +24,9 @@ A named list with three elements:
       the common branches (`PROD`, `DEV_v2`, `QA`) and the package
       version on that branch.}
     \item{local}{`data.frame` with columns: `package`, `local_branch`,
-      `local_version`, and `local_status` (one of `"behind {branch}"`,
-      `"ahead of {branch}"`, `"up-to-date"`, `"Not in local"`,
-      `"{branch} not in repo"`, `"{branch} version unknown"`).}
+      `local_version`, and `local_status` (one of `"behind <branch>"`,
+      `"ahead of <branch>"`, `"up-to-date"`, `"Not in local"`,
+      `"<branch> not in repo"`, `"<branch> version unknown"`).}
     \item{*}{One additional `data.frame` per package listing its
       non-common branches and their versions.}
   }

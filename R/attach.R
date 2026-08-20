@@ -32,11 +32,18 @@ metapip_attach <- function(pkg = NULL) {
     ),
     startup = TRUE
   )
-
-  installed_packages <- utils::installed.packages()
-  not_installed_core_packages <- setdiff(core, rownames(installed_packages))
+  # Check if the requested core packages are installed; if not, warn and skip
+  # them, but never expand the attach set beyond what was requested.
+  # O(1) per-package namespace checks instead of a full library scan
+  not_installed_core_packages <-
+    to_load[!vapply(to_load, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1))]
   if (length(not_installed_core_packages) > 0L) {
-    to_load <- setdiff(core, not_installed_core_packages)
+    to_load <- setdiff(to_load, not_installed_core_packages)
+
+    if (length(to_load) == 0) {
+      return(invisible())
+    }
+
     to_install <- paste0("c(",
                          shQuote(not_installed_core_packages) |>
                            paste(collapse = ", ") ,")")

@@ -20,17 +20,17 @@ objective` · `fix`_ · 12 entities
   > Fix .onAttach() stub and init_metapip() hardcoded answer (R7)
 - **[Write red-phase regression tests for V1–V4](roadmap.json#write-red-phase-tests)** · `feature` · _idea_ · `—`
   > Write red-phase regression tests for V1–V4
-- **[Per-session API memoization for get_branches\(\) / latest_commit_for_branch\(\) \(P1\)](roadmap.json#api-memoization)** · `feature` · _idea_ · `—`
+- **[Per-session API memoization for get_branches\(\) / latest_commit_for_branch\(\) \(P1\)](roadmap.json#api-memoization)** · `feature` · _done_ · `—`
   > Per-session API memoization for get_branches() / latest_commit_for_branch() (P1)
-- **[Replace installed.packages\(\) with requireNamespace\(\) per-package checks \(P2\)](roadmap.json#require-namespace-checks)** · `feature` · _idea_ · `—`
+- **[Replace installed.packages\(\) with requireNamespace\(\) per-package checks \(P2\)](roadmap.json#require-namespace-checks)** · `feature` · _done_ · `—`
   > Replace installed.packages() with requireNamespace() per-package checks (P2)
-- **[Un-skip and rewrite install tests with mockery stubs](roadmap.json#unskip-install-tests)** · `feature` · _idea_ · `—`
+- **[Un-skip and rewrite install tests with mockery stubs](roadmap.json#unskip-install-tests)** · `feature` · _done_ · `—`
   > Un-skip and rewrite install tests with mockery stubs
-- **[Mark network tests with skip_if_offline\(\) + skip_on_cran\(\)](roadmap.json#network-test-gating)** · `feature` · _idea_ · `—`
+- **[Mark network tests with skip_if_offline\(\) + skip_on_cran\(\)](roadmap.json#network-test-gating)** · `feature` · _done_ · `—`
   > Mark network tests with skip_if_offline() + skip_on_cran()
-- **[Windows CI matrix + pin actions/checkout@v4 + document GH_TOKEN policy](roadmap.json#windows-ci)** · `feature` · _idea_ · `—`
+- **[Windows CI matrix + pin actions/checkout@v4 + document GH_TOKEN policy](roadmap.json#windows-ci)** · `feature` · _done_ · `—`
   > Windows CI matrix + pin actions/checkout@v4 + document GH_TOKEN policy
-- **[Version bump to 0.1.0, NEWS.md rewrite, API hygiene \(typos, globalVariables, roxygen\)](roadmap.json#version-bump-010)** · `feature` · _idea_ · `—`
+- **[Version bump to 0.1.0, NEWS.md rewrite, API hygiene \(typos, globalVariables, roxygen\)](roadmap.json#version-bump-010)** · `feature` · _done_ · `—`
   > Version bump to 0.1.0, NEWS.md rewrite, API hygiene (typos, globalVariables, roxygen)
 
 ## Lock Down / Supply Chain Objective / Token
@@ -71,14 +71,27 @@ objective` · `interactive` · `failure`_ · 6 entities
 - **[Document CRAN dependency gap, recommend renv companion \(S5 deferred\)](roadmap.json#document-cran-gap)** · `feature` · _done_ · `—`
   > Document CRAN dependency gap, recommend renv companion (S5 deferred)
 
-## Init_Metapip.R / Test-Init_Metapip.R / Fix
+## Fcase / Mapply / Local_Status
 
-_Keywords: `init_metapip.r` · `test-init_metapip.r` · `fix`_ · 4 entities
+_Keywords: `fcase` · `mapply` · `local_status`_ · 4 entities
+
+- **[collapse does not export fcase/fifelse and join\(\) never produces local_status](.cg-docs/solutions/bugs/2026-08-14-collapse-fcase-fifelse-not-exported.md)** · `solution` · _—_ · `2026-08-14`
+  > `package_branches()` crashed at runtime with `could not find function "fcase"`. A rewrite to `fifelse()` failed ident…
+- **[Resilient httr2 fetching, explicit-UTC timestamps, and safe subsetting in R](.cg-docs/solutions/data-quality/2026-08-13-resilient-httr2-utc-fetching.md)** · `solution` · _—_ · `2026-08-13`
+  > Three fragility classes in an R package's remote-data layer: 1. `read.dcf(url(y))` had no timeout, no HTTP error hand…
+- **[Parse untrusted remote version strings safely with compareVersion + tryCatch](.cg-docs/solutions/data-quality/2026-08-14-untrusted-version-parse-compareversion.md)** · `solution` · _—_ · `2026-08-14`
+  > `package_branches()` reads `Version:` fields straight from `raw.githubusercontent.com/.../DESCRIPTION` files via `rea…
+- **[Tri-state compare_sha and mockery stubbing with mapply](.cg-docs/solutions/testing-patterns/2026-08-13-tri-state-compare-sha-mockery.md)** · `solution` · _—_ · `2026-08-13`
+  > When testing `update_pip_packages()`, which uses `mapply(compare_sha, pkgs, default_branch[pkgs])`, mocking `compare_…
+
+## Init_Metapip.R / Fix / Test-Init_Metapip.R
+
+_Keywords: `init_metapip.r` · `fix` · `test-init_metapip.r`_ · 4 entities
 
 - **[2026-08-12-unblock-the-core-review](.cg-docs/reviews/2026-08-12-unblock-the-core-review.md)** · `review` · _—_ · `2026-08-12`
   > **Review mode**: standard **Files reviewed**: 15 **Findings**: 17 (P0: 1, P1: 5, P2: 7, P3: 4)
 - **[2026-08-12-unblock-the-core-verify-review-2](.cg-docs/reviews/2026-08-12-unblock-the-core-verify-review-2.md)** · `review` · _—_ · `2026-08-14`
-  > **Review mode**: verification (light depth, forced by mode:verify) **Parent review**: `.cg-docs/reviews/2026-08-12-un…
+  > **Review mode**: light (verify pass) **Files reviewed**: 18 (milestone changes + tests) **Findings**: 16 (P0: 0, P1: …
 - **[2026-08-13-harden-install-pipeline-verify-review](.cg-docs/reviews/2026-08-13-harden-install-pipeline-verify-review.md)** · `review` · _—_ · `2026-08-13`
   > **Review mode**: light (verify pass) **Files reviewed**: 10 **Findings**: 11 (P0: 0, P1: 0, P2: 6, P3: 5)
 - **[2026-08-14-lock-down-supply-chain-review](.cg-docs/reviews/2026-08-14-lock-down-supply-chain-review.md)** · `review` · _—_ · `2026-08-14`

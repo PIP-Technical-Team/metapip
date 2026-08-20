@@ -27,5 +27,10 @@ metapip_default_options <- list(
   op <- options()
   toset <- !(names(metapip_default_options) %in% names(op))
   if (any(toset)) options(metapip_default_options[toset])
+
+  # Session-scoped memoization cache for GitHub API calls. Cleared on package
+  # reload; restarting R is the intended cache invalidation mechanism.
+  .metapip_cache <<- new.env(parent = emptyenv())
+
   invisible()
 }

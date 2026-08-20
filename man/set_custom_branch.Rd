@@ -33,7 +33,7 @@ packages, persisting the change as the `metapip.custom_branch` R option.
 \details{
 Custom branches take precedence over the global default (from
 [get_default_branch()]) in all functions that resolve a package's branch.
-The convention is `{package}_branch` in the options list, but you pass
+The convention is `package_branch` in the options list, but you pass
 package names directly to `set_custom_branch()`.
 }
 \section{Errors}{

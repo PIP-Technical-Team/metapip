@@ -1,6 +1,6 @@
 # 🧠 Project Brain
 
-_Generated 2026-08-17 · 45 entities · 6 topics · 9 edges_
+_Generated 2026-08-17 · 49 entities · 7 topics · 10 edges_
 
 ## How to Use
 
@@ -16,18 +16,19 @@ _Generated 2026-08-17 · 45 entities · 6 topics · 9 edges_
 | 1 | [Core Objective / Release Objective / Fix](BRAIN-01.md#core-objective-release-objective-fix) | 12 | BRAIN-01.md |
 | 2 | [Lock Down / Supply Chain Objective / Token](BRAIN-01.md#lock-down-supply-chain-objective-token) | 7 | BRAIN-01.md |
 | 3 | [Install Pipeline Objective / Interactive / Failure](BRAIN-01.md#install-pipeline-objective-interactive-failure) | 6 | BRAIN-01.md |
-| 4 | [Init_Metapip.R / Test-Init_Metapip.R / Fix](BRAIN-01.md#init-metapip-r-test-init-metapip-r-fix) | 4 | BRAIN-01.md |
-| 5 | [Resilient Networking / Time Objective / Get_Latest_Branch_Update](BRAIN-01.md#resilient-networking-time-objective-get-latest-branch-update) | 3 | BRAIN-01.md |
-| 6 | [Update_Pip_Packages\(\) / Compare_Sha / Install_Branch](BRAIN-01.md#update-pip-packages-compare-sha-install-branch) | 3 | BRAIN-01.md |
+| 4 | [Fcase / Mapply / Local_Status](BRAIN-01.md#fcase-mapply-local-status) | 4 | BRAIN-01.md |
+| 5 | [Init_Metapip.R / Fix / Test-Init_Metapip.R](BRAIN-01.md#init-metapip-r-fix-test-init-metapip-r) | 4 | BRAIN-01.md |
+| 6 | [Resilient Networking / Time Objective / Get_Latest_Branch_Update](BRAIN-01.md#resilient-networking-time-objective-get-latest-branch-update) | 3 | BRAIN-01.md |
+| 7 | [Update_Pip_Packages\(\) / Compare_Sha / Install_Branch](BRAIN-01.md#update-pip-packages-compare-sha-install-branch) | 3 | BRAIN-01.md |
 
 ## Entity Summary
 
 | Type | Count |
 |------|-------|
 | feature | 28 |
-| plan | 5 |
+| plan | 6 |
 | review | 6 |
-| solution | 5 |
+| solution | 8 |
 | strategy | 1 |
 
 _10 entities not assigned to any topic_
@@ -37,5 +38,5 @@ _10 entities not assigned to any topic_
 | Edge Type | Count |
 |-----------|-------|
 | references | 2 |
-| reviews | 4 |
+| reviews | 5 |
 | verifies | 3 |

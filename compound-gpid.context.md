@@ -11,10 +11,12 @@ this file is committed to git and shared with the team.
 
 ### R: data.table-collapse dialect gotchas (discovered 2026-08-13)
 
-- `fcase()` / `fifelse()` come from **data.table**, not collapse. collapse does not export them; use data.table's (`import(data.table, except = fdroplevels)` is in NAMESPACE).
+- `fcase()` / `fifelse()` come from **data.table**, not collapse. collapse does not export them; use data.table's (`import(data.table, except = fdroplevels)` is in NAMESPACE). The installed `collapse` 2.1.7 does NOT export `fcase`/`fifelse` — verify with `"fname" %in% getNamespaceExports("collapse")` before relying on any collapse function.
+- Prefer base `ifelse` (or `utils::compareVersion` for version comparison); metapip defines its own internal `package_version()` color formatter, so always fully qualify `base::package_version` / `utils::compareVersion`.
 - `collapse::join(..., how = "full")` returns only the joined columns — it never creates a status column. Compute comparisons explicitly (e.g., `utils::compareVersion` via `mapply`; it is scalar, not vectorized).
 - GitHub timestamps (`...Z`) must be parsed with `as.POSIXct(x, format = "%Y-%m-%dT%H:%M:%OSZ", tz = "UTC")` — `%OS` handles optional fractional seconds; never rely on host TZ.
 - Prefer `cli::cli_warn()` over `cli::cli_alert_warning()` when a test must `expect_warning()`.
+- Only successful API responses (and genuine 404 `gh_error`s) are cached — never error fallbacks. GitHub API calls are memoized per R session (session-scoped `.metapip_cache`); restart R to invalidate, and `install_branch()` invalidates per-package keys after install.
 
 ### Supply-chain / install conventions (discovered 2026-08-14)
 

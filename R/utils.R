@@ -30,7 +30,6 @@ text_col <- function(x) {
 #'   `"metapip"` in the returned vector.
 #'
 #' @return Character vector of package names.
-#'
 #' @examples
 #' metapip_packages()
 #' metapip_packages(include_self = FALSE)
@@ -273,12 +272,14 @@ rs_theme <- function() {
          background = "")
 
   if (Sys.getenv("RSTUDIO") == "1") {
-    if ("rstudioapi" %in% rownames(utils::installed.packages())) {
-      rstudio_theme <- tryCatch(
-        rstudioapi::getThemeInfo(),
-        error = \(e) template,
-        silent = TRUE
-      )
+    # Attempt to infer theme or notify the user to set the theme if using a
+    # newer RStudio version without `rstudioapi` support
+    # If possible, use `rstudioapi` to get theme information (works only in certain versions)
+
+    if (requireNamespace("rstudioapi", quietly = TRUE)) {
+      rstudio_theme <- tryCatch(rstudioapi::getThemeInfo(),
+                                error = \(e) template,
+                                silent = TRUE)
     }
   }
   invisible(rstudio_theme)

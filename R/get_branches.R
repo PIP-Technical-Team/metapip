@@ -39,16 +39,21 @@
 #' @export
 get_branches <- function(package = "pipapi", display = TRUE) {
   check_package_condition(package)
-  out <- gh::gh(
-    "GET /repos/PIP-Technical-Team/{repo}/branches",
-    repo = package,
-    .token = gh_token(),
-    .limit = Inf
-  )
+  key <- paste0("branches:", package)
+  out <- cache_get(key)
+  if (is.null(out)) {
+    out <- gh::gh(
+      "GET /repos/PIP-Technical-Team/{repo}/branches",
+      repo = package,
+      .token = gh_token(),
+      .limit = Inf
+    )
+    cache_set(key, out)
+  }
   branches <- vapply(out, `[[`, "", "name")
   if (isTRUE(display)) {
     cli::cli_h3("These are available branches for {package} package: ")
-    cli::cat_bullet(glue::glue("{branches}"))
+    cli::cat_bullet("{branches}")
   }
   return(invisible(branches))
 }
@@ -361,7 +366,7 @@ get_package_current_branch <- function(package) {
 #' @details
 #' Custom branches take precedence over the global default (from
 #' [get_default_branch()]) in all functions that resolve a package's branch.
-#' The convention is `{package}_branch` in the options list, but you pass
+#' The convention is `package_branch` in the options list, but you pass
 #' package names directly to `set_custom_branch()`.
 #'
 #' @param ... For `set_custom_branch()`: named character scalars where

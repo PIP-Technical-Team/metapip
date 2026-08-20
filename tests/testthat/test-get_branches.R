@@ -7,64 +7,161 @@ test_that("check_package_condition works correctly", {
 
 
 test_that("get_branches works correctly", {
-  mockery::stub(get_branches, "gh_token", function() NULL)
-  mockery::stub(get_branches, "gh::gh", function(...) {
-    return(list(list(name = "abc", num = 1), list(name = "def", num = 5)))
-  })
-  res <- get_branches("pipapi")
-  expect_equal(res, c("abc", "def"))
-  expect_message(get_branches("wbpip"), "These are available branches for wbpip package")
+  with_mocked_bindings(
+    gh = function(...) list(list(name = "abc", num = 1), list(name = "def", num = 5)),
+    .package = "gh",
+    code = with_mocked_bindings(
+      gh_token = function() NULL,
+      check_package_condition = function(...) TRUE,
+      .package = "metapip",
+      code = {
+        res <- get_branches("pipapi")
+        expect_equal(res, c("abc", "def"))
+        expect_message(get_branches("wbpip"), "These are available branches for wbpip package")
+      }
+    )
+  )
+})
+
+test_that("get_branches memoizes gh::gh per package (V1)", {
+  call_count <- 0L
+  with_mocked_bindings(
+    gh = function(...) {
+      call_count <<- call_count + 1L
+      list(list(name = "abc"), list(name = "def"))
+    },
+    .package = "gh",
+    code = with_mocked_bindings(
+      gh_token = function() NULL,
+      check_package_condition = function(...) TRUE,
+      .package = "metapip",
+      code = {
+        cache_clear("branches:")
+        res1 <- get_branches("pipapi", display = FALSE)
+        res2 <- get_branches("pipapi", display = FALSE)
+        expect_equal(call_count, 1L)
+        expect_equal(res1, c("abc", "def"))
+        expect_equal(res2, c("abc", "def"))
+
+        # A different package uses a different cache key
+        res3 <- get_branches("wbpip", display = FALSE)
+        expect_equal(call_count, 2L)
+        expect_equal(res3, c("abc", "def"))
+
+        cache_clear("branches:")
+      }
+    )
+  )
+})
+
+test_that("get_branches display logic still runs on cache hit", {
+  messages <- character(0)
+  with_mocked_bindings(
+    gh = function(...) list(list(name = "abc")),
+    .package = "gh",
+    code = with_mocked_bindings(
+      gh_token = function() NULL,
+      check_package_condition = function(...) TRUE,
+      .package = "metapip",
+      code = with_mocked_bindings(
+        cli_h3 = function(msg) NULL,
+        # cli::cat_bullet interpolates {branches} internally; simulate that
+        # here so the test observes the rendered branch names.
+        cat_bullet = function(msg) {
+          messages <<- c(messages, glue::glue(msg, .envir = parent.frame()))
+        },
+        .package = "cli",
+        code = {
+          cache_clear("branches:")
+          invisible(get_branches("pipapi", display = TRUE))
+          invisible(get_branches("pipapi", display = TRUE))
+          expect_length(messages, 2)
+          cache_clear("branches:")
+        }
+      )
+    )
+  )
 })
 
 test_that("get_branches returns all branches with full pagination (45 branches)", {
   captured_args <- NULL
-  mockery::stub(get_branches, "gh_token", function() NULL)
-  mockery::stub(get_branches, "check_package_condition", \(...) TRUE)
-  mockery::stub(get_branches, "gh::gh", function(...) {
-    captured_args <<- list(...)
-    lapply(seq_len(45), \(i) list(name = sprintf("branch_%02d", i)))
-  })
-
-  res <- get_branches("pipapi", display = FALSE)
-
-  expect_length(res, 45)
-  expect_true(identical(captured_args$.limit, Inf))
-  expect_true(identical(captured_args$repo, "pipapi"))
+  cache_clear("branches:")
+  with_mocked_bindings(
+    gh = function(...) {
+      captured_args <<- list(...)
+      lapply(seq_len(45), \(i) list(name = sprintf("branch_%02d", i)))
+    },
+    .package = "gh",
+    code = with_mocked_bindings(
+      gh_token = function() NULL,
+      check_package_condition = function(...) TRUE,
+      .package = "metapip",
+      code = {
+        res <- get_branches("pipapi", display = FALSE)
+        expect_length(res, 45)
+        expect_true(identical(captured_args$.limit, Inf))
+        expect_true(identical(captured_args$repo, "pipapi"))
+      }
+    )
+  )
 })
 
 test_that("get_branches returns exactly 30 branches when repo has 30", {
-  mockery::stub(get_branches, "gh_token", function() NULL)
-  mockery::stub(get_branches, "check_package_condition", \(...) TRUE)
-  mockery::stub(get_branches, "gh::gh", function(...) {
-    lapply(seq_len(30), \(i) list(name = sprintf("branch_%02d", i)))
-  })
-
-  res <- get_branches("pipapi", display = FALSE)
-
-  expect_length(res, 30)
+  cache_clear("branches:")
+  with_mocked_bindings(
+    gh = function(...) {
+      lapply(seq_len(30), \(i) list(name = sprintf("branch_%02d", i)))
+    },
+    .package = "gh",
+    code = with_mocked_bindings(
+      gh_token = function() NULL,
+      check_package_condition = function(...) TRUE,
+      .package = "metapip",
+      code = {
+        res <- get_branches("pipapi", display = FALSE)
+        expect_length(res, 30)
+      }
+    )
+  )
 })
 
 test_that("get_branches propagates gh errors", {
-  mockery::stub(get_branches, "gh_token", function() NULL)
-  mockery::stub(get_branches, "check_package_condition", \(...) TRUE)
-  mockery::stub(get_branches, "gh::gh", \(...) stop("GitHub API error"))
-
-  expect_error(get_branches("pipapi", display = FALSE), "GitHub API error")
+  cache_clear("branches:")
+  with_mocked_bindings(
+    gh = function(...) stop("GitHub API error"),
+    .package = "gh",
+    code = with_mocked_bindings(
+      gh_token = function() NULL,
+      check_package_condition = function(...) TRUE,
+      .package = "metapip",
+      code = {
+        expect_error(get_branches("pipapi", display = FALSE), "GitHub API error")
+      }
+    )
+  )
 })
 
 test_that("get_branches works without GITHUB_PAT", {
   gh_called <- FALSE
   token_seen <- "unset"
+  cache_clear("branches:")
   withr::with_envvar(c(GITHUB_PAT = "", GITHUB_TOKEN = ""), {
-    mockery::stub(get_branches, "gh_token", function() NULL)
-    mockery::stub(get_branches, "check_package_condition", \(...) TRUE)
-    mockery::stub(get_branches, "gh::gh", function(..., .token = NULL) {
-      gh_called <<- TRUE
-      token_seen <<- .token
-      list(list(name = "abc", num = 1))
-    })
-
-    res <- get_branches("pipapi", display = FALSE)
+    with_mocked_bindings(
+      gh = function(..., .token = NULL) {
+        gh_called <<- TRUE
+        token_seen <<- .token
+        list(list(name = "abc", num = 1))
+      },
+      .package = "gh",
+      code = with_mocked_bindings(
+        gh_token = function() NULL,
+        check_package_condition = function(...) TRUE,
+        .package = "metapip",
+        code = {
+          res <- get_branches("pipapi", display = FALSE)
+        }
+      )
+    )
   })
 
   expect_true(gh_called)
@@ -74,147 +171,200 @@ test_that("get_branches works without GITHUB_PAT", {
 
 test_that("install_branch works correctly", {
   install_refs <- character(0)
-  mockery::stub(install_branch, "check_github_token", function() NULL)
-  mockery::stub(install_branch, "check_package_condition", function(...) TRUE)
-  mockery::stub(install_branch, "detach_package", function(...) invisible())
-  mockery::stub(install_branch, "get_branches", function(...) {
-    c("abc", "def")
-  })
-  mockery::stub(install_branch, "latest_commit_for_branch", function(...) {
-    list(sha = "abc123")
-  })
-  mockery::stub(install_branch, "utils::packageDescription", function(...) {
-    NA_character_
-  })
-  mockery::stub(install_branch, "remotes::install_github", function(x) {
-    install_refs <<- c(install_refs, x)
-    TRUE
-  })
+  with_mocked_bindings(
+    check_github_token = function(...) NULL,
+    check_package_condition = function(...) TRUE,
+    detach_package = function(...) invisible(),
+    get_branches = function(...) c("abc", "def"),
+    latest_commit_for_branch = function(...) list(sha = "abc123"),
+    .package = "metapip",
+    code = with_mocked_bindings(
+      packageDescription = function(...) NA_character_,
+      .package = "utils",
+      code = with_mocked_bindings(
+        install_github = function(x) {
+          install_refs <<- c(install_refs, x)
+          TRUE
+        },
+        .package = "remotes",
+        code = {
+          cache_clear("branches:")
+          cache_clear("commit:")
+          expect_true(install_branch(branch = "abc"))
+          expect_equal(install_refs, "PIP-Technical-Team/pipapi@abc123")
+          expect_message(install_branch(branch = "abc"), "Installing branch abc from package pipapi")
+        }
+      )
+    )
+  )
 
-  expect_true(install_branch(branch = "abc"))
-  expect_equal(install_refs, "PIP-Technical-Team/pipapi@abc123")
-  expect_error(install_branch(branch = c("abc", "def")), "Please enter a single branch name.")
-  expect_message(install_branch(branch = "abc"), "Installing branch abc from package pipapi")
+  # The validation error is intentionally outside the packageDescription mock.
+  # cli/rlang formats the error through utils::packageVersion("cli").
+  with_mocked_bindings(
+    check_github_token = function(...) NULL,
+    check_package_condition = function(...) TRUE,
+    .package = "metapip",
+    code = expect_error(
+      install_branch(branch = c("abc", "def")),
+      "Please enter a single branch name."
+    )
+  )
 })
 
 test_that("install_branch(force=TRUE) installs live branch HEAD with a bypass warning", {
   install_refs <- character(0)
   sha_resolved <- FALSE
-  mockery::stub(install_branch, "check_github_token", function() NULL)
-  mockery::stub(install_branch, "check_package_condition", function(...) TRUE)
-  mockery::stub(install_branch, "detach_package", function(...) invisible())
-  mockery::stub(install_branch, "get_branches", function(...) c("abc", "def"))
-  mockery::stub(install_branch, "latest_commit_for_branch", function(...) {
-    sha_resolved <<- TRUE
-    list(sha = "abc123")
-  })
-  mockery::stub(install_branch, "remotes::install_github", function(x) {
-    install_refs <<- c(install_refs, x)
-    TRUE
-  })
-
-  expect_message(install_branch(branch = "abc", force = TRUE), "force = TRUE bypasses the team lock")
-  expect_equal(install_refs, "PIP-Technical-Team/pipapi@abc")
-  expect_false(sha_resolved)
+  with_mocked_bindings(
+    check_github_token = function(...) NULL,
+    check_package_condition = function(...) TRUE,
+    detach_package = function(...) invisible(),
+    get_branches = function(...) c("abc", "def"),
+    latest_commit_for_branch = function(...) {
+      sha_resolved <<- TRUE
+      list(sha = "abc123")
+    },
+    .package = "metapip",
+    code = with_mocked_bindings(
+      install_github = function(x) {
+        install_refs <<- c(install_refs, x)
+        TRUE
+      },
+      .package = "remotes",
+      code = {
+        cache_clear("branches:")
+        expect_message(install_branch(branch = "abc", force = TRUE), "force = TRUE bypasses the team lock")
+        expect_equal(install_refs, "PIP-Technical-Team/pipapi@abc")
+        expect_false(sha_resolved)
+      }
+    )
+  )
 })
 
 test_that("install_branch skips install when installed RemoteSha matches target SHA", {
   installed <- FALSE
   info_messages <- character(0)
-  mockery::stub(install_branch, "check_github_token", function() NULL)
-  mockery::stub(install_branch, "check_package_condition", function(...) TRUE)
-  mockery::stub(install_branch, "detach_package", function(...) invisible())
-  mockery::stub(install_branch, "get_branches", function(...) c("abc", "def"))
-  mockery::stub(install_branch, "latest_commit_for_branch", function(...) {
-    list(sha = "abc123")
-  })
-  mockery::stub(install_branch, "utils::packageDescription", function(...) {
-    "abc123"
-  })
-  mockery::stub(install_branch, "remotes::install_github", function(x) {
-    installed <<- TRUE
-    TRUE
-  })
-  mockery::stub(install_branch, "cli::cli_alert_info", function(msg) {
-    info_messages <<- c(info_messages, msg)
-  })
-
-  res <- install_branch(branch = "abc")
-
-  expect_false(installed)
-  expect_null(res)
-  expect_true(any(grepl("already at SHA", info_messages)))
+  with_mocked_bindings(
+    check_github_token = function(...) NULL,
+    check_package_condition = function(...) TRUE,
+    detach_package = function(...) invisible(),
+    get_branches = function(...) c("abc", "def"),
+    latest_commit_for_branch = function(...) list(sha = "abc123"),
+    .package = "metapip",
+    code = with_mocked_bindings(
+      packageDescription = function(...) "abc123",
+      .package = "utils",
+      code = with_mocked_bindings(
+        install_github = function(x) {
+          installed <<- TRUE
+          TRUE
+        },
+        .package = "remotes",
+        code = with_mocked_bindings(
+          cli_alert_info = function(msg) {
+            info_messages <<- c(info_messages, msg)
+          },
+          .package = "cli",
+          code = {
+            res <- install_branch(branch = "abc")
+            expect_false(installed)
+            expect_null(res)
+            expect_true(any(grepl("already at SHA", info_messages)))
+          }
+        )
+      )
+    )
+  )
 })
 
 test_that("install_branch proceeds when installed RemoteSha is NA", {
   installed <- FALSE
-  mockery::stub(install_branch, "check_github_token", function() NULL)
-  mockery::stub(install_branch, "check_package_condition", function(...) TRUE)
-  mockery::stub(install_branch, "detach_package", function(...) invisible())
-  mockery::stub(install_branch, "get_branches", function(...) c("abc", "def"))
-  mockery::stub(install_branch, "latest_commit_for_branch", function(...) {
-    list(sha = "abc123")
-  })
-  mockery::stub(install_branch, "utils::packageDescription", function(...) {
-    NA_character_
-  })
-  mockery::stub(install_branch, "remotes::install_github", function(x) {
-    installed <<- TRUE
-    TRUE
-  })
-
-  res <- install_branch(branch = "abc")
-
-  expect_true(installed)
+  with_mocked_bindings(
+    check_github_token = function(...) NULL,
+    check_package_condition = function(...) TRUE,
+    detach_package = function(...) invisible(),
+    get_branches = function(...) c("abc", "def"),
+    latest_commit_for_branch = function(...) list(sha = "abc123"),
+    .package = "metapip",
+    code = with_mocked_bindings(
+      packageDescription = function(...) NA_character_,
+      .package = "utils",
+      code = with_mocked_bindings(
+        install_github = function(x) {
+          installed <<- TRUE
+          TRUE
+        },
+        .package = "remotes",
+        code = {
+          res <- install_branch(branch = "abc")
+          expect_true(installed)
+        }
+      )
+    )
+  )
 })
 
 test_that("install_branch aborts cleanly when the target SHA cannot be resolved", {
   installed <- FALSE
-  mockery::stub(install_branch, "check_github_token", function() NULL)
-  mockery::stub(install_branch, "check_package_condition", function(...) TRUE)
-  mockery::stub(install_branch, "detach_package", function(...) invisible())
-  mockery::stub(install_branch, "get_branches", function(...) c("abc", "def"))
-  mockery::stub(install_branch, "latest_commit_for_branch", function(...) {
-    list(sha = NULL)
-  })
-  mockery::stub(install_branch, "remotes::install_github", function(x) {
-    installed <<- TRUE
-    TRUE
-  })
-
-  expect_error(install_branch(branch = "abc"), "Could not resolve SHA")
-  expect_false(installed)
+  with_mocked_bindings(
+    check_github_token = function(...) NULL,
+    check_package_condition = function(...) TRUE,
+    detach_package = function(...) invisible(),
+    get_branches = function(...) c("abc", "def"),
+    latest_commit_for_branch = function(...) list(sha = NULL),
+    .package = "metapip",
+    code = with_mocked_bindings(
+      install_github = function(x) {
+        installed <<- TRUE
+        TRUE
+      },
+      .package = "remotes",
+      code = {
+        expect_error(install_branch(branch = "abc"), "Could not resolve SHA")
+        expect_false(installed)
+      }
+    )
+  )
 })
 
 test_that("install_branch honours an explicit sha override", {
   install_refs <- character(0)
-  mockery::stub(install_branch, "check_github_token", function() NULL)
-  mockery::stub(install_branch, "check_package_condition", function(...) TRUE)
-  mockery::stub(install_branch, "detach_package", function(...) invisible())
-  mockery::stub(install_branch, "get_branches", function(...) c("abc", "def"))
-  mockery::stub(install_branch, "latest_commit_for_branch", function(...) {
-    list(sha = "branchhead")
-  })
-  mockery::stub(install_branch, "utils::packageDescription", function(...) {
-    NA_character_
-  })
-  mockery::stub(install_branch, "remotes::install_github", function(x) {
-    install_refs <<- c(install_refs, x)
-    TRUE
-  })
-
-  install_branch(branch = "abc", sha = "deadbeef")
-
-  expect_equal(install_refs, "PIP-Technical-Team/pipapi@deadbeef")
+  with_mocked_bindings(
+    check_github_token = function(...) NULL,
+    check_package_condition = function(...) TRUE,
+    detach_package = function(...) invisible(),
+    get_branches = function(...) c("abc", "def"),
+    latest_commit_for_branch = function(...) list(sha = "branchhead"),
+    .package = "metapip",
+    code = with_mocked_bindings(
+      packageDescription = function(...) NA_character_,
+      .package = "utils",
+      code = with_mocked_bindings(
+        install_github = function(x) {
+          install_refs <<- c(install_refs, x)
+          TRUE
+        },
+        .package = "remotes",
+        code = {
+          cache_clear("branches:")
+          install_branch(branch = "abc", sha = "deadbeef")
+          expect_equal(install_refs, "PIP-Technical-Team/pipapi@deadbeef")
+        }
+      )
+    )
+  )
 })
 
 test_that("install_branch aborts for an invalid branch name", {
-  mockery::stub(install_branch, "check_github_token", function() NULL)
-  mockery::stub(install_branch, "check_package_condition", function(...) TRUE)
-  mockery::stub(install_branch, "detach_package", function(...) invisible())
-  mockery::stub(install_branch, "get_branches", function(...) c("abc", "def"))
-
-  expect_error(install_branch(branch = "nope"), "Not a valid branch name")
+  with_mocked_bindings(
+    check_github_token = function(...) NULL,
+    check_package_condition = function(...) TRUE,
+    detach_package = function(...) invisible(),
+    get_branches = function(...) c("abc", "def"),
+    .package = "metapip",
+    code = {
+      expect_error(install_branch(branch = "nope"), "Not a valid branch name")
+    }
+  )
 })
 
 test_that("is_core works as expected", {
@@ -225,7 +375,8 @@ test_that("is_core works as expected", {
 
 
 test_that("get_branch_info works as expected", {
-  skip("avoid live network")
+  skip_if_offline()
+  skip_on_cran()
   out1 <- get_branch_info()
   out2 <- get_branch_info(package = "wbpip", branch = c("PROD", "QA"))
   expect_s3_class(out1, "data.frame")
@@ -234,15 +385,9 @@ test_that("get_branch_info works as expected", {
   expect_length(out2, 4)
 })
 
-
-test_that("get_branch_info returns an error", {
-  #expect_error(get_branch_info("abc"), "The package is not one of pipapi, pipload, wbpip, pipfun, pipdata, pipr.")
-  #expect_error(get_branch_info(c("pipr", "pipapi")), "Please enter a single package name.")
-})
-
-
 test_that("get_latest_branch_update works as expected", {
-  skip("avoid live network")
+  skip_if_offline()
+  skip_on_cran()
   out1 <- get_latest_branch_update()
   out2 <- get_latest_branch_update(package = "wbpip")
   expect_s3_class(out1, "data.frame")
@@ -355,9 +500,4 @@ test_that("get_latest_branch_update handles single non-gh-pages branch", {
   res <- get_latest_branch_update("pipapi", display = FALSE)
   expect_equal(nrow(res), 1L)
   expect_identical(res$branch_name, "DEV")
-})
-
-test_that("get_branch_info returns an error", {
-  #expect_error(get_latest_branch_update("abc"), "The package is not one of pipapi, pipload, wbpip, pipfun, pipdata, pipr.")
-  #expect_error(get_latest_branch_update(c("pipr", "pipapi")), "Please enter a single package name.")
 })

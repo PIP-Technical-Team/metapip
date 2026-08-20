@@ -1,10 +1,82 @@
-test_that("package_branches works correctly", {
-  skip("avoid live network")
-  mockery::stub(package_branches, "get_branches", function(...) c("PROD", "DEV"))
+test_that("package_branches works correctly with fully stubbed data", {
+  mockery::stub(package_branches, "check_github_token", function(...) list(password = "x"))
+  mockery::stub(package_branches, "is_core", function(...) TRUE)
+  mockery::stub(package_branches, "get_package_version", function(package) {
+    stats::setNames(
+      lapply(package, function(p) c(PROD = "0.1.0", DEV = "0.1.1")),
+      package
+    )
+  })
+  mockery::stub(package_branches, "utils::packageDescription", function(package, fields) {
+    list(GithubRef = "PROD", Version = "0.1.0")
+  })
+
   out <- package_branches(c("pipapi", "wbpip"))
+
+  # list(common, local, <per-package lists>)
   expect_length(out, 4)
-  expect_length(out$local, 4)
-  expect_length(out$common, 4)
+  expect_s3_class(out$local, "data.frame")
+  expect_true("package" %in% names(out$local))
+})
+
+test_that("join_and_get_status reports behind/ahead/up-to-date", {
+  local <- data.frame(
+    package = c("pipapi", "pipfun", "pipaux"),
+    local_branch = c("PROD", "PROD", "PROD"),
+    local_version = c("0.1.0", "0.2.0", "0.3.0"),
+    stringsAsFactors = FALSE
+  )
+  dev <- data.frame(
+    package = c("pipapi", "pipfun", "pipaux"),
+    branch = c("PROD", "PROD", "PROD"),
+    version = c("0.2.0", "0.2.0", "0.2.0"),
+    stringsAsFactors = FALSE
+  )
+
+  res <- suppressMessages(join_and_get_status(local, dev, "PROD"))
+
+  expect_equal(
+    res$local_status,
+    c("behind PROD", "up-to-date", "ahead of PROD")
+  )
+})
+
+test_that("join_and_get_status degrades malformed remote versions to unknown", {
+  local <- data.frame(
+    package = c("pipapi", "pipfun"),
+    local_branch = c("PROD", "PROD"),
+    local_version = c("0.1.0", "0.2.0"),
+    stringsAsFactors = FALSE
+  )
+  dev <- data.frame(
+    package = c("pipapi", "pipfun"),
+    branch = c("PROD", "PROD"),
+    version = c("v2.0.1", ""),
+    stringsAsFactors = FALSE
+  )
+
+  res <- suppressMessages(join_and_get_status(local, dev, "PROD"))
+
+  expect_equal(res$local_status, c("unknown", "unknown"))
+})
+
+test_that("join_and_get_status reports Not in local and branch missing", {
+  local <- data.frame(
+    package = c("pipapi", "pipfun"),
+    local_branch = c("PROD", "PROD"),
+    local_version = c(NA_character_, "0.2.0"),
+    stringsAsFactors = FALSE
+  )
+  dev <- data.frame(
+    package = c("pipapi", "pipfun"),
+    branch = c("PROD", NA_character_),
+    version = c("0.2.0", NA_character_),
+    stringsAsFactors = FALSE
+  )
+
+  res <- suppressMessages(join_and_get_status(local, dev, "QA"))
+
+  expect_equal(res$local_status, c("Not in local", "QA not in repo"))
 })
 
 test_that("get_version_for_url returns version on 200", {

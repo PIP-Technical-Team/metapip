@@ -15,9 +15,16 @@ Key exported functions:
 | `get_latest_branch_update()` | Latest commit's branch, author, and timestamp per package |
 | `get_default_branch()` / `set_default_branch()` | Get/set the default branch |
 | `get_custom_branch()` / `set_custom_branch()` | Get/set per-package branch overrides |
-| `core_metadata()` / `get_core_pagkages()` / `metapip_packages()` | Package metadata and listing |
+| `get_core_packages()` | List the core PIP packages (correctly-spelled name) |
+| `get_core_pagkages()` | Deprecated alias, retained for backward compatibility (typo) |
+| `core_metadata()` / `metapip_packages()` | Package metadata and listing |
+| `package_branches()` | Status table of local and remote versions, incl. a `local_status` column |
 | `pkg_deps()` | Package dependency details |
 | `check_github_token()` | Verify GitHub credentials; returns a redacted `metapip_token` (never the live token) |
+
+GitHub API calls are memoized per R session, so repeated inspections reuse
+cached results instead of re-hitting the network. Restart R to clear the
+cache.
 <!-- cg:auto:end -->
 
 <!-- cg:auto:parameters -->
