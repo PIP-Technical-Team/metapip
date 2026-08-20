@@ -1,7 +1,8 @@
 # Get available branches for a package
 
-Returns a vector of branch names for the package specified. If display
-is set to TRUE, the branch names are printed in the console.
+Queries the GitHub API for all branches of a PIP package in the
+\`PIP-Technical-Team\` organisation. Paginates automatically so repos
+with more than 30 branches are fully returned.
 
 ## Usage
 
@@ -13,22 +14,43 @@ get_branches(package = "pipapi", display = TRUE)
 
 - package:
 
-  one of the core package name (default "pipapi")
+  Character. Single core PIP package name. Defaults to \`"pipapi"\`.
 
 - display:
 
-  (default TRUE) do you want to display the name of the branches in the
-  console?
+  Logical. If \`TRUE\` (default), branch names are printed to the
+  console with bullet markers. Set to \`FALSE\` for silent use in
+  scripts.
 
 ## Value
 
-an invisible character vector of branches
+Character vector of branch names (returned invisibly). Always returns
+the full set regardless of the \`display\` setting.
+
+## Side effects
+
+When \`display = TRUE\`, prints a header and bullet list to the console
+via \[cli::cli_h3()\] and \[cli::cat_bullet()\].
+
+## Authentication
+
+Read-only function: works without a GitHub PAT against the public
+\`PIP-Technical-Team\` org. Supplying a PAT via \[gh_token()\] increases
+the API rate limit from 60 to 5000 requests/hour.
+
+## See also
+
+\[get_branch_info()\], \[get_latest_branch_update()\],
+\[install_branch()\]
 
 ## Examples
 
 ``` r
 if (FALSE) { # \dontrun{
-  get_branches()
-  get_branches("wbpip", display = FALSE)
+# Interactive use: displays branches in console
+branches <- get_branches("wbpip")
+
+# Silent use: suppresses display
+branches <- get_branches("wbpip", display = FALSE)
 } # }
 ```

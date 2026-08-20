@@ -1,42 +1,26 @@
-# metapip
+# metapip ![](reference/figures/logo.png)
 
-The goal of [metapip](https://github.com/PIP-Technical-Team/metapip) is
-to provide the user with a set of functions that allow him/her to work
-efficiently with all the PIP R packages. The technical world of PIP
-consist of several packages that interact to each to load, format,
-modify, and estimate data for the PIP system. Given that the number of
-packages has increased over time, it was necessary to create a meta
-package whose only objective is the proper management of all the other
-PIP packages.
+**metapip** installs, inspects, and manages the R packages behind the
+World Bank’s [Poverty and Inequality Platform
+(PIP)](https://pip.worldbank.org/). Think of it as the
+[{tidyverse}](https://github.com/tidyverse/tidyverse) for PIP: one
+package that loads and coordinates all the others.
 
-[metapip](https://github.com/PIP-Technical-Team/metapip) is highly
-inspired by the [{tidyverse}](https://github.com/tidyverse/tidyverse),
-so that some of its functions are just a simple refactoring of the
-[tidyverse](https://tidyverse.tidyverse.org) functions. All the credit,
-then, goes to the Tidyerse team. Thank you!
+## Why metapip?
 
-In addition to the basic functionality of attaching and installing
-PIP-related R packages,
-[metapip](https://github.com/PIP-Technical-Team/metapip) also works as
-the manager of those packages in your working environment such that you
-are always working with the right version of any of the PIP packages.
+The PIP ecosystem comprises multiple interdependent R packages
+(`pipapi`, `pipload`, `wbpip`, `pipfun`, `pipdata`, `pipaux`, `pipster`,
+`pipfaker`) hosted on GitHub. Keeping them in sync across users and
+environments is error-prone. `metapip` solves this by:
 
-## Core packages
-
-The core PIP R packages are
-
-- pipapi
-- pipaux
-- pipload
-- wbpip
-- pipfun
-- pipdata
-- pipr
+- **One-call installs** – install all core packages from their
+  configured branches with a single function call.
+- **SHA-pinned reproducibility** – a `PIP_LOCK.csv` lockfile pins every
+  package to an exact commit, so all team members get identical code.
+- **Branch management** – configure per-package branch overrides and
+  inspect version status across the ecosystem.
 
 ## Installation
-
-You can install the development version of metapip from
-[GitHub](https://github.com/) with:
 
 ``` r
 
@@ -44,305 +28,219 @@ You can install the development version of metapip from
 devtools::install_github("PIP-Technical-Team/metapip")
 ```
 
-## Setting up default branch in metapip
-
-In `metapip` there are different ways to set up default branches. By
-default it uses `options(metapip.default_branch)` to provide a default
-branch value to all packages. When you load the package it is set to
-“PROD”. You can override that default setting on per package basis by
-updating options with custom default branch like
-`options(metapip.custom_branch = list(pipapi_branch = "DEV", pipfaker_branch = "main"))`.
-So in this case, the default value for `pipapi` branch is “DEV” whereas
-the one for `pipfaker` is set to “main”. For rest of the pip core
-packages it remains as “PROD”.
-
-## Functions and it’s usage in metapip
+## Quick Start
 
 ``` r
 
 library(metapip)
-```
 
-Since `metapip` works with Github API, install functions
-([`install_branch()`](https://pip-technical-team.github.io/metapip/reference/install_branch.md),
-[`install_pip_packages()`](https://pip-technical-team.github.io/metapip/reference/install_pip_packages.md))
-need your GitHub credentials to be properly set in your R environment
-for rate-limit reliability. The best way to do so is using the
-[gitcreds](https://gitcreds.r-lib.org/) package, or by setting the
-`GITHUB_PAT`/`GITHUB_TOKEN` environment variables. You may find a simple
-explanation about how you can generate a token for yourself and set it
-up [here](https://happygitwithr.com/https-pat#tldr).
+# 1. Verify GitHub credentials (recommended for rate limits)
+check_github_token() |> print()
 
-Read-only functions
-([`get_branches()`](https://pip-technical-team.github.io/metapip/reference/get_branches.md),
-[`get_branch_info()`](https://pip-technical-team.github.io/metapip/reference/get_branch_info.md),
-[`get_latest_branch_update()`](https://pip-technical-team.github.io/metapip/reference/get_latest_branch_update.md),
-[`core_metadata()`](https://pip-technical-team.github.io/metapip/reference/core_metadata.md),
-[`package_branches()`](https://pip-technical-team.github.io/metapip/reference/package_branches.md))
-work without a token against the public `PIP-Technical-Team` org.
-
-You can check if your credentials are properly set by running the
-following command.
-
-``` r
-
-check_github_token() |> 
-  print()
-```
-
-The printed output is redacted — the `metapip_token` print method shows
-`""` in place of the actual token.
-
-Let us now go through the functions in metapip.
-
-1.  [`get_branches()`](https://pip-technical-team.github.io/metapip/reference/get_branches.md)
-
-    This function as the name suggests gives you the available branches
-    for a particular pip package on GitHub. It will display in the
-    console the available branches.
-
-``` r
-
-get_branches("pipr")   
-
-#── These are available branches for pipr package:  
-#• 29-website-formatting
-#• 61_global_end
-#• DEV
-#• add_retry
-#• default_options
-#• fix_popshare
-#• gh-pages
-#• httr2
-#• main
-#• test
-```
-
-At the same time it also returns the branch name as character vector
-invisibly.
-
-``` r
-
-out <- get_branches("pipr")
-
-#── These are available branches for pipr package:  
-#• 29-website-formatting
-#• 61_global_end
-#• DEV
-#• add_retry
-#• default_options
-#• fix_popshare
-#• gh-pages
-#• httr2
-#• main
-#• test
-
-out
-#[1] "29-website-formatting" "61_global_end"         "DEV"                   "add_retry"            
-#[5] "default_options"       "fix_popshare"          "gh-pages"              "httr2"                
-#[9] "main"                  "test"                 
-```
-
-There is an argument called `display` which is set as `TRUE` by default.
-This argument controls if you want to show the branch names in the
-console or not.
-
-``` r
-
-out <- get_branches("pipr", display = FALSE)  
-out
-#[1] "29-website-formatting" "61_global_end"         "DEV"                   "add_retry"            
-#[5] "default_options"       "fix_popshare"          "gh-pages"              "httr2"                
-#[9] "main"                  "test"                 
-```
-
-2.  [`install_branch()`](https://pip-technical-team.github.io/metapip/reference/install_branch.md)
-
-    This installs a specific branch for a particular package.
-
-``` r
-
-install_branch(package = "wbpip", branch = "DEV")
-```
-
-The above command will install `DEV` branch of `wbpip` package.
-
-3.  [`get_branch_info()`](https://pip-technical-team.github.io/metapip/reference/get_branch_info.md)
-
-This function will give you information of a particular branch in a
-package. For example, when was last commit done on this branch and by
-whom.
-
-``` r
-
-get_branch_info(package = "pipr", branch = "DEV")
-
-#  package branch_name last_commit_author_name     last_update_time
-#1    pipr         DEV               Tony Fujs 2023-09-04T13:06:47Z
-```
-
-You may pass more than one branch names.
-
-``` r
-
-get_branch_info(package = "wbpip", branch = c("PROD", "QA"))
-
-#  package branch_name last_commit_author_name     last_update_time
-#1   wbpip        PROD               Tony Fujs 2023-09-20T08:02:24Z
-#2   wbpip          QA                tonyfujs 2023-07-14T08:50:33Z
-```
-
-4.  [`install_latest_branch()`](https://pip-technical-team.github.io/metapip/reference/install_latest_branch.md)
-
-This function installs the packages from the branch which was last
-updated i.e the latest branch. It is a **developer-only** tool: it
-deliberately bypasses the team `PIP_LOCK` manifest and installs the live
-HEAD of each branch. Use
-[`pip_snapshot()`](https://pip-technical-team.github.io/metapip/reference/pip_snapshot.md) +
-[`init_metapip()`](https://pip-technical-team.github.io/metapip/reference/init_metapip.md)
-for team-consistent installs.
-
-If you pass no arguments to it, it will install latest branch for all
-pip core R packages. However, you can also restrict it to only a few
-packages as well.
-
-``` r
-
-install_latest_branch()
-install_latest_branch(c("pipfun", "pipapi"))
-```
-
-5.  [`core_metadata()`](https://pip-technical-team.github.io/metapip/reference/core_metadata.md)
-
-Get metadata information about pip packages.
-
-``` r
-
-out <- core_metadata()
-out <- core_metadata(c("pipapi", "wbpip"))
-```
-
-6.  [`install_pip_packages()`](https://pip-technical-team.github.io/metapip/reference/install_pip_packages.md)
-
-Install one or more core packages from a specific branch. If you have
-fresh installation of R then running
-[`install_pip_packages()`](https://pip-technical-team.github.io/metapip/reference/install_pip_packages.md)
-would set you up with all pip packages.
-
-``` r
-
-install_pip_packages(branch = "test")
-install_pip_packages(c("pipapi", "wbpip"), "test")
-```
-
-7.  [`init_metapip()`](https://pip-technical-team.github.io/metapip/reference/init_metapip.md)
-
-This function checks the default branches for each packages and ensures
-that they are up-to-date. If they are not, it provides an option to
-update them with a single stroke.
-
-``` r
+# 2. Install and attach all core packages
 init_metapip()
 
-! The following packages do not have the updated version of default branch
-installed: pipapi, pipload, pipfun, and pipaux
-Do you want to install them now? 
-
-1: Yes
-2: No
-
-Selection: 1
-
-── Attaching packages ────────────────────────────────────────────────────────────────────── metapip 0.0.1 ──
-✔ pipapi   1.5.3      (DEV)
-✔ pipload  1.0.0      (PROD)
-✔ wbpip    0.1.6      (DEV)
-✔ pipfun   1.0.0      (PROD)
-✔ pipdata  0.0.0.9017 (PROD)
-✔ pipster  0.0.1.9003 (DEV)
-✔ pipaux   0.3.0      (PROD)
-✔ pipfaker 0.2.1      (main)
+# 3. Snapshot the current state for team reproducibility
+pip_snapshot()
 ```
 
-8.  [`set_custom_branch()`](https://pip-technical-team.github.io/metapip/reference/set_custom_branch.md)
+[`init_metapip()`](https://pip-technical-team.github.io/metapip/reference/init_metapip.md)
+checks each package against its configured branch and installs any
+outdated packages. When a `PIP_LOCK.csv` lockfile is present, it
+installs from the exact recorded SHAs.
 
-An easier way to set [`options()`](https://rdrr.io/r/base/options.html)
-for pip packages custom default branch.
+## Key Functions
+
+### Installation
+
+| Function | Description |
+|----|----|
+| [`init_metapip()`](https://pip-technical-team.github.io/metapip/reference/init_metapip.md) | Install + attach all packages (lock-driven) |
+| [`install_branch()`](https://pip-technical-team.github.io/metapip/reference/install_branch.md) | Install one package from a branch/SHA |
+| [`install_pip_packages()`](https://pip-technical-team.github.io/metapip/reference/install_pip_packages.md) | Install multiple packages from branches |
+| [`update_pip_packages()`](https://pip-technical-team.github.io/metapip/reference/init_metapip.md) | Refresh lock + install outdated packages |
+
+### Inspection
+
+| Function | Description |
+|----|----|
+| [`get_branches()`](https://pip-technical-team.github.io/metapip/reference/get_branches.md) | List available branches for a package |
+| [`get_branch_info()`](https://pip-technical-team.github.io/metapip/reference/get_branch_info.md) | Last commit info for specific branches |
+| [`core_metadata()`](https://pip-technical-team.github.io/metapip/reference/core_metadata.md) | Overview of all core packages |
+| [`package_branches()`](https://pip-technical-team.github.io/metapip/reference/package_branches.md) | Version comparison across branches |
+| [`get_current_branches()`](https://pip-technical-team.github.io/metapip/reference/get_current_branches.md) | View configured branch assignments |
+
+### Reproducibility
+
+| Function | Description |
+|----|----|
+| [`pip_snapshot()`](https://pip-technical-team.github.io/metapip/reference/pip_snapshot.md) | Write a `PIP_LOCK.csv` lock manifest |
+
+## Setting Up Branches
+
+`metapip` uses a two-tier configuration:
 
 ``` r
 
-set_custom_branch(pipr = 'main', 'pipapi' = 'DEV_v3')
+# Global default (applies to all packages)
+get_default_branch()       # "PROD"
+set_default_branch("DEV")  # Change for session
+
+# Per-package overrides (take precedence over global)
+set_custom_branch(pipapi = "DEV_v3", pipfaker = "main")
+get_custom_branch()        # View overrides
 ```
 
-This is functionally equivalent to
-`options(metapip.custom_branch = list(pipr_branch = "main", pipapi_branch = "DEV_v3"))`.
+## GitHub Credentials
 
-## Dependency management note
+Install functions
+([`install_branch()`](https://pip-technical-team.github.io/metapip/reference/install_branch.md),
+[`install_pip_packages()`](https://pip-technical-team.github.io/metapip/reference/install_pip_packages.md))
+require a GitHub PAT for rate-limit reliability. Read-only functions
+work without one. Set up credentials with:
 
-[metapip](https://github.com/PIP-Technical-Team/metapip) installs PIP
-packages from GitHub branches and resolves non-PIP dependencies from
-CRAN independently, which can cause version skew. For coordinated
-dependency resolution across all packages, consider using
+``` r
+
+# Using gitcreds (recommended)
+gitcreds::gitcreds_set()
+
+# Or environment variable
+Sys.setenv(GITHUB_PAT = "ghp_your_token")
+```
+
+## Team Workflow
+
+1.  **Project lead**: run
+    [`pip_snapshot()`](https://pip-technical-team.github.io/metapip/reference/pip_snapshot.md)
+    to write `PIP_LOCK.csv`.
+2.  **Commit** the lockfile to version control.
+3.  **Team members**: run
+    [`init_metapip()`](https://pip-technical-team.github.io/metapip/reference/init_metapip.md)
+    to install at the recorded SHAs.
+4.  **Updates**: run
+    [`update_pip_packages()`](https://pip-technical-team.github.io/metapip/reference/init_metapip.md)
+    to refresh the lock and install new versions.
+
+See
+[`vignette("lockfile-workflow")`](https://pip-technical-team.github.io/metapip/articles/lockfile-workflow.md)
+for the full workflow.
+
+## Documentation
+
+| Vignette | Description |
+|----|----|
+| [Getting Started](https://pip-technical-team.github.io/metapip/articles/getting-started.html) | Installation, credentials, first steps |
+| [Architecture](https://pip-technical-team.github.io/metapip/articles/architecture.html) | Design, data flow, and core concepts |
+| [Lockfile Workflow](https://pip-technical-team.github.io/metapip/articles/lockfile-workflow.html) | Team reproducibility end-to-end |
+| [Package Development](https://pip-technical-team.github.io/metapip/articles/package-development.html) | Developing PIP packages with metapip |
+| [Branch Configuration](https://pip-technical-team.github.io/metapip/articles/package-specific-options.html) | Default branches and per-package overrides |
+| [Function Reference](https://pip-technical-team.github.io/metapip/reference/) | Complete function documentation |
+
+## Dependency Note
+
+`metapip` installs PIP packages from GitHub branches and resolves
+non-PIP dependencies from CRAN independently, which can cause version
+skew. For coordinated dependency resolution, consider using
 [{renv}](https://rstudio.github.io/renv/) as a companion tool.
 
 # Package index
 
-## All functions
+## Installation
 
-- [`check_github_token()`](https://pip-technical-team.github.io/metapip/reference/check_github_token.md)
-  : make sure your GITHUB credentials are properly setup
-- [`core_metadata()`](https://pip-technical-team.github.io/metapip/reference/core_metadata.md)
-  : Return meta information about core packages
-- [`get_branch_info()`](https://pip-technical-team.github.io/metapip/reference/get_branch_info.md)
-  : Get last update time of branches in a package
-- [`get_branches()`](https://pip-technical-team.github.io/metapip/reference/get_branches.md)
-  : Get available branches for a package
-- [`get_core_pagkages()`](https://pip-technical-team.github.io/metapip/reference/get_core_pagkages.md)
-  : Get core PIP ecosystem package
-- [`get_current_branches()`](https://pip-technical-team.github.io/metapip/reference/get_current_branches.md)
-  [`get_package_current_branch()`](https://pip-technical-team.github.io/metapip/reference/get_current_branches.md)
-  : get the current branches that are meant to be used
-- [`get_default_branch()`](https://pip-technical-team.github.io/metapip/reference/get_default_branch.md)
-  [`set_default_branch()`](https://pip-technical-team.github.io/metapip/reference/get_default_branch.md)
-  : Get default branch in PIP ecosystem
-- [`get_latest_branch_update()`](https://pip-technical-team.github.io/metapip/reference/get_latest_branch_update.md)
-  : Get details of the branch which was last updated
+Install and initialise PIP packages
+
 - [`init_metapip()`](https://pip-technical-team.github.io/metapip/reference/init_metapip.md)
   [`update_pip_packages()`](https://pip-technical-team.github.io/metapip/reference/init_metapip.md)
-  : Initializes and updates the pip core packages
+  : Initialise and update PIP core packages
 - [`install_branch()`](https://pip-technical-team.github.io/metapip/reference/install_branch.md)
-  : Install branch from a package
-- [`install_latest_branch()`](https://pip-technical-team.github.io/metapip/reference/install_latest_branch.md)
-  : Install latest branch from a package
+  : Install a specific branch of a PIP package
 - [`install_pip_packages()`](https://pip-technical-team.github.io/metapip/reference/install_pip_packages.md)
-  : Install one (or more) pip core packages from a branch.
-- [`metapip`](https://pip-technical-team.github.io/metapip/reference/metapip.md)
-  : metapip: PIP packages manager
-- [`metapip_packages()`](https://pip-technical-team.github.io/metapip/reference/metapip_packages.md)
-  : List all packages in metapip
-- [`metapip_update()`](https://pip-technical-team.github.io/metapip/reference/metapip_update.md)
-  : Update metapip packages
+  : Install one or more PIP core packages from a branch
+- [`install_latest_branch()`](https://pip-technical-team.github.io/metapip/reference/install_latest_branch.md)
+  : Install the live HEAD of a branch (developer-only)
+
+## Inspection
+
+Explore branches, versions, and commit history
+
+- [`get_branches()`](https://pip-technical-team.github.io/metapip/reference/get_branches.md)
+  : Get available branches for a package
+- [`get_branch_info()`](https://pip-technical-team.github.io/metapip/reference/get_branch_info.md)
+  : Get last commit metadata for specific branches
+- [`get_latest_branch_update()`](https://pip-technical-team.github.io/metapip/reference/get_latest_branch_update.md)
+  : Get details of the most recently updated branch
+- [`core_metadata()`](https://pip-technical-team.github.io/metapip/reference/core_metadata.md)
+  : Return meta information about core packages
 - [`package_branches()`](https://pip-technical-team.github.io/metapip/reference/package_branches.md)
-  : Status tables of package versions in different branches along with
-  local installations. For local installation,a status column is
-  returned which indicates if the local version is ahead or behind the
-  PROD branch.
-- [`pip_snapshot()`](https://pip-technical-team.github.io/metapip/reference/pip_snapshot.md)
-  : Snapshot the current PIP package SHAs into a lock manifest
-- [`pkg_deps()`](https://pip-technical-team.github.io/metapip/reference/pkg_deps.md)
-  : List all dependencies
-- [`print(`*`<metapip_simplelist>`*`)`](https://pip-technical-team.github.io/metapip/reference/print.metapip_simplelist.md)
-  : Pretty print for metapip_simplelist objects
-- [`rowname_to_column()`](https://pip-technical-team.github.io/metapip/reference/rowname_to_column.md)
-  : Non tidyverse alternative to tibble::rownames_to_column
+  : Compare package versions across branches and local installations
+
+## Branch Configuration
+
+Set and query default and custom branch assignments
+
+- [`get_default_branch()`](https://pip-technical-team.github.io/metapip/reference/get_default_branch.md)
+  [`set_default_branch()`](https://pip-technical-team.github.io/metapip/reference/get_default_branch.md)
+  : Get or set the global default branch
+- [`get_current_branches()`](https://pip-technical-team.github.io/metapip/reference/get_current_branches.md)
+  [`get_package_current_branch()`](https://pip-technical-team.github.io/metapip/reference/get_current_branches.md)
+  : View current branch assignments for all (or selected) packages
 - [`set_custom_branch()`](https://pip-technical-team.github.io/metapip/reference/set_custom_branch.md)
   [`get_custom_branch()`](https://pip-technical-team.github.io/metapip/reference/set_custom_branch.md)
-  : Set default custom branching options
+  : Set or query custom per-package branch assignments
+
+## Lock Management
+
+Team-wide reproducible installs via PIP_LOCK.csv
+
+- [`pip_snapshot()`](https://pip-technical-team.github.io/metapip/reference/pip_snapshot.md)
+  : Snapshot current PIP package SHAs into a lock manifest
+
+## Credentials
+
+GitHub token validation
+
+- [`check_github_token()`](https://pip-technical-team.github.io/metapip/reference/check_github_token.md)
+  : Validate GitHub credentials
+
+## Utilities
+
+Package metadata and helper functions
+
+- [`get_core_pagkages()`](https://pip-technical-team.github.io/metapip/reference/get_core_pagkages.md)
+  : Get the list of core PIP ecosystem packages
+- [`get_core_packages()`](https://pip-technical-team.github.io/metapip/reference/get_core_packages.md)
+  : Get core PIP ecosystem package
+- [`metapip_packages()`](https://pip-technical-team.github.io/metapip/reference/metapip_packages.md)
+  : List all metapip package dependencies
+- [`metapip_update()`](https://pip-technical-team.github.io/metapip/reference/metapip_update.md)
+  : Check for CRAN updates to metapip and its dependencies
+- [`pkg_deps()`](https://pip-technical-team.github.io/metapip/reference/pkg_deps.md)
+  : Compare current package versions against CRAN
+- [`rowname_to_column()`](https://pip-technical-team.github.io/metapip/reference/rowname_to_column.md)
+  : Move row names to a column
+- [`print(`*`<metapip_simplelist>`*`)`](https://pip-technical-team.github.io/metapip/reference/print.metapip_simplelist.md)
+  : Pretty print for metapip_simplelist objects
+- [`metapip`](https://pip-technical-team.github.io/metapip/reference/metapip-package.md)
+  [`metapip-package`](https://pip-technical-team.github.io/metapip/reference/metapip-package.md)
+  : metapip: Manage, Install, and Inspect PIP R Packages
 
 # Articles
 
-### All vignettes
+### Getting Started
 
-- [metapip in package
-  development](https://pip-technical-team.github.io/metapip/articles/package_development.md):
-- [package-specific-options](https://pip-technical-team.github.io/metapip/articles/package-specific-options.md):
+- [Getting Started with
+  metapip](https://pip-technical-team.github.io/metapip/articles/getting-started.md):
+
+### Core Concepts
+
+- [Architecture and Core
+  Concepts](https://pip-technical-team.github.io/metapip/articles/architecture.md):
+- [Lockfile Workflow for Team
+  Reproducibility](https://pip-technical-team.github.io/metapip/articles/lockfile-workflow.md):
+
+### Workflows
+
+- [metapip in Package
+  Development](https://pip-technical-team.github.io/metapip/articles/package_development.md):
+- [Branch Configuration and
+  Options](https://pip-technical-team.github.io/metapip/articles/package-specific-options.md):

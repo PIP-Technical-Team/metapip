@@ -1,6 +1,6 @@
-# Set theme for colorDF
+# Detect RStudio theme for colorDF display settings (internal)
 
-Set theme for colorDF
+Detect RStudio theme for colorDF display settings (internal)
 
 ## Usage
 
@@ -10,4 +10,5 @@ rs_theme()
 
 ## Value
 
-invisible RStudio theme
+A list with elements \`editor\`, \`global\`, \`dark\`, \`foreground\`,
+\`background\`. Returns an empty template when RStudio is not available.

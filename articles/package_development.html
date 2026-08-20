@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>metapip in package development • metapip</title>
+<title>metapip in Package Development • metapip</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="metapip in package development">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="metapip in Package Development">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">metapip</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,8 +33,9 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/package_development.html">metapip in package development</a></li>
-    <li><a class="dropdown-item" href="../articles/package-specific-options.html">package-specific-options</a></li>
+<li><a class="dropdown-item" href="../articles/getting-started.html">Getting Started with metapip</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -57,7 +58,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>metapip in package development</h1>
+      <h1>metapip in Package Development</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/PIP-Technical-Team/metapip/blob/master/vignettes/package_development.Rmd" class="external-link"><code>vignettes/package_development.Rmd</code></a></small>
@@ -67,38 +68,27 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span> <span class="co"># devtools::load_all(".")</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PIP-Technical-Team/metapip" class="external-link">metapip</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; ── <span style="font-weight: bold;">Attaching packages</span> ───────────────────────────────────────── metapip 0.0.3 ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span>   <span style="color: #0000BB;">()</span></span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PIP-Technical-Team/metapip" class="external-link">metapip</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; ── <span style="font-weight: bold;">Attaching packages</span> ───────────────────────────────────────── metapip 0.1.0 ──</span></span></code></pre></div>
 <div class="section level2">
-<h2 id="metapip-managing-pip-ecosystem-packages-for-development">metapip: Managing PIP Ecosystem Packages for Development<a class="anchor" aria-label="anchor" href="#metapip-managing-pip-ecosystem-packages-for-development"></a>
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>The <code>metapip</code> package is designed to make it easy to
-manage all the packages in the PIP ecosystem. This is especially useful
-for package development, as the PIP packages depend on each other—most
-notably, like <code>pipfun</code>, which provides shared utilities.
-Coordinating branches and versions across these packages is essential
-for a smooth development workflow.</p>
+<p>When developing a PIP package (e.g., <code>pipapi</code>,
+<code>wbpip</code>), you need the other PIP ecosystem packages available
+at their correct versions. <code>metapip</code> automatically detects
+when you’re working inside a PIP package directory and excludes it from
+updates, so you never accidentally overwrite the code you’re actively
+developing.</p>
 </div>
 <div class="section level2">
 <h2 id="default-and-custom-branches">Default and Custom Branches<a class="anchor" aria-label="anchor" href="#default-and-custom-branches"></a>
 </h2>
-<p>To use the most recent version of a package, it’s important to know
-which branch is considered the default for each package. By default, the
-branch is available with <code><a href="../reference/get_default_branch.html">get_default_branch()</a></code>,</p>
+<p>The global default branch:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_default_branch.html">get_default_branch</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "PROD"</span></span></code></pre></div>
-<p>and you can modify it with <code><a href="../reference/get_default_branch.html">set_default_branch()</a></code>. For
-example:</p>
+<p>Per-package overrides:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_default_branch.html">set_default_branch</a></span><span class="op">(</span><span class="st">"DEV"</span><span class="op">)</span></span></code></pre></div>
-<p>However, not all packages’ most recent versions are available in the
-same branch. Packages that do not use the default branch are tracked as
-“custom branches.” You can see these with
-<code><a href="../reference/set_custom_branch.html">get_custom_branch()</a></code>:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/set_custom_branch.html">get_custom_branch</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB; font-weight: bold;">metapip</span><span style="font-weight: bold;"> custom branches:</span> ──</span></span>
@@ -107,14 +97,14 @@ same branch. Packages that do not use the default branch are tracked as
 <span><span class="co">#&gt; <span style="color: #00BB00;">◌</span> <span style="color: #BBBB00;">pipfaker</span>: <span style="color: #0000BB;">main</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">◌</span> <span style="color: #BBBB00;">wbpip   </span>: <span style="color: #0000BB;">DEV</span> </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">◌</span> <span style="color: #BBBB00;">pipster </span>: <span style="color: #0000BB;">DEV</span></span></span></code></pre></div>
+<p>Change the global default:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_default_branch.html">set_default_branch</a></span><span class="op">(</span><span class="st">"DEV"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="inspecting-and-modifying-branch-assignments">Inspecting and Modifying Branch Assignments<a class="anchor" aria-label="anchor" href="#inspecting-and-modifying-branch-assignments"></a>
+<h2 id="inspecting-branch-assignments">Inspecting Branch Assignments<a class="anchor" aria-label="anchor" href="#inspecting-branch-assignments"></a>
 </h2>
-<p>To see all PIP ecosystem packages and their currently assigned
-branches, use <code><a href="../reference/get_current_branches.html">get_current_branches()</a></code>. To get the branch for
-a specific package, use
-<code>get_package_current_branch(package)</code>. For example:</p>
+<p>See all current assignments:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_current_branches.html">get_current_branches</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB; font-weight: bold;">metapip</span><span style="font-weight: bold;"> current branches (default in </span><span style="color: #BB0000; font-weight: bold;">red</span><span style="font-weight: bold;">):</span> ──</span></span>
@@ -126,16 +116,19 @@ a specific package, use
 <span><span class="co">#&gt; <span style="color: #00BB00;">◌</span> <span style="color: #BBBB00;">pipdata </span>: <span style="color: #BB0000;">PROD</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">◌</span> <span style="color: #BBBB00;">pipster </span>: <span style="color: #0000BB;">DEV</span> </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">◌</span> <span style="color: #BBBB00;">pipaux  </span>: <span style="color: #BB0000;">PROD</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">◌</span> <span style="color: #BBBB00;">pipfaker</span>: <span style="color: #0000BB;">main</span></span></span>
-<span><span class="fu"><a href="../reference/get_current_branches.html">get_package_current_branch</a></span><span class="op">(</span><span class="st">"pipdata"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">◌</span> <span style="color: #BBBB00;">pipfaker</span>: <span style="color: #0000BB;">main</span></span></span></code></pre></div>
+<p>Get the branch for a single package:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_current_branches.html">get_package_current_branch</a></span><span class="op">(</span><span class="st">"pipdata"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; pipdata </span></span>
 <span><span class="co">#&gt;  "PROD"</span></span></code></pre></div>
-<p>If you need to change the working branch for any package, use
-<code><a href="../reference/set_custom_branch.html">set_custom_branch()</a></code>. For example, to set the
-<code>pipdata</code> package to use the <code>main</code> branch and
-<code>pipapi</code> to use <code>DEV_v3</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/set_custom_branch.html">set_custom_branch</a></span><span class="op">(</span>pipdata <span class="op">=</span> <span class="st">'main'</span>, pipapi <span class="op">=</span> <span class="st">'DEV_v3'</span><span class="op">)</span></span>
+</div>
+<div class="section level2">
+<h2 id="setting-custom-branches">Setting Custom Branches<a class="anchor" aria-label="anchor" href="#setting-custom-branches"></a>
+</h2>
+<p>Override individual packages:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/set_custom_branch.html">set_custom_branch</a></span><span class="op">(</span>pipdata <span class="op">=</span> <span class="st">"main"</span>, pipapi <span class="op">=</span> <span class="st">"DEV_v3"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB; font-weight: bold;">metapip</span><span style="font-weight: bold;"> custom branches:</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">◌</span> <span style="color: #BBBB00;">pipapi  </span>: <span style="color: #0000BB;">DEV_v3</span></span></span>
@@ -147,51 +140,50 @@ a specific package, use
 <div class="section level2">
 <h2 id="listing-core-packages">Listing Core Packages<a class="anchor" aria-label="anchor" href="#listing-core-packages"></a>
 </h2>
-<p>To get a list of all core PIP packages, use:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_core_pagkages.html">get_core_pagkages</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "pipapi"   "pipload"  "wbpip"    "pipfun"   "pipdata"  "pipster"  "pipaux"  </span></span>
 <span><span class="co">#&gt; [8] "pipfaker"</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="package-development-workflow">Package Development Workflow<a class="anchor" aria-label="anchor" href="#package-development-workflow"></a>
+<h2 id="auto-exclusion-logic">Auto-Exclusion Logic<a class="anchor" aria-label="anchor" href="#auto-exclusion-logic"></a>
 </h2>
-<p>When developing a PIP package, it is important to ensure you are
-using the most recent versions of all other PIP ecosystem packages, each
-on their appropriate default branch. Typically, you can achieve this by
-running <code><a href="../reference/init_metapip.html">metapip::update_pip_packages()</a></code>, which updates all
-core PIP packages except the one you are currently developing.</p>
-<p>If you want to both update and attach (i.e., load with
-<code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code>) the PIP packages, use
-<code><a href="../reference/init_metapip.html">metapip::init_metapip()</a></code>. Both functions automatically
-detect your current working directory and exclude the package you are
-developing from updates and attachment.</p>
-<p>This behavior is managed by the <code><a href="../reference/get_core_pagkages.html">get_core_pagkages()</a></code>
-function. By default, it returns all core PIP packages. However, when
-called with <code>exclude = NA</code>, it checks if your working
-directory is a PIP package and excludes it from the list.</p>
-<p>For example, if you are working on the <code>pipapi</code> package,
-<code>get_core_pagkages(exclude = NA)</code> will return all core
-packages except <code>pipapi</code>. This ensures you do not
-accidentally update or reload the package you are actively developing.
-The following explains the logic behind the process. <strong>Do NOT use
-this in your code</strong>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># the same as get_core_pagkages() because the working directory </span></span>
-<span><span class="co"># is not a PIP package</span></span>
+<p>When called with <code>exclude = NA</code> (the default),
+<code><a href="../reference/get_core_pagkages.html">get_core_pagkages()</a></code> automatically detects if your working
+directory is a PIP package and excludes it. This is what
+<code><a href="../reference/init_metapip.html">init_metapip()</a></code> and <code><a href="../reference/init_metapip.html">update_pip_packages()</a></code> use
+internally.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Current directory is not a PIP package</span></span>
 <span><span class="fu"><a href="../reference/get_core_pagkages.html">get_core_pagkages</a></span><span class="op">(</span>exclude <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "pipapi"   "pipload"  "wbpip"    "pipfun"   "pipdata"  "pipster"  "pipaux"  </span></span>
-<span><span class="co">#&gt; [8] "pipfaker"</span></span>
-<span></span>
+<span><span class="co">#&gt; [8] "pipfaker"</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Simulate working inside pipapi</span></span>
 <span><span class="va">pipapi_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"pipapi"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">pipapi_dir</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu">withr</span><span class="fu">::</span><span class="fu"><a href="https://withr.r-lib.org/reference/with_dir.html" class="external-link">with_dir</a></span><span class="op">(</span></span>
 <span>  <span class="va">pipapi_dir</span>,</span>
-<span>  </span>
-<span>  <span class="co"># Since the working directory is a PIP package, </span></span>
-<span>  <span class="co"># it will be excluded </span></span>
-<span>  <span class="fu"><a href="../reference/get_core_pagkages.html">get_core_pagkages</a></span><span class="op">(</span><span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_core_pagkages.html">get_core_pagkages</a></span><span class="op">(</span><span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "pipload"  "wbpip"    "pipfun"   "pipdata"  "pipster"  "pipaux"   "pipfaker"</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="package-development-workflow">Package Development Workflow<a class="anchor" aria-label="anchor" href="#package-development-workflow"></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li>Navigate to your package directory (e.g.,
+<code>~/repos/pipapi</code>).</li>
+<li>Run <code><a href="../reference/init_metapip.html">update_pip_packages()</a></code> – all core packages
+<strong>except</strong> <code>pipapi</code> are updated to their
+configured branch HEADs.</li>
+<li>Run <code><a href="../reference/init_metapip.html">init_metapip()</a></code> – all core packages
+<strong>except</strong> <code>pipapi</code> are installed (if outdated)
+and attached.</li>
+<li>Develop your package with the correct dependency versions.</li>
+<li>When done, run <code><a href="../reference/pip_snapshot.html">pip_snapshot()</a></code> from a neutral directory
+to update the team lock.</li>
+</ol>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

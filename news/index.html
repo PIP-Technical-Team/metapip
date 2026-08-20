@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">metapip</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,8 +18,9 @@
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/package_development.html">metapip in package development</a></li>
-    <li><a class="dropdown-item" href="../articles/package-specific-options.html">package-specific-options</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/getting-started.html">Getting Started with metapip</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -38,43 +39,63 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.3" id="metapip-003">metapip 0.0.3<a class="anchor" aria-label="anchor" href="#metapip-003"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0" id="metapip-010">metapip 0.1.0<a class="anchor" aria-label="anchor" href="#metapip-010"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-0-1-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-1-0"></a></h3>
+<ul><li>None.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-0-1-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-1-0"></a></h3>
 <ul><li>
-<code>get_package_version()</code> now uses httr2 with timeouts and graceful error handling.</li>
-<li>Timestamp parsing uses explicit UTC timezone in <code><a href="../reference/get_latest_branch_update.html">get_latest_branch_update()</a></code> and <code><a href="../reference/core_metadata.html">core_metadata()</a></code>.</li>
+<code><a href="../reference/get_core_packages.html">get_core_packages()</a></code> added as a correctly spelled alias for the deprecated <code><a href="../reference/get_core_pagkages.html">get_core_pagkages()</a></code> (spelling kept for backward compatibility).</li>
 <li>
-<code><a href="../reference/get_latest_branch_update.html">get_latest_branch_update()</a></code> handles packages with only gh-pages branches gracefully.</li>
-<li>Added httr2 to Imports.</li>
+<code><a href="../reference/package_branches.html">package_branches()</a></code> now reports an accurate <code>local_status</code> column (behind/ahead/up-to-date, plus “Not in local”, “not in repo”, and “unknown” for unparseable versions).</li>
+<li>New <code><a href="../reference/pip_snapshot.html">pip_snapshot()</a></code> writes a committed team lock manifest (<code>PIP_LOCK.csv</code> with <code>package,branch,sha</code> columns). <code><a href="../reference/init_metapip.html">init_metapip()</a></code> is now lock-driven: it installs each package at its recorded SHA and falls back to branch HEAD (with a <code><a href="../reference/pip_snapshot.html">pip_snapshot()</a></code> suggestion) when the lock is absent. <code><a href="../reference/init_metapip.html">update_pip_packages()</a></code> refreshes the lock and installs outdated packages at their new SHAs.</li>
+<li>
+<code><a href="../reference/get_branches.html">get_branches()</a></code> now paginates through all branches (<code>.limit = Inf</code>), so repos with more than 30 branches are fully returned.</li>
+<li>Least-privilege token handling: read-only GitHub calls (<code>get_branches</code>, <code>core_metadata</code>, <code>get_branch_info</code>, <code>get_latest_branch_update</code>, <code>package_branches</code>) no longer require a PAT, and <code>print(check_github_token())</code> shows a redacted token.</li>
 </ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.2" id="metapip-002">metapip 0.0.2<a class="anchor" aria-label="anchor" href="#metapip-002"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-0-1-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-0"></a></h3>
 <ul><li>
-<code>detach_package()</code> now warns and continues on <code><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">unloadNamespace()</a></code> failure instead of aborting.</li>
+<code><a href="../reference/package_branches.html">package_branches()</a></code> no longer fails at runtime: <code><a href="../reference/join_and_get_status.html">join_and_get_status()</a></code> previously referenced a <code>local_status</code> column that the join never produced, and malformed remote <code>Version</code> strings now degrade to <code>"unknown"</code> instead of crashing the report.</li>
 <li>
-<code><a href="../reference/init_metapip.html">update_pip_packages()</a></code> isolates per-package failures and reports a summary (N succeeded, M failed).</li>
+<code><a href="../reference/install_branch.html">install_branch()</a></code> now pins to the resolved branch HEAD SHA by default (session-level determinism) with an idempotency short-circuit (<code>force = TRUE</code> bypasses pinning and installs live HEAD; <code>sha =</code> overrides the resolved SHA).</li>
 <li>
-<code>update_pip_packages(ask=TRUE)</code> no longer hangs in non-interactive sessions; defaults to install with warning.</li>
+<code><a href="../reference/get_latest_branch_update.html">get_latest_branch_update()</a></code> handles empty and gh-pages-only branch sets, and parses timestamps as UTC.</li>
 <li>
-<code>compare_sha()</code> returns <code>"unknown"</code> (not <code>FALSE</code>) when <code>RemoteSha</code> is missing (e.g., CRAN install).</li>
+<code><a href="../reference/install_latest_branch.html">install_latest_branch()</a></code> skips packages already at HEAD of their branch and is now developer-only (warns it bypasses the team lockfile).</li>
 <li>
-<code><a href="../reference/get_latest_branch_update.html">get_latest_branch_update()</a></code> handles empty branch lists gracefully.</li>
+<code><a href="../reference/get_package_version.html">get_package_version()</a></code> uses httr2 with timeouts and graceful error handling.</li>
 <li>
-<code><a href="../reference/install_latest_branch.html">install_latest_branch()</a></code> skips packages already at HEAD of their branch.</li>
-<li>Added CRAN dependency gap note recommending <code>renv</code> for coordinated dependency management.</li>
+<code><a href="../reference/init_metapip.html">update_pip_packages()</a></code> isolates per-package failures and reports a summary (N succeeded, M failed); no longer hangs in non-interactive sessions.</li>
+<li>
+<code>detach_package()</code> warns and continues on <code><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">unloadNamespace()</a></code> failure.</li>
+<li>README codecov badge no longer carries a <code>?token=</code> parameter.</li>
 </ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.1" id="metapip-001">metapip 0.0.1<a class="anchor" aria-label="anchor" href="#metapip-001"></a></h2>
-<ul><li>Remove dependencies from <code>tidyverse</code> packages <code>dplyr</code>, <code>tidyr</code>, <code>purrr</code>, <code>magrittr</code> and <code>tibble</code>.</li>
-<li>add suit to update packages.</li>
+<div class="section level3">
+<h3 id="performance-0-1-0">Performance<a class="anchor" aria-label="anchor" href="#performance-0-1-0"></a></h3>
+<ul><li>Per-session memoization of GitHub API calls in <code><a href="../reference/get_branches.html">get_branches()</a></code>, <code><a href="../reference/latest_commit_for_branch.html">latest_commit_for_branch()</a></code>, and <code><a href="../reference/core_metadata.html">core_metadata()</a></code>. Repeated calls in the same R session hit the cache instead of the API (~80 calls reduced to ~3 for a full <code><a href="../reference/core_metadata.html">core_metadata()</a></code> refresh). Only successful responses are cached so transient failures are retried.</li>
+<li>
+<code>metapip_attach()</code> and <code><a href="../reference/rs_theme.html">rs_theme()</a></code> use per-package <code><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace()</a></code> checks instead of a full <code><a href="https://rdrr.io/r/utils/installed.packages.html" class="external-link">installed.packages()</a></code> library scan.</li>
 </ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9010" id="metapip-0009010">metapip 0.0.0.9010<a class="anchor" aria-label="anchor" href="#metapip-0009010"></a></h2>
-<ul><li>Add a new <code><a href="../reference/package_branches.html">package_branches()</a></code> function to show package versions in branches.</li>
+<div class="section level3">
+<h3 id="testing-0-1-0">Testing<a class="anchor" aria-label="anchor" href="#testing-0-1-0"></a></h3>
+<ul><li>Full test coverage for exported functions using mockery stubs; no un-skipped production-path tests.</li>
+<li>Network-dependent tests gated with <code>skip_if_offline()</code> + <code>skip_on_cran()</code>.</li>
+<li>Deleted obsolete test for the nonexistent <code>install_all_packages()</code>.</li>
 </ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9008" id="metapip-0009008">metapip 0.0.0.9008<a class="anchor" aria-label="anchor" href="#metapip-0009008"></a></h2>
-<ul><li>Unload packages before installing (<a href="https://github.com/PIP-Technical-Team/metapip/issues/3" class="external-link">#3</a>)</li>
+<div class="section level3">
+<h3 id="internal-0-1-0">Internal<a class="anchor" aria-label="anchor" href="#internal-0-1-0"></a></h3>
+<ul><li>Cleaned <code><a href="https://rdrr.io/r/utils/globalVariables.html" class="external-link">globalVariables()</a></code> declarations (duplicates and unused data.table symbols removed).</li>
+<li>Removed duplicate <code>@docType package</code> roxygen in <code>R/metapip.R</code>.</li>
+<li>CI runs <code>R CMD check</code> on both Ubuntu and Windows; GitHub Pages deploy uses <code>actions/checkout@v4</code>.</li>
 </ul></div>
+<div class="section level3">
+<h3 id="infrastructure-0-1-0">Infrastructure<a class="anchor" aria-label="anchor" href="#infrastructure-0-1-0"></a></h3>
+<ul><li>Added Windows CI job with a documented <code>GH_TOKEN</code> (fine-grained PAT with <code>contents:read</code>) policy.</li>
+</ul></div>
+</div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

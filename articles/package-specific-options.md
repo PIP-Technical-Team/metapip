@@ -1,51 +1,61 @@
-# package-specific-options
+# Branch Configuration and Options
 
 ## Background
 
-`metapip` is a R package that allows to work efficiently with all the
-pip packages. As explained in the `README` of the file there are lot of
-functionality that is provided with `metapip`. Many of the functions has
-`branch` as an argument. In this vignette we would explore different
-options of passing branch names to these functions.
+Many `metapip` functions accept a `branch` argument. This vignette
+explains the three-level priority system for resolving branch names and
+how to configure it.
 
-## Main content
+## Branch Resolution Priority
 
-Let’s take
-[`get_branch_info()`](https://pip-technical-team.github.io/metapip/reference/get_branch_info.md)
-function as an example. There are 3 ways in which a `branch` name
-ordered by increasing priority.
+Branch names are resolved in this order (highest priority first):
 
-1.  Pass `branch` name explicitly.
+### Level 1: Explicit argument
+
+Pass `branch` directly to any function that accepts it:
 
 ``` r
 
 get_branch_info(package = "pipapi", branch = "DEV")
 ```
 
-This will take `branch` value as “DEV” irrespective of any settings.
+This always wins, regardless of any option settings.
 
-2.  Use package specific options to set the default branch of a package.
+### Level 2: Per-package custom branch
 
-We have enabled a feature to set custom default branches of a package
-using function `set_custom_branch`
+Use
+[`set_custom_branch()`](https://pip-technical-team.github.io/metapip/reference/set_custom_branch.md)
+to override specific packages:
 
 ``` r
 
-set_custom_branch(pipr = 'main', 'pipapi' = 'DEV_v3')
+set_custom_branch(pipr = "main", pipapi = "DEV_v3")
 ```
 
-This function sets `option()` in the background which is used to
-determine the default branch. So now if we call
-`get_branch_info(package = "pipapi")` then it will check if the
-`option()` value is set and get “DEV_v3” as default branch.
+This sets
+`options(metapip.custom_branch = list(pipr_branch = "main", pipapi_branch = "DEV_v3"))`
+behind the scenes. Now:
 
-3.  Use a generic default branch.
+``` r
 
-Finally, if both the options are not passed/set then it will use the
-`getOption(metapip.default_branch)` which is the default branch for all
-the PIP packages unless a custom default branch is set. This is the
-default setting when you load the `metapip` package defined in file
-`zzz.R`
+get_branch_info(package = "pipapi")  # Uses "DEV_v3"
+```
+
+### Level 3: Global default branch
+
+If neither an explicit argument nor a custom branch is set, the global
+default is used:
+
+``` r
+
+get_default_branch()  # Returns "PROD" by default
+```
+
+This comes from `options(metapip.default_branch)`.
+
+## Zero-Configuration Defaults
+
+When `metapip` loads, it ships with sensible defaults:
 
 ``` r
 
@@ -55,14 +65,54 @@ metapip_default_options <- list(
     pipapi_branch = "DEV",
     pipfaker_branch = "main",
     wbpip_branch = "DEV",
-    pipster_branch = "DEV",
-    pipdata_branch = "DEV"
+    pipster_branch = "DEV"
   )
 )
 ```
 
-Moreover, we have come up with function
-[`init_metapip()`](https://pip-technical-team.github.io/metapip/reference/init_metapip.md)
-that checks these default branches for all PIP packages and provides an
-option to update them. Please try the package functions and let us know
-what you think about it.
+So out of the box, `pipapi` uses `DEV`, `pipfaker` uses `main`, and
+everything else uses `PROD`.
+
+## Viewing Current Configuration
+
+``` r
+
+get_default_branch()
+get_custom_branch()
+get_current_branches()
+```
+
+## Modifying Configuration
+
+``` r
+
+# Change the global default
+set_default_branch("DEV")
+
+# Override specific packages
+set_custom_branch(pipdata = "main", pipapi = "DEV_v3")
+
+# Verify
+get_current_branches()
+```
+
+## Persisting Configuration Across Sessions
+
+The options set by
+[`set_default_branch()`](https://pip-technical-team.github.io/metapip/reference/get_default_branch.md)
+and
+[`set_custom_branch()`](https://pip-technical-team.github.io/metapip/reference/set_custom_branch.md)
+persist for the current R session only. To make them permanent, add to
+your `.Rprofile`:
+
+``` r
+
+options(
+  metapip.default_branch = "PROD",
+  metapip.custom_branch = list(
+    pipapi_branch = "DEV",
+    wbpip_branch = "DEV",
+    pipfaker_branch = "main"
+  )
+)
+```

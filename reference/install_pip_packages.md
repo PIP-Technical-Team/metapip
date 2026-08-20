@@ -1,7 +1,9 @@
-# Install one (or more) pip core packages from a branch.
+# Install one or more PIP core packages from a branch
 
-This installs packages like pipapi, pipaux, pipload, wbpip, pipfun,
-pipdata from a branch
+Convenience wrapper that installs multiple core PIP packages from a
+specified branch (or each package's configured default branch). For a
+fresh R installation, running \`install_pip_packages()\` with no
+arguments sets up all core packages.
 
 ## Usage
 
@@ -13,22 +15,38 @@ install_pip_packages(package = NULL, branch = NULL)
 
 - package:
 
-  one (or more) of the core package name, if NULL all the core packages
-  are installed from the branch
+  Character vector. One or more core PIP package names. If \`NULL\`
+  (default), all core packages are installed.
 
 - branch:
 
-  valid branch name (default "PROD")
+  Character scalar or named character vector. The branch to install
+  from. When \`NULL\` (default), each package's configured default
+  branch (via \[get_package_current_branch()\]) is used. When a scalar,
+  all packages are installed from that single branch.
 
 ## Value
 
-invisible NULL
+\`NULL\` invisibly.
+
+## Side effects
+
+Each package is installed via \[install_branch()\] with SHA pinning.
+Failures for individual packages are caught and reported without
+aborting the remaining installs.
+
+## See also
+
+\[install_branch()\], \[init_metapip()\]
 
 ## Examples
 
 ``` r
 if (FALSE) { # \dontrun{
-install_pip_packages(branch = "test")
-install_pip_packages(package = "wbpip", branch = "DEV")
+# Install all packages from their default branches
+install_pip_packages()
+
+# Install specific packages from a branch
+install_pip_packages(c("pipapi", "wbpip"), branch = "test")
 } # }
 ```

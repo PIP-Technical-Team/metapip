@@ -1,6 +1,7 @@
-# List all packages in metapip
+# List all metapip package dependencies
 
-List all packages in metapip
+Returns the names of all packages listed in the \`Imports\` field of
+metapip's DESCRIPTION. Optionally includes \`"metapip"\` itself.
 
 ## Usage
 
@@ -12,7 +13,12 @@ metapip_packages(include_self = TRUE)
 
 - include_self:
 
-  Include metapip in the list?
+  Logical. If \`TRUE\` (default), includes \`"metapip"\` in the returned
+  vector.
+
+## Value
+
+Character vector of package names.
 
 ## Examples
 
@@ -21,4 +27,8 @@ metapip_packages()
 #>  [1] "cli"        "glue"       "gh"         "httr2"      "data.table"
 #>  [6] "rstudioapi" "remotes"    "gitcreds"   "collapse"   "rlang"     
 #> [11] "colorDF"    "metapip"   
+metapip_packages(include_self = FALSE)
+#>  [1] "cli"        "glue"       "gh"         "httr2"      "data.table"
+#>  [6] "rstudioapi" "remotes"    "gitcreds"   "collapse"   "rlang"     
+#> [11] "colorDF"   
 ```

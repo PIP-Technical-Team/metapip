@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">metapip</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,8 +35,9 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/package_development.html">metapip in package development</a></li>
-    <li><a class="dropdown-item" href="articles/package-specific-options.html">package-specific-options</a></li>
+<li><a class="dropdown-item" href="articles/getting-started.html">Getting Started with metapip</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="articles/index.html">More articles...</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
@@ -54,183 +55,217 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="metapip">metapip<a class="anchor" aria-label="anchor" href="#metapip"></a>
+<div class="page-header"><h1 id="metapip-">metapip <img src="reference/figures/logo.png" align="right" height="139"><a class="anchor" aria-label="anchor" href="#metapip-"></a>
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of <a href="https://github.com/PIP-Technical-Team/metapip" class="external-link">metapip</a> is to provide the user with a set of functions that allow him/her to work efficiently with all the PIP R packages. The technical world of PIP consist of several packages that interact to each to load, format, modify, and estimate data for the PIP system. Given that the number of packages has increased over time, it was necessary to create a meta package whose only objective is the proper management of all the other PIP packages.</p>
-<p><a href="https://github.com/PIP-Technical-Team/metapip" class="external-link">metapip</a> is highly inspired by the <a href="https://github.com/tidyverse/tidyverse" class="external-link">{tidyverse}</a>, so that some of its functions are just a simple refactoring of the <a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a> functions. All the credit, then, goes to the Tidyerse team. Thank you!</p>
-<p>In addition to the basic functionality of attaching and installing PIP-related R packages, <a href="https://github.com/PIP-Technical-Team/metapip" class="external-link">metapip</a> also works as the manager of those packages in your working environment such that you are always working with the right version of any of the PIP packages.</p>
+<!-- badges: end -->
+<p><strong>metapip</strong> installs, inspects, and manages the R packages behind the World Bank’s <a href="https://pip.worldbank.org/" class="external-link">Poverty and Inequality Platform (PIP)</a>. Think of it as the <a href="https://github.com/tidyverse/tidyverse" class="external-link">{tidyverse}</a> for PIP: one package that loads and coordinates all the others.</p>
 <div class="section level2">
-<h2 id="core-packages">Core packages<a class="anchor" aria-label="anchor" href="#core-packages"></a>
+<h2 id="why-metapip">Why metapip?<a class="anchor" aria-label="anchor" href="#why-metapip"></a>
 </h2>
-<p>The core PIP R packages are</p>
+<p>The PIP ecosystem comprises multiple interdependent R packages (<code>pipapi</code>, <code>pipload</code>, <code>wbpip</code>, <code>pipfun</code>, <code>pipdata</code>, <code>pipaux</code>, <code>pipster</code>, <code>pipfaker</code>) hosted on GitHub. Keeping them in sync across users and environments is error-prone. <code>metapip</code> solves this by:</p>
 <ul>
-<li>pipapi</li>
-<li>pipaux</li>
-<li>pipload</li>
-<li>wbpip</li>
-<li>pipfun</li>
-<li>pipdata</li>
-<li>pipr</li>
+<li>
+<strong>One-call installs</strong> – install all core packages from their configured branches with a single function call.</li>
+<li>
+<strong>SHA-pinned reproducibility</strong> – a <code>PIP_LOCK.csv</code> lockfile pins every package to an exact commit, so all team members get identical code.</li>
+<li>
+<strong>Branch management</strong> – configure per-package branch overrides and inspect version status across the ecosystem.</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of metapip from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"PIP-Technical-Team/metapip"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="setting-up-default-branch-in-metapip">Setting up default branch in metapip<a class="anchor" aria-label="anchor" href="#setting-up-default-branch-in-metapip"></a>
-</h2>
-<p>In <code>metapip</code> there are different ways to set up default branches. By default it uses <code>options(metapip.default_branch)</code> to provide a default branch value to all packages. When you load the package it is set to “PROD”. You can override that default setting on per package basis by updating options with custom default branch like <code>options(metapip.custom_branch = list(pipapi_branch = "DEV", pipfaker_branch = "main"))</code>. So in this case, the default value for <code>pipapi</code> branch is “DEV” whereas the one for <code>pipfaker</code> is set to “main”. For rest of the pip core packages it remains as “PROD”.</p>
-</div>
-<div class="section level2">
-<h2 id="functions-and-its-usage-in-metapip">Functions and it’s usage in metapip<a class="anchor" aria-label="anchor" href="#functions-and-its-usage-in-metapip"></a>
+<h2 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PIP-Technical-Team/metapip" class="external-link">metapip</a></span><span class="op">)</span></span></code></pre></div>
-<p>Since <code>metapip</code> works with Github API, install functions (<code><a href="reference/install_branch.html">install_branch()</a></code>, <code><a href="reference/install_pip_packages.html">install_pip_packages()</a></code>) need your GitHub credentials to be properly set in your R environment for rate-limit reliability. The best way to do so is using the <a href="https://gitcreds.r-lib.org/" class="external-link">gitcreds</a> package, or by setting the <code>GITHUB_PAT</code>/<code>GITHUB_TOKEN</code> environment variables. You may find a simple explanation about how you can generate a token for yourself and set it up <a href="https://happygitwithr.com/https-pat#tldr" class="external-link">here</a>.</p>
-<p>Read-only functions (<code><a href="reference/get_branches.html">get_branches()</a></code>, <code><a href="reference/get_branch_info.html">get_branch_info()</a></code>, <code><a href="reference/get_latest_branch_update.html">get_latest_branch_update()</a></code>, <code><a href="reference/core_metadata.html">core_metadata()</a></code>, <code><a href="reference/package_branches.html">package_branches()</a></code>) work without a token against the public <code>PIP-Technical-Team</code> org.</p>
-<p>You can check if your credentials are properly set by running the following command.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/check_github_token.html">check_github_token</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>The printed output is redacted — the <code>metapip_token</code> print method shows <code>""</code> in place of the actual token.</p>
-<p>Let us now go through the functions in metapip.</p>
-<ol style="list-style-type: decimal">
-<li>
-<p><code><a href="reference/get_branches.html">get_branches()</a></code></p>
-<p>This function as the name suggests gives you the available branches for a particular pip package on GitHub. It will display in the console the available branches.</p>
-</li>
-</ol>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/get_branches.html">get_branches</a></span><span class="op">(</span><span class="st">"pipr"</span><span class="op">)</span>   </span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PIP-Technical-Team/metapip" class="external-link">metapip</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#── These are available branches for pipr package:  </span></span>
-<span><span class="co">#• 29-website-formatting</span></span>
-<span><span class="co">#• 61_global_end</span></span>
-<span><span class="co">#• DEV</span></span>
-<span><span class="co">#• add_retry</span></span>
-<span><span class="co">#• default_options</span></span>
-<span><span class="co">#• fix_popshare</span></span>
-<span><span class="co">#• gh-pages</span></span>
-<span><span class="co">#• httr2</span></span>
-<span><span class="co">#• main</span></span>
-<span><span class="co">#• test</span></span></code></pre></div>
-<p>At the same time it also returns the branch name as character vector invisibly.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_branches.html">get_branches</a></span><span class="op">(</span><span class="st">"pipr"</span><span class="op">)</span></span>
+<span><span class="co"># 1. Verify GitHub credentials (recommended for rate limits)</span></span>
+<span><span class="fu"><a href="reference/check_github_token.html">check_github_token</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#── These are available branches for pipr package:  </span></span>
-<span><span class="co">#• 29-website-formatting</span></span>
-<span><span class="co">#• 61_global_end</span></span>
-<span><span class="co">#• DEV</span></span>
-<span><span class="co">#• add_retry</span></span>
-<span><span class="co">#• default_options</span></span>
-<span><span class="co">#• fix_popshare</span></span>
-<span><span class="co">#• gh-pages</span></span>
-<span><span class="co">#• httr2</span></span>
-<span><span class="co">#• main</span></span>
-<span><span class="co">#• test</span></span>
+<span><span class="co"># 2. Install and attach all core packages</span></span>
+<span><span class="fu"><a href="reference/init_metapip.html">init_metapip</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">out</span></span>
-<span><span class="co">#[1] "29-website-formatting" "61_global_end"         "DEV"                   "add_retry"            </span></span>
-<span><span class="co">#[5] "default_options"       "fix_popshare"          "gh-pages"              "httr2"                </span></span>
-<span><span class="co">#[9] "main"                  "test"                 </span></span></code></pre></div>
-<p>There is an argument called <code>display</code> which is set as <code>TRUE</code> by default. This argument controls if you want to show the branch names in the console or not.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_branches.html">get_branches</a></span><span class="op">(</span><span class="st">"pipr"</span>, display <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>  </span>
-<span><span class="va">out</span></span>
-<span><span class="co">#[1] "29-website-formatting" "61_global_end"         "DEV"                   "add_retry"            </span></span>
-<span><span class="co">#[5] "default_options"       "fix_popshare"          "gh-pages"              "httr2"                </span></span>
-<span><span class="co">#[9] "main"                  "test"                 </span></span></code></pre></div>
-<ol start="2" style="list-style-type: decimal">
-<li>
-<p><code><a href="reference/install_branch.html">install_branch()</a></code></p>
-<p>This installs a specific branch for a particular package.</p>
-</li>
-</ol>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/install_branch.html">install_branch</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"wbpip"</span>, branch <span class="op">=</span> <span class="st">"DEV"</span><span class="op">)</span></span></code></pre></div>
-<p>The above command will install <code>DEV</code> branch of <code>wbpip</code> package.</p>
-<ol start="3" style="list-style-type: decimal">
-<li><code><a href="reference/get_branch_info.html">get_branch_info()</a></code></li>
-</ol>
-<p>This function will give you information of a particular branch in a package. For example, when was last commit done on this branch and by whom.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/get_branch_info.html">get_branch_info</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"pipr"</span>, branch <span class="op">=</span> <span class="st">"DEV"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#  package branch_name last_commit_author_name     last_update_time</span></span>
-<span><span class="co">#1    pipr         DEV               Tony Fujs 2023-09-04T13:06:47Z</span></span></code></pre></div>
-<p>You may pass more than one branch names.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/get_branch_info.html">get_branch_info</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"wbpip"</span>, branch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PROD"</span>, <span class="st">"QA"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#  package branch_name last_commit_author_name     last_update_time</span></span>
-<span><span class="co">#1   wbpip        PROD               Tony Fujs 2023-09-20T08:02:24Z</span></span>
-<span><span class="co">#2   wbpip          QA                tonyfujs 2023-07-14T08:50:33Z</span></span></code></pre></div>
-<ol start="4" style="list-style-type: decimal">
-<li><code><a href="reference/install_latest_branch.html">install_latest_branch()</a></code></li>
-</ol>
-<p>This function installs the packages from the branch which was last updated i.e the latest branch. It is a <strong>developer-only</strong> tool: it deliberately bypasses the team <code>PIP_LOCK</code> manifest and installs the live HEAD of each branch. Use <code><a href="reference/pip_snapshot.html">pip_snapshot()</a></code> + <code><a href="reference/init_metapip.html">init_metapip()</a></code> for team-consistent installs.</p>
-<p>If you pass no arguments to it, it will install latest branch for all pip core R packages. However, you can also restrict it to only a few packages as well.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/install_latest_branch.html">install_latest_branch</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/install_latest_branch.html">install_latest_branch</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pipfun"</span>, <span class="st">"pipapi"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<ol start="5" style="list-style-type: decimal">
-<li><code><a href="reference/core_metadata.html">core_metadata()</a></code></li>
-</ol>
-<p>Get metadata information about pip packages.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/core_metadata.html">core_metadata</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/core_metadata.html">core_metadata</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pipapi"</span>, <span class="st">"wbpip"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<ol start="6" style="list-style-type: decimal">
-<li><code><a href="reference/install_pip_packages.html">install_pip_packages()</a></code></li>
-</ol>
-<p>Install one or more core packages from a specific branch. If you have fresh installation of R then running <code><a href="reference/install_pip_packages.html">install_pip_packages()</a></code> would set you up with all pip packages.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/install_pip_packages.html">install_pip_packages</a></span><span class="op">(</span>branch <span class="op">=</span> <span class="st">"test"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/install_pip_packages.html">install_pip_packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pipapi"</span>, <span class="st">"wbpip"</span><span class="op">)</span>, <span class="st">"test"</span><span class="op">)</span></span></code></pre></div>
-<ol start="7" style="list-style-type: decimal">
-<li><code><a href="reference/init_metapip.html">init_metapip()</a></code></li>
-</ol>
-<p>This function checks the default branches for each packages and ensures that they are up-to-date. If they are not, it provides an option to update them with a single stroke.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">init_metapip</span>()</span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="sc">!</span> The following packages do not have the updated version of default branch</span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>installed<span class="sc">:</span> pipapi, pipload, pipfun, and pipaux</span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>Do you want to install them now? </span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span> Yes</span>
-<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="dv">2</span><span class="sc">:</span> No</span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a></span>
-<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>Selection<span class="sc">:</span> <span class="dv">1</span></span>
-<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a></span>
-<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>── Attaching packages ────────────────────────────────────────────────────────────────────── metapip <span class="dv">0</span>.<span class="fl">0.1</span> ──</span>
-<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>✔ pipapi   <span class="dv">1</span>.<span class="fl">5.3</span>      (DEV)</span>
-<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>✔ pipload  <span class="dv">1</span>.<span class="fl">0.0</span>      (PROD)</span>
-<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>✔ wbpip    <span class="dv">0</span>.<span class="fl">1.6</span>      (DEV)</span>
-<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a>✔ pipfun   <span class="dv">1</span>.<span class="fl">0.0</span>      (PROD)</span>
-<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a>✔ pipdata  <span class="dv">0</span>.<span class="dv">0</span>.<span class="fl">0.9017</span> (PROD)</span>
-<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a>✔ pipster  <span class="dv">0</span>.<span class="dv">0</span>.<span class="fl">1.9003</span> (DEV)</span>
-<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a>✔ pipaux   <span class="dv">0</span>.<span class="fl">3.0</span>      (PROD)</span>
-<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a>✔ pipfaker <span class="dv">0</span>.<span class="fl">2.1</span>      (main)</span></code></pre></div>
-<ol start="8" style="list-style-type: decimal">
-<li><code><a href="reference/set_custom_branch.html">set_custom_branch()</a></code></li>
-</ol>
-<p>An easier way to set <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code> for pip packages custom default branch.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/set_custom_branch.html">set_custom_branch</a></span><span class="op">(</span>pipr <span class="op">=</span> <span class="st">'main'</span>, <span class="st">'pipapi'</span> <span class="op">=</span> <span class="st">'DEV_v3'</span><span class="op">)</span></span></code></pre></div>
-<p>This is functionally equivalent to <code>options(metapip.custom_branch = list(pipr_branch = "main", pipapi_branch = "DEV_v3"))</code>.</p>
+<span><span class="co"># 3. Snapshot the current state for team reproducibility</span></span>
+<span><span class="fu"><a href="reference/pip_snapshot.html">pip_snapshot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><code><a href="reference/init_metapip.html">init_metapip()</a></code> checks each package against its configured branch and installs any outdated packages. When a <code>PIP_LOCK.csv</code> lockfile is present, it installs from the exact recorded SHAs.</p>
 </div>
 <div class="section level2">
-<h2 id="dependency-management-note">Dependency management note<a class="anchor" aria-label="anchor" href="#dependency-management-note"></a>
+<h2 id="key-functions">Key Functions<a class="anchor" aria-label="anchor" href="#key-functions"></a>
 </h2>
-<p><a href="https://github.com/PIP-Technical-Team/metapip" class="external-link">metapip</a> installs PIP packages from GitHub branches and resolves non-PIP dependencies from CRAN independently, which can cause version skew. For coordinated dependency resolution across all packages, consider using <a href="https://rstudio.github.io/renv/" class="external-link">{renv}</a> as a companion tool.</p>
+<div class="section level3">
+<h3 id="installation-1">Installation<a class="anchor" aria-label="anchor" href="#installation-1"></a>
+</h3>
+<table class="table">
+<colgroup>
+<col width="37%">
+<col width="62%">
+</colgroup>
+<thead><tr>
+<th>Function</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code><a href="reference/init_metapip.html">init_metapip()</a></code></td>
+<td>Install + attach all packages (lock-driven)</td>
+</tr>
+<tr>
+<td><code><a href="reference/install_branch.html">install_branch()</a></code></td>
+<td>Install one package from a branch/SHA</td>
+</tr>
+<tr>
+<td><code><a href="reference/install_pip_packages.html">install_pip_packages()</a></code></td>
+<td>Install multiple packages from branches</td>
+</tr>
+<tr>
+<td><code><a href="reference/init_metapip.html">update_pip_packages()</a></code></td>
+<td>Refresh lock + install outdated packages</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="inspection">Inspection<a class="anchor" aria-label="anchor" href="#inspection"></a>
+</h3>
+<table class="table">
+<colgroup>
+<col width="38%">
+<col width="61%">
+</colgroup>
+<thead><tr>
+<th>Function</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code><a href="reference/get_branches.html">get_branches()</a></code></td>
+<td>List available branches for a package</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_branch_info.html">get_branch_info()</a></code></td>
+<td>Last commit info for specific branches</td>
+</tr>
+<tr>
+<td><code><a href="reference/core_metadata.html">core_metadata()</a></code></td>
+<td>Overview of all core packages</td>
+</tr>
+<tr>
+<td><code><a href="reference/package_branches.html">package_branches()</a></code></td>
+<td>Version comparison across branches</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_current_branches.html">get_current_branches()</a></code></td>
+<td>View configured branch assignments</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="reproducibility">Reproducibility<a class="anchor" aria-label="anchor" href="#reproducibility"></a>
+</h3>
+<table class="table">
+<thead><tr>
+<th>Function</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td><code><a href="reference/pip_snapshot.html">pip_snapshot()</a></code></td>
+<td>Write a <code>PIP_LOCK.csv</code> lock manifest</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+<div class="section level2">
+<h2 id="setting-up-branches">Setting Up Branches<a class="anchor" aria-label="anchor" href="#setting-up-branches"></a>
+</h2>
+<p><code>metapip</code> uses a two-tier configuration:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Global default (applies to all packages)</span></span>
+<span><span class="fu"><a href="reference/get_default_branch.html">get_default_branch</a></span><span class="op">(</span><span class="op">)</span>       <span class="co"># "PROD"</span></span>
+<span><span class="fu"><a href="reference/get_default_branch.html">set_default_branch</a></span><span class="op">(</span><span class="st">"DEV"</span><span class="op">)</span>  <span class="co"># Change for session</span></span>
+<span></span>
+<span><span class="co"># Per-package overrides (take precedence over global)</span></span>
+<span><span class="fu"><a href="reference/set_custom_branch.html">set_custom_branch</a></span><span class="op">(</span>pipapi <span class="op">=</span> <span class="st">"DEV_v3"</span>, pipfaker <span class="op">=</span> <span class="st">"main"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/set_custom_branch.html">get_custom_branch</a></span><span class="op">(</span><span class="op">)</span>        <span class="co"># View overrides</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="github-credentials">GitHub Credentials<a class="anchor" aria-label="anchor" href="#github-credentials"></a>
+</h2>
+<p>Install functions (<code><a href="reference/install_branch.html">install_branch()</a></code>, <code><a href="reference/install_pip_packages.html">install_pip_packages()</a></code>) require a GitHub PAT for rate-limit reliability. Read-only functions work without one. Set up credentials with:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Using gitcreds (recommended)</span></span>
+<span><span class="fu">gitcreds</span><span class="fu">::</span><span class="fu"><a href="https://gitcreds.r-lib.org/reference/gitcreds_get.html" class="external-link">gitcreds_set</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Or environment variable</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>GITHUB_PAT <span class="op">=</span> <span class="st">"ghp_your_token"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="team-workflow">Team Workflow<a class="anchor" aria-label="anchor" href="#team-workflow"></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Project lead</strong>: run <code><a href="reference/pip_snapshot.html">pip_snapshot()</a></code> to write <code>PIP_LOCK.csv</code>.</li>
+<li>
+<strong>Commit</strong> the lockfile to version control.</li>
+<li>
+<strong>Team members</strong>: run <code><a href="reference/init_metapip.html">init_metapip()</a></code> to install at the recorded SHAs.</li>
+<li>
+<strong>Updates</strong>: run <code><a href="reference/init_metapip.html">update_pip_packages()</a></code> to refresh the lock and install new versions.</li>
+</ol>
+<p>See <code><a href="articles/lockfile-workflow.html">vignette("lockfile-workflow")</a></code> for the full workflow.</p>
+</div>
+<div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Vignette</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><a href="https://pip-technical-team.github.io/metapip/articles/getting-started.html">Getting Started</a></td>
+<td>Installation, credentials, first steps</td>
+</tr>
+<tr>
+<td><a href="https://pip-technical-team.github.io/metapip/articles/architecture.html">Architecture</a></td>
+<td>Design, data flow, and core concepts</td>
+</tr>
+<tr>
+<td><a href="https://pip-technical-team.github.io/metapip/articles/lockfile-workflow.html">Lockfile Workflow</a></td>
+<td>Team reproducibility end-to-end</td>
+</tr>
+<tr>
+<td><a href="https://pip-technical-team.github.io/metapip/articles/package-development.html">Package Development</a></td>
+<td>Developing PIP packages with metapip</td>
+</tr>
+<tr>
+<td><a href="https://pip-technical-team.github.io/metapip/articles/package-specific-options.html">Branch Configuration</a></td>
+<td>Default branches and per-package overrides</td>
+</tr>
+<tr>
+<td><a href="https://pip-technical-team.github.io/metapip/reference/">Function Reference</a></td>
+<td>Complete function documentation</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="dependency-note">Dependency Note<a class="anchor" aria-label="anchor" href="#dependency-note"></a>
+</h2>
+<p><code>metapip</code> installs PIP packages from GitHub branches and resolves non-PIP dependencies from CRAN independently, which can cause version skew. For coordinated dependency resolution, consider using <a href="https://rstudio.github.io/renv/" class="external-link">{renv}</a> as a companion tool.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

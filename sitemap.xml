@@ -2,7 +2,10 @@
 <url><loc>https://pip-technical-team.github.io/metapip/404.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/AGENTS.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/LICENSE.html</loc></url>
+<url><loc>https://pip-technical-team.github.io/metapip/articles/architecture.html</loc></url>
+<url><loc>https://pip-technical-team.github.io/metapip/articles/getting-started.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/articles/index.html</loc></url>
+<url><loc>https://pip-technical-team.github.io/metapip/articles/lockfile-workflow.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/articles/package-specific-options.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/articles/package_development.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/authors.html</loc></url>
@@ -12,21 +15,28 @@
 <url><loc>https://pip-technical-team.github.io/metapip/index.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/news/index.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/check_github_token.html</loc></url>
+<url><loc>https://pip-technical-team.github.io/metapip/reference/common_data.html</loc></url>
+<url><loc>https://pip-technical-team.github.io/metapip/reference/compare_sha.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/core_metadata.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/get_branch_info.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/get_branches.html</loc></url>
+<url><loc>https://pip-technical-team.github.io/metapip/reference/get_complete_data.html</loc></url>
+<url><loc>https://pip-technical-team.github.io/metapip/reference/get_core_packages.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/get_core_pagkages.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/get_current_branches.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/get_default_branch.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/get_latest_branch_update.html</loc></url>
+<url><loc>https://pip-technical-team.github.io/metapip/reference/get_package_version.html</loc></url>
+<url><loc>https://pip-technical-team.github.io/metapip/reference/get_version_for_url.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/gh_token.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/index.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/init_metapip.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/install_branch.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/install_latest_branch.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/install_pip_packages.html</loc></url>
+<url><loc>https://pip-technical-team.github.io/metapip/reference/join_and_get_status.html</loc></url>
+<url><loc>https://pip-technical-team.github.io/metapip/reference/latest_commit_for_branch.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/metapip-package.html</loc></url>
-<url><loc>https://pip-technical-team.github.io/metapip/reference/metapip.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/metapip_packages.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/metapip_update.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/package_branches.html</loc></url>
@@ -38,5 +48,6 @@
 <url><loc>https://pip-technical-team.github.io/metapip/reference/rs_theme.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/set_colorDF.html</loc></url>
 <url><loc>https://pip-technical-team.github.io/metapip/reference/set_custom_branch.html</loc></url>
+<url><loc>https://pip-technical-team.github.io/metapip/reference/split_packages_into_list.html</loc></url>
 </urlset>
 

@@ -1,7 +1,8 @@
 # Pretty print for metapip_simplelist objects
 
-Prints a named list of character vectors (possibly empty) in a readable
-way using the cli package.
+S3 method that prints a named list of character vectors in a readable,
+aligned format using the cli package. Default branches are shown in red;
+custom branches are shown in blue.
 
 ## Usage
 
@@ -14,8 +15,15 @@ print(x, ...)
 
 - x:
 
-  A named list of character vectors (class 'metapip_simplelist').
+  A named list of character vectors with class \`"metapip_simplelist"\`.
+  Attributes: - \`title\`: cli-formatted header string. - \`to_red\`:
+  character scalar to highlight in red.
 
 - ...:
 
-  Further arguments passed to or from other methods (ignored).
+  Additional arguments passed to or from other methods (currently
+  ignored).
+
+## Value
+
+\`x\` invisibly (for use in pipelines).

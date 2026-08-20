@@ -1,8 +1,96 @@
-# metapip: Easily Install, Load, and manage PIP Packages
+# metapip: Manage, Install, and Inspect PIP R Packages
 
-This package helps you to install latest branch from PIP packages, get
-information about the packages and many more things. All of this is
-enabled via Github API.
+The \`metapip\` package provides a unified interface for managing the
+suite of R packages that make up the PIP (Poverty and Inequality
+Platform) technical ecosystem. It is inspired by the tidyverse
+meta-package and is designed to:
+
+\- \*\*Install\*\* specific branches or pinned commits of PIP packages
+from GitHub via \[install_branch()\], \[install_pip_packages()\], and
+\[install_latest_branch()\]. - \*\*Inspect\*\* available branches,
+commit metadata, and version status across the ecosystem with
+\[get_branches()\], \[get_branch_info()\], \[core_metadata()\], and
+\[package_branches()\]. - \*\*Lock\*\* team-wide installs with
+\[pip_snapshot()\] and \[init_metapip()\] so that every team member
+works with identical package versions. - \*\*Update\*\* packages and
+refresh the lock manifest with \[update_pip_packages()\].
+
+## Quick start
+
+“\`r library(metapip)
+
+\# Check GitHub credentials check_github_token() \|\> print()
+
+\# Install and attach all core packages init_metapip()
+
+\# Snapshot current state for team reproducibility pip_snapshot() “\`
+
+## Core packages
+
+The PIP ecosystem comprises these core packages, all under the
+\`PIP-Technical-Team\` GitHub organisation:
+
+\| Package \| Purpose \| \|———-\|———\| \| pipapi \| REST API client for
+PIP microdata \| \| pipaux \| Auxiliary data loaders \| \| pipload \|
+Data loading helpers \| \| wbpip \| Welfare and poverty computations \|
+\| pipfun \| Shared utility functions \| \| pipdata \| Country-level
+data management \| \| pipster \| Survey metadata helpers \| \| pipfaker
+\| Synthetic data generation \|
+
+## Lock-driven reproducibility
+
+\`metapip\` supports team-wide deterministic installs via a
+\`PIP_LOCK.csv\` lockfile (\`package, branch, sha\`). The workflow is:
+
+1\. Run \`pip_snapshot()\` to resolve all branch HEAD SHAs and write
+\`PIP_LOCK.csv\`. 2. Commit the lockfile to version control. 3. Team
+members run \`init_metapip()\` to install packages at the exact recorded
+SHAs. 4. Run \`update_pip_packages()\` periodically to refresh the lock
+and install any outdated packages.
+
+## Options
+
+\`metapip\` uses \`options()\` to control default branch assignments:
+
+\- \`metapip.default_branch\`: Global default branch for all packages.
+Defaults to \`"PROD"\`; set via \[set_default_branch()\]. -
+\`metapip.custom_branch\`: Named list of per-package overrides (e.g.,
+\`list(pipapi_branch = "DEV")\`). Set via \[set_custom_branch()\]. -
+\`metapip.lock_path\`: Custom path to \`PIP_LOCK.csv\`. Defaults to the
+bundled \`inst/PIP_LOCK.csv\`.
+
+## Functions
+
+\*\*Installation\*\* - \[install_branch()\]: Install a single package
+from a specific branch/SHA. - \[install_pip_packages()\]: Install
+multiple core packages from a branch. - \[install_latest_branch()\]:
+Developer-only: install live branch HEADs. - \[init_metapip()\]:
+Lock-driven initialisation and attachment. - \[update_pip_packages()\]:
+Refresh lock and install outdated packages.
+
+\*\*Inspection\*\* - \[get_branches()\]: List available branches for a
+package. - \[get_branch_info()\]: Last commit metadata for specific
+branches. - \[get_latest_branch_update()\]: Most recently updated
+branch. - \[core_metadata()\]: Overview of all core packages. -
+\[package_branches()\]: Version comparison across branches.
+
+\*\*Lock management\*\* - \[pip_snapshot()\]: Write a \`PIP_LOCK.csv\`
+lock manifest. - \[pip_lock_path()\]: Path to the committed lockfile.
+
+\*\*Branch configuration\*\* - \[get_default_branch()\] /
+\[set_default_branch()\]: Global default branch. -
+\[get_custom_branch()\] / \[set_custom_branch()\]: Per-package branch
+overrides. - \[get_current_branches()\]: View all current branch
+assignments. - \[get_package_current_branch()\]: Branch for a single
+package.
+
+\*\*Credential management\*\* - \[check_github_token()\]: Validate
+GitHub credentials.
+
+\*\*Utilities\*\* - \[metapip_packages()\]: List all metapip
+dependencies. - \[metapip_update()\]: Check for CRAN updates. -
+\[pkg_deps()\]: List and compare package dependencies. -
+\[rowname_to_column()\]: Move row names to a column.
 
 ## See also
 

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">metapip</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,8 +18,9 @@
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="articles/package_development.html">metapip in package development</a></li>
-    <li><a class="dropdown-item" href="articles/package-specific-options.html">package-specific-options</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="articles/getting-started.html">Getting Started with metapip</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="articles/index.html">More articles...</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -50,11 +51,13 @@
 <div class="section level3">
 <h3 id="r-datatable-collapse-dialect-gotchas-discovered-2026-08-13">R: data.table-collapse dialect gotchas (discovered 2026-08-13)<a class="anchor" aria-label="anchor" href="#r-datatable-collapse-dialect-gotchas-discovered-2026-08-13"></a></h3>
 <ul><li>
-<code>fcase()</code> / <code>fifelse()</code> come from <strong>data.table</strong>, not collapse. collapse does not export them; use data.table’s (<code>import(data.table, except = fdroplevels)</code> is in NAMESPACE).</li>
+<code>fcase()</code> / <code>fifelse()</code> come from <strong>data.table</strong>, not collapse. collapse does not export them; use data.table’s (<code>import(data.table, except = fdroplevels)</code> is in NAMESPACE). The installed <code>collapse</code> 2.1.7 does NOT export <code>fcase</code>/<code>fifelse</code> — verify with <code>"fname" %in% getNamespaceExports("collapse")</code> before relying on any collapse function.</li>
+<li>Prefer base <code>ifelse</code> (or <code><a href="https://rdrr.io/r/utils/compareVersion.html" class="external-link">utils::compareVersion</a></code> for version comparison); metapip defines its own internal <code><a href="https://rdrr.io/r/base/numeric_version.html" class="external-link">package_version()</a></code> color formatter, so always fully qualify <code><a href="https://rdrr.io/r/base/numeric_version.html" class="external-link">base::package_version</a></code> / <code><a href="https://rdrr.io/r/utils/compareVersion.html" class="external-link">utils::compareVersion</a></code>.</li>
 <li>
 <code>collapse::join(..., how = "full")</code> returns only the joined columns — it never creates a status column. Compute comparisons explicitly (e.g., <code><a href="https://rdrr.io/r/utils/compareVersion.html" class="external-link">utils::compareVersion</a></code> via <code>mapply</code>; it is scalar, not vectorized).</li>
 <li>GitHub timestamps (<code>...Z</code>) must be parsed with <code>as.POSIXct(x, format = "%Y-%m-%dT%H:%M:%OSZ", tz = "UTC")</code> — <code>%OS</code> handles optional fractional seconds; never rely on host TZ.</li>
 <li>Prefer <code><a href="https://cli.r-lib.org/reference/cli_abort.html" class="external-link">cli::cli_warn()</a></code> over <code><a href="https://cli.r-lib.org/reference/cli_alert.html" class="external-link">cli::cli_alert_warning()</a></code> when a test must <code>expect_warning()</code>.</li>
+<li>Only successful API responses (and genuine 404 <code>gh_error</code>s) are cached — never error fallbacks. GitHub API calls are memoized per R session (session-scoped <code>.metapip_cache</code>); restart R to invalidate, and <code><a href="reference/install_branch.html">install_branch()</a></code> invalidates per-package keys after install.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="supply-chain--install-conventions-discovered-2026-08-14">Supply-chain / install conventions (discovered 2026-08-14)<a class="anchor" aria-label="anchor" href="#supply-chain--install-conventions-discovered-2026-08-14"></a></h3>

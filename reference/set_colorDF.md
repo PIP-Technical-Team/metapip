@@ -1,6 +1,8 @@
-# identify RStudio theme
+# Set colorDF theme based on RStudio theme (internal)
 
-identify RStudio theme
+Detects the current RStudio dark/light theme and sets the
+\`colorDF_theme\` option accordingly (\`"wb"\` for dark, \`"bw"\` for
+light).
 
 ## Usage
 
@@ -10,4 +12,4 @@ set_colorDF()
 
 ## Value
 
-invisible RStudio theme
+Invisible list. The RStudio theme information from \[rs_theme()\].

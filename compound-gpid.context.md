@@ -11,7 +11,18 @@ Additional context for Copilot and the Compound GPID plugin. Edit freely
 
 - `fcase()` / `fifelse()` come from **data.table**, not collapse.
   collapse does not export them; use data.table’s
-  (`import(data.table, except = fdroplevels)` is in NAMESPACE).
+  (`import(data.table, except = fdroplevels)` is in NAMESPACE). The
+  installed `collapse` 2.1.7 does NOT export `fcase`/`fifelse` — verify
+  with `"fname" %in% getNamespaceExports("collapse")` before relying on
+  any collapse function.
+- Prefer base `ifelse` (or
+  [`utils::compareVersion`](https://rdrr.io/r/utils/compareVersion.html)
+  for version comparison); metapip defines its own internal
+  [`package_version()`](https://rdrr.io/r/base/numeric_version.html)
+  color formatter, so always fully qualify
+  [`base::package_version`](https://rdrr.io/r/base/numeric_version.html)
+  /
+  [`utils::compareVersion`](https://rdrr.io/r/utils/compareVersion.html).
 - `collapse::join(..., how = "full")` returns only the joined columns —
   it never creates a status column. Compute comparisons explicitly
   (e.g.,
@@ -25,6 +36,11 @@ Additional context for Copilot and the Compound GPID plugin. Edit freely
   over
   [`cli::cli_alert_warning()`](https://cli.r-lib.org/reference/cli_alert.html)
   when a test must `expect_warning()`.
+- Only successful API responses (and genuine 404 `gh_error`s) are cached
+  — never error fallbacks. GitHub API calls are memoized per R session
+  (session-scoped `.metapip_cache`); restart R to invalidate, and
+  [`install_branch()`](https://pip-technical-team.github.io/metapip/reference/install_branch.md)
+  invalidates per-package keys after install.
 
 ### Supply-chain / install conventions (discovered 2026-08-14)
 

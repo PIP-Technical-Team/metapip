@@ -1,0 +1,232 @@
+# Architecture and Core Concepts
+
+## Overview
+
+`metapip` is a meta-package – a package whose primary job is managing
+other packages. This vignette documents the underlying design, data
+flow, and key concepts you need to understand to use and contribute to
+`metapip` effectively.
+
+## Design Principles
+
+`metapip` follows three core principles:
+
+1.  **GitHub as the source of truth.** All PIP packages live in the
+    `PIP-Technical-Team` GitHub organisation. `metapip` uses the GitHub
+    API ([`gh::gh()`](https://gh.r-lib.org/reference/gh.html), `httr2`)
+    to discover branches, read commit metadata, and download DESCRIPTION
+    files – it does not maintain its own registry.
+
+2.  **Lock-driven reproducibility.** Deterministic installs are achieved
+    via a `PIP_LOCK.csv` file that pins every core package to an exact
+    commit SHA. This is analogous to how `renv.lock` works for CRAN
+    packages.
+
+3.  **Resilient installation.** Individual package failures are isolated
+    – one failed install does not abort the rest. Functions always
+    return sensible defaults on error (e.g., `NA` data.frames or
+    `NULL`).
+
+## Package Ecosystem
+
+The PIP ecosystem comprises eight core R packages:
+
+                         metapip (meta-package)
+                               |
+            +------------------+------------------+
+            |        |         |        |         |
+         pipapi   pipload    wbpip   pipfun    pipdata
+           |                  |        ^         |
+           +--> REST API      +--> computations   +--> country data
+                                            |
+                                         pipaux (auxiliary data)
+                                         pipster (survey metadata)
+                                         pipfaker (synthetic data)
+
+All packages live under the `PIP-Technical-Team` GitHub organisation and
+follow a consistent branching model (`PROD`, `DEV`, `QA`, feature
+branches).
+
+## Branch Hierarchy
+
+`metapip` uses a two-tier branch resolution system:
+
+1.  **Global default** (`metapip.default_branch` option, default
+    `"PROD"`): Applies to all packages unless overridden.
+
+2.  **Per-package custom branches** (`metapip.custom_branch` option): A
+    named list that overrides the global default for specific packages.
+    Example: `list(pipapi_branch = "DEV", pipfaker_branch = "main")`.
+
+Resolution order:
+
+    explicit `branch` argument
+            |
+            v
+    custom_branch option (package-specific)
+            |
+            v
+    default_branch option (global)
+
+Functions that accept a `branch` argument always check in this order: if
+you pass `branch = "DEV"` explicitly, the options are ignored.
+
+## Zero-Configuration Defaults
+
+When `metapip` loads (`.onAttach`), it:
+
+1.  Sets `colorDF` display options based on your RStudio theme.
+2.  Loads the default options from `.onLoad`:
+    - `metapip.default_branch = "PROD"`
+    - `metapip.custom_branch` with overrides for `pipapi` (DEV),
+      `pipfaker` (main), `wbpip` (DEV), `pipster` (DEV).
+3.  Attaches all installed core packages.
+
+This means
+[`library(metapip)`](https://github.com/PIP-Technical-Team/metapip)
+immediately gives you a working environment without any explicit
+configuration.
+
+## The Lock File (`PIP_LOCK.csv`)
+
+The lock file is a CSV with three columns:
+
+| Column | Description | Example |
+|----|----|----|
+| `package` | Core package name | `pipapi` |
+| `branch` | Branch that was snapshotted | `DEV` |
+| `sha` | Exact commit SHA at snapshot time | `94365f9a1ce45ad0d562e73f0612a0...` |
+
+### Lock lifecycle
+
+    pip_snapshot()                  init_metapip()
+          |                               |
+          v                               v
+      Resolve branch HEADs          Read PIP_LOCK.csv
+          |                               |
+          v                               v
+      Write PIP_LOCK.csv            Install at recorded SHAs
+          |                               |
+          v                               v
+      Commit to git                 Team has identical packages
+
+### When the lock is absent
+
+If `PIP_LOCK.csv` is missing (no lock committed yet, or first-time
+setup),
+[`init_metapip()`](https://pip-technical-team.github.io/metapip/reference/init_metapip.md)
+falls back to installing each package at its branch HEAD SHA and prints
+a suggestion to run
+[`pip_snapshot()`](https://pip-technical-team.github.io/metapip/reference/pip_snapshot.md).
+
+## Installation: SHA Pinning vs. Live HEAD
+
+[`install_branch()`](https://pip-technical-team.github.io/metapip/reference/install_branch.md)
+has two modes:
+
+### Default mode (`force = FALSE`): SHA-pinned installation
+
+1.  Resolves branch HEAD SHA from the GitHub API
+    ([`latest_commit_for_branch()`](https://pip-technical-team.github.io/metapip/reference/latest_commit_for_branch.md)).
+2.  Checks the locally installed `RemoteSha` (set by
+    [`remotes::install_github()`](https://remotes.r-lib.org/reference/install_github.html)).
+3.  If they match, skips installation (idempotent).
+4.  Otherwise, installs at the resolved SHA via
+    `remotes::install_github("PIP-Technical-Team/{pkg}@{sha}")`.
+
+This mode is **deterministic**: running the same call twice produces the
+same result, and all team members get identical code when using the same
+lock.
+
+### Developer mode (`force = TRUE`): live HEAD
+
+Installs `@{branch}` directly, ignoring SHA pinning. Useful during
+active development when you want the absolute latest commit.
+
+## Data Flow Diagrams
+
+### `init_metapip()` flow
+
+    init_metapip()
+        |
+        +-- pip_lock_path() --> PIP_LOCK.csv exists?
+        |       |
+        |       +-- YES: Read lock, filter by exclude
+        |       |       |
+        |       |       +-- install_branch(sha = locked_sha)
+        |       |               (for each package)
+        |       |
+        |       +-- NO: Resolve branch HEAD
+        |               |
+        |               +-- get_core_pagkages(exclude)
+        |               +-- get_package_current_branch(pkgs)
+        |               +-- install_branch(branch = default)
+        |                       (for each package)
+        |
+        +-- metapip_attach() --> attach all installed core packages
+
+### `update_pip_packages()` flow
+
+    update_pip_packages()
+        |
+        +-- compare_sha(pkg, branch) for each core package
+        |       |
+        |       +-- TRUE: up-to-date
+        |       +-- FALSE: outdated
+        |       +-- "unknown": skip (no git metadata)
+        |       +-- NULL: branch missing on GitHub
+        |
+        +-- Resolve new branch HEAD SHAs
+        |
+        +-- Write updated PIP_LOCK.csv
+        |
+        +-- Install outdated packages at new SHAs
+                |
+                +-- Per-package error isolation
+                +-- Summary report (N success, M failed)
+
+## GitHub API Interaction
+
+`metapip` interacts with the GitHub API through two channels:
+
+- **[`gh::gh()`](https://gh.r-lib.org/reference/gh.html)**: Used for
+  read-only metadata queries (branches, commits, releases). The package
+  passes
+  [`gh_token()`](https://pip-technical-team.github.io/metapip/reference/gh_token.md)
+  which may be `NULL` for unauthenticated access (60 req/hr limit).
+
+- **[`remotes::install_github()`](https://remotes.r-lib.org/reference/install_github.html)**:
+  Used for actual package installation. Resolves credentials
+  independently via `gitcreds`.
+
+### Rate limit management
+
+| Operation | Auth required? | Rate limit |
+|----|----|----|
+| [`get_branches()`](https://pip-technical-team.github.io/metapip/reference/get_branches.md) | No | 60 or 5000 |
+| [`get_branch_info()`](https://pip-technical-team.github.io/metapip/reference/get_branch_info.md) | No | 60 or 5000 |
+| [`core_metadata()`](https://pip-technical-team.github.io/metapip/reference/core_metadata.md) | No | 60 or 5000 |
+| [`install_branch()`](https://pip-technical-team.github.io/metapip/reference/install_branch.md) | Yes | N/A |
+| [`install_pip_packages()`](https://pip-technical-team.github.io/metapip/reference/install_pip_packages.md) | Yes | N/A |
+| [`install_latest_branch()`](https://pip-technical-team.github.io/metapip/reference/install_latest_branch.md) | Yes | N/A |
+
+Functions marked “No” work fine unauthenticated for occasional use. For
+heavy usage (e.g.,
+[`core_metadata()`](https://pip-technical-team.github.io/metapip/reference/core_metadata.md)
+which makes 3+ API calls per package), a PAT is strongly recommended.
+
+## Auto-Exclusion for Package Development
+
+When developing a PIP package (e.g., `pipapi`), you don’t want `metapip`
+to update or overwrite the package you’re actively working on. The
+`get_core_pagkages(exclude = NA)` convention handles this:
+
+1.  Checks if `basename(getwd())` is a core package name.
+2.  If so, excludes that package from the returned list.
+
+Both
+[`init_metapip()`](https://pip-technical-team.github.io/metapip/reference/init_metapip.md)
+and
+[`update_pip_packages()`](https://pip-technical-team.github.io/metapip/reference/init_metapip.md)
+use this default, so running them from within a PIP package directory
+automatically excludes that package from updates.
