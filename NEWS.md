@@ -1,3 +1,23 @@
+# metapip 0.1.1
+
+## Bug Fixes
+
+* `package_branches()` now reports `"{branch} version unknown"` instead of a
+  bare `"unknown"` when a configured branch is absent from the remote repo,
+  using vectorized `fcase()` conditions that stay NA-safe for missing versions.
+
+## Testing
+
+* Added test coverage for cache memoization, `core_metadata()`, and utility
+  helpers.
+* CI coverage now attributes results correctly with
+  `with_mocked_bindings()` and indexes the exported `get_core_packages()`
+  alias in the pkgdown reference.
+
+## Infrastructure
+
+* `get_core_packages()` added to the pkgdown function reference index.
+
 # metapip 0.1.0
 
 ## Breaking Changes
