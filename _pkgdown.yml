@@ -48,6 +48,7 @@ reference:
     desc: Package metadata and helper functions
     contents:
       - get_core_pagkages
+      - get_core_packages
       - metapip_packages
       - metapip_update
       - pkg_deps
