@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">metapip</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,6 +38,24 @@
       <small>Source: <a href="https://github.com/PIP-Technical-Team/metapip/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.1" id="metapip-011">metapip 0.1.1<a class="anchor" aria-label="anchor" href="#metapip-011"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-0-1-1">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-1"></a></h3>
+<ul><li>
+<code><a href="../reference/package_branches.html">package_branches()</a></code> now reports <code>"{branch} version unknown"</code> instead of a bare <code>"unknown"</code> when a configured branch is absent from the remote repo, using vectorized <code>fcase()</code> conditions that stay NA-safe for missing versions.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="testing-0-1-1">Testing<a class="anchor" aria-label="anchor" href="#testing-0-1-1"></a></h3>
+<ul><li>Added test coverage for cache memoization, <code><a href="../reference/core_metadata.html">core_metadata()</a></code>, and utility helpers.</li>
+<li>CI coverage now attributes results correctly with <code>with_mocked_bindings()</code> and indexes the exported <code><a href="../reference/get_core_packages.html">get_core_packages()</a></code> alias in the pkgdown reference.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="infrastructure-0-1-1">Infrastructure<a class="anchor" aria-label="anchor" href="#infrastructure-0-1-1"></a></h3>
+<ul><li>
+<code><a href="../reference/get_core_packages.html">get_core_packages()</a></code> added to the pkgdown function reference index.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="metapip-010">metapip 0.1.0<a class="anchor" aria-label="anchor" href="#metapip-010"></a></h2>
 <div class="section level3">

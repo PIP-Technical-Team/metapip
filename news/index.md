@@ -1,5 +1,30 @@
 # Changelog
 
+## metapip 0.1.1
+
+### Bug Fixes
+
+- [`package_branches()`](https://pip-technical-team.github.io/metapip/reference/package_branches.md)
+  now reports `"{branch} version unknown"` instead of a bare `"unknown"`
+  when a configured branch is absent from the remote repo, using
+  vectorized `fcase()` conditions that stay NA-safe for missing
+  versions.
+
+### Testing
+
+- Added test coverage for cache memoization,
+  [`core_metadata()`](https://pip-technical-team.github.io/metapip/reference/core_metadata.md),
+  and utility helpers.
+- CI coverage now attributes results correctly with
+  `with_mocked_bindings()` and indexes the exported
+  [`get_core_packages()`](https://pip-technical-team.github.io/metapip/reference/get_core_packages.md)
+  alias in the pkgdown reference.
+
+### Infrastructure
+
+- [`get_core_packages()`](https://pip-technical-team.github.io/metapip/reference/get_core_packages.md)
+  added to the pkgdown function reference index.
+
 ## metapip 0.1.0
 
 ### Breaking Changes

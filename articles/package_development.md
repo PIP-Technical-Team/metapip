@@ -3,7 +3,7 @@
 ``` r
 
 library(metapip)
-#> ── Attaching packages ───────────────────────────────────────── metapip 0.1.0 ──
+#> ── Attaching packages ───────────────────────────────────────── metapip 0.1.1 ──
 ```
 
 ## Overview
